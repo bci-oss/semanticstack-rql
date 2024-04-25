@@ -3,7 +3,7 @@
 Thank you for your interest in contributing to **Robert Bosch Manufacturing Solutions GmbH, Wernerstraße 51, 70469 Stuttgart, Deutschland's Semantic Stack
 Resource Query Language (RQL)** ("We" or "Us").
 The purpose of this contributor agreement ("Agreement") is to clarify and document the rights granted by **Copyright owners** for their contributions to Us. To
-make this document effective, please follow the instructions at [RQL Contribution](https://github.com/bosch-semantic-stack/rbs-rql).
+make this document effective, please follow the instructions at [Semantic Stack RQL Contribution](https://github.com/bci-oss/semanticstack-rql).
 
 **If you are an employee** and have created the Contribution as part of your employment:
 Before providing the Contribution to Us, you need to have your employer approve this Agreement this document.
