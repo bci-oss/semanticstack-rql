@@ -1,0 +1,8 @@
+name: ROOT
+title: Bosch Semantic Stack RQL
+version: main
+start_page: ROOT:index.adoc
+nav:
+  - modules/ROOT/nav_top.adoc
+  - modules/user-guide/nav.adoc
+  - modules/developer-guide/nav.adoc

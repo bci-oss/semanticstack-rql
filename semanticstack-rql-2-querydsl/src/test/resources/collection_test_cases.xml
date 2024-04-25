@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+  ~ Copyright (c)2024 Robert Bosch Manufacturing Solutions GmbH
+  ~
+  ~  See the AUTHORS file(s) distributed with this work for additional
+  ~  information regarding authorship.
+  ~
+  ~  This Source Code Form is subject to the terms of the Mozilla Public
+  ~  License, v. 2.0. If a copy of the MPL was not distributed with this
+  ~  file, You can obtain one at https://mozilla.org/MPL/2.0/.
+  ~
+  ~  SPDX-License-Identifier: MPL-2.0
+  -->
+
+<!--//@formatter:off-->
+<Cases>
+<cases>
+   <cases>
+      <description>with SubSubEntity and Custom method</description>
+      <jpa>
+where entity in (select entity
+from Entity entity
+  left join entity.subEntities as subEntity
+where subEntity.entity.description &lt;&gt; ?1)</jpa>
+      <rql>filter=ne(entity3.description,"a")</rql>
+   </cases>
+    <cases>
+        <description>1 withCollectionEntryPropertyEqualsString</description>
+        <jpa>
+where entity in (select entity
+from Entity entity
+  left join entity.subEntities as subEntity
+where subEntity.name &lt;&gt; ?1)</jpa>
+        <rql>filter=ne(subEntities.name,"a")</rql>
+    </cases>
+    <cases>
+        <description>2 withPropertyConstraintAndCollectionEntryWithMultipleConditions_shouldApplyPredicatesToSameCollectionEntry</description>
+        <jpa>
+where entity in (select entity
+from Entity entity
+  left join entity.subEntities as subEntity
+where subEntity.name = ?1 and (entity.name = ?2 or subEntity.type = ?3))</jpa>
+        <rql>filter=and(eq(subEntities.name,"a"),or(eq(entity.name,"x"),eq(subEntities.type,"b")))</rql>
+    </cases>
+    <cases>
+        <description>3 withPropertyConstraintAndCollectionEntryWithMultipleConditions_shouldApplyPredicatesToSameCollectionEntry</description>
+        <jpa>
+where entity in (select entity
+from Entity entity
+  left join entity.subEntities as subEntity
+where subEntity.name = ?1 and (entity.name = ?2 or subEntity.type = ?3))</jpa>
+        <rql>filter=and(eq(subEntities.name,"a"),or(eq(entity.name,"x"),eq(subEntities.type,"b")))</rql>
+    </cases>
+    <cases>
+        <description>4 withPropertyConstraintAndCollectionEntryWithMultipleConditionsIncludingMetadataMap_shouldApplyPredicatesToSameCollectionEntry</description>
+        <jpa>
+where entity in (select entity
+from Entity entity
+  left join entity.subEntities as subEntity
+  left join subEntity.metadata as subEntity_metadata_0 on key(subEntity_metadata_0) = ?1
+where subEntity.name = ?2 and (entity.name = ?3 or subEntity.type = ?4 and subEntity_metadata_0 = ?5))</jpa>
+        <rql>filter=and(eq(subEntities.name,"a"),or(eq(entity.name,"x"),and(eq(subEntities.type,"b"),eq(subEntities.metadata.key1,"meta_v1"))))</rql>
+    </cases>
+    <cases>
+        <description>5 withCollectionEntryWithMultipleConditionsWithAnd_shouldApplyPredicatesToSameCollectionEntry</description>
+        <jpa>
+where entity in (select entity
+from Entity entity
+  left join entity.subEntities as subEntity
+where subEntity.name = ?1 and subEntity.type = ?2)</jpa>
+        <rql>filter=and(eq(subEntities.name,"a"),eq(subEntities.type,"b"))</rql>
+    </cases>
+    <cases>
+        <description>6 withCollectionEntryWithMultipleConditionsWithOr_shouldApplyPredicatesToSameCollectionEntry</description>
+        <jpa>
+where entity in (select entity
+from Entity entity
+  left join entity.subEntities as subEntity
+where subEntity.name = ?1 or subEntity.type = ?2)</jpa>
+        <rql>filter=or(eq(subEntities.name,"a"),eq(subEntities.type,"b"))</rql>
+    </cases>
+    <cases>
+        <description>7 withCollectionEntryWithMultipleConditionsWithNestedOr_shouldApplyPredicatesToSameCollectionEntry</description>
+        <jpa>
+where entity in (select entity
+from Entity entity
+  left join entity.subEntities as subEntity
+where subEntity.name = ?1 and (subEntity.type = ?2 or subEntity.type = ?3))</jpa>
+        <rql>filter=and(eq(subEntities.name,"a"),or(eq(subEntities.type,"x"),eq(subEntities.type,"y")))</rql>
+    </cases>
+    <cases>
+        <description>8 withCollectionEntryWithMultipleConditionsWithNestedOrs_shouldApplyPredicatesToSameCollectionEntry</description>
+        <jpa>
+where entity in (select entity
+from Entity entity
+  left join entity.subEntities as subEntity
+where (subEntity.name = ?1 or subEntity.type = ?2) and (subEntity.name = ?3 or subEntity.type = ?4))</jpa>
+        <rql>filter=and(or(eq(subEntities.name,"a"),eq(subEntities.type,"x")),or(eq(subEntities.name,"b"),eq(subEntities.type,"y")))</rql>
+    </cases>
+    <cases>
+        <description>9 withCollectionEntryPropertyUppercase_shouldBeCaseInsensitive</description>
+        <jpa>
+where entity in (select entity
+from Entity entity
+  left join entity.subEntities as subEntity
+where subEntity.name &lt;&gt; ?1)</jpa>
+        <rql>filter=ne(SUBENTITIES.NAME,"a")</rql>
+    </cases>
+    <cases>
+        <description>10 withCollectionEntryMapPropertyEqualsString_shouldReturnPredicateForEntityWithSuchASubEntity</description>
+        <jpa>
+where entity in (select entity
+from Entity entity
+  left join entity.subEntities as subEntity
+  left join subEntity.metadata as subEntity_metadata_0 on key(subEntity_metadata_0) = ?1
+where subEntity_metadata_0 &lt;&gt; ?2)</jpa>
+        <rql>filter=ne(subEntities.metadata.key1,"value1")</rql>
+    </cases>
+    <cases>
+        <description>11 withTwoCollectionsEntryPropertyEqualsString_shouldReturnPredicateForEntityWithSuchASubEntity</description>
+        <jpa>
+where entity in (select entity
+from Entity entity
+  left join entity.subEntities as subEntity
+  left join entity.subEntities2 as subEntity2
+where subEntity.name = ?1 and subEntity2.name = ?2)</jpa>
+        <rql>filter=and(eq(subEntities.name,"a"),eq(subEntities2.name,"b"))</rql>
+    </cases>
+    <cases>
+        <description>12 withTwoCollectionsEntryPropertyEqualsStringAndNestedKeyValueMap_shouldReturnPredicateForEntityWithSuchASubEntity</description>
+        <jpa>
+where entity in (select entity
+from Entity entity
+  left join entity.subEntities as subEntity
+  left join entity.subEntities2 as subEntity2
+  left join subEntity.metadata as subEntity_metadata_0 on key(subEntity_metadata_0) = ?1
+where subEntity.name = ?2 and (subEntity_metadata_0 = ?3 or subEntity2.name = ?4))</jpa>
+        <rql>filter=and(eq(subEntities.name,"a"),or(eq(subEntities.metadata.key1,"value1"),eq(subEntities2.name,"b")))</rql>
+    </cases>
+   <cases>
+      <description>
+         withTwoCollectionsEntryPropertyEqualsStringAnd2NestedKeyValueMap_shouldReturnPredicateForEntityWithSuchASubEntity
+      </description>
+      <jpa>
+where entity in (select entity
+from Entity entity
+  left join entity.subEntities as subEntity
+  left join entity.subEntities2 as subEntity2
+  left join subEntity.metadata as subEntity_metadata_0 on key(subEntity_metadata_0) = ?1
+  left join subEntity.metadata as subEntity_metadata_1 on key(subEntity_metadata_1) = ?2
+where subEntity.name = ?3 and (subEntity_metadata_0 = ?4 and subEntity_metadata_1 = ?5 or subEntity2.name = ?6))</jpa>
+      <rql>
+         filter=and(eq(subEntities.name,"a"),or(and(eq(subEntities.metadata.key1,"value1"),eq(subEntities.metadata.key2,"value2")),eq(subEntities2.name,"b")))
+      </rql>
+   </cases>
+   <cases>
+      <description>
+         withStringCollection_shouldReturnPredicateForCollectionEntry
+      </description>
+      <jpa>
+where exists (select 1
+from Entity entity_1904655894
+  inner join entity_1904655894.stringList as entity_stringList_0
+where entity_1904655894 = entity and entity_stringList_0 = ?1)</jpa>
+      <rql>
+         filter=and(eq(stringList,"a"))
+      </rql>
+   </cases>
+   <cases>
+      <description>
+         withStringCollectionTwoConstraints_shouldReturnPredicateForCollectionEntry
+      </description>
+      <jpa>
+where exists (select 1
+from Entity entity_1904655894
+  inner join entity_1904655894.stringList as entity_stringList_0
+where entity_1904655894 = entity and entity_stringList_0 = ?1) and exists (select 1
+from Entity entity_1977027566
+  inner join entity_1977027566.stringList as entity_stringList_1
+where entity_1977027566 = entity and entity_stringList_1 like ?2 escape '!')</jpa>
+      <rql>
+         filter=and(eq(stringList,"a"), like(stringList, "b*"))
+      </rql>
+   </cases>
+    <cases>
+        <description>1 withCollectionEntryPropertyEqualsString with subs.shortName Method</description>
+        <jpa>
+where entity in (select entity
+from Entity entity
+  left join entity.subEntities as subEntity
+where subEntity.name &lt;&gt; ?1)</jpa>
+        <rql>filter=ne(subs.shortName,"a")</rql>
+    </cases>
+    <cases>
+        <description>1 withCollectionEntryPropertyEqualsString with shortName Method</description>
+        <jpa>
+where entity in (select entity
+from Entity entity
+  left join entity.subEntities as subEntity
+where subEntity.name &lt;&gt; ?1)</jpa>
+        <rql>filter=ne(subEntities.shortName,"a")</rql>
+    </cases>
+    <cases>
+        <description>with SubSubEntity</description>
+        <jpa>
+where entity in (select entity
+from Entity entity
+  left join entity.subEntities as subEntity
+where subEntity.entity.description &lt;&gt; ?1)</jpa>
+        <rql>filter=ne(subEntities.entity.description,"a")</rql>
+    </cases>
+</cases>
+</Cases>

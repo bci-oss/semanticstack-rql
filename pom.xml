@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c)2024 Robert Bosch Manufacturing Solutions GmbH
+  ~
+  ~  See the AUTHORS file(s) distributed with this work for additional
+  ~  information regarding authorship.
+  ~
+  ~  This Source Code Form is subject to the terms of the Mozilla Public
+  ~  License, v. 2.0. If a copy of the MPL was not distributed with this
+  ~  file, You can obtain one at https://mozilla.org/MPL/2.0/.
+  ~
+  ~  SPDX-License-Identifier: MPL-2.0
+  -->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+   <modelVersion>4.0.0</modelVersion>
+
+   <groupId>com.boschsemanticstack</groupId>
+   <artifactId>semanticstack-rql-parent</artifactId>
+   <version>DEV-SNAPSHOT</version>
+   <packaging>pom</packaging>
+   <name>Bosch Semantic Stack RQL Parent</name>
+
+   <modules>
+      <module>semanticstack-rql-core</module>
+      <module>semanticstack-rql-model</module>
+      <module>semanticstack-rql-parser</module>
+      <module>semanticstack-rql-2-querydsl</module>
+      <module>examples/semanticstack-rql-examples-querydsljpa</module>
+   </modules>
+
+   <licenses>
+      <license>
+         <name>MPL-2.0</name>
+         <url>https://www.mozilla.org/en-US/MPL/2.0/</url>
+      </license>
+   </licenses>
+
+   <scm>
+      <connection>scm:git@github.com:bosch-semantic-stack/rbs-rql.git</connection>
+      <developerConnection>scm:git@github.com:bosch-semantic-stack/rbs-rql.git</developerConnection>
+   </scm>
+
+   <properties>
+      <!-- Dependency Versions -->
+      <antlr4.version>4.13.1</antlr4.version>
+      <assertj.version>3.24.2</assertj.version>
+      <h2.version>2.1.214</h2.version>
+      <junit.version>5.9.3</junit.version>
+      <mockito.version>4.11.0</mockito.version>
+      <jackson.version>2.16.1</jackson.version>
+      <querydsl.version>5.0.0</querydsl.version>
+      <jakarta.version>3.0.2</jakarta.version>
+      <rxjava.version>2.2.21</rxjava.version>
+
+      <!-- Plugin Versions -->
+      <build-helper-maven-plugin.version>3.4.0</build-helper-maven-plugin.version>
+      <antlr4-maven-plugin.version>${antlr4.version}</antlr4-maven-plugin.version>
+      <maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
+
+      <!-- General settings -->
+      <testreports.surefire>surefire-report</testreports.surefire>
+      <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+      <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+      <java-target-version>17</java-target-version>
+      <java-source-version>17</java-source-version>
+   </properties>
+
+   <dependencyManagement>
+      <dependencies>
+         <!-- POM section -->
+         <dependency>
+            <groupId>com.fasterxml.jackson</groupId>
+            <artifactId>jackson-bom</artifactId>
+            <version>${jackson.version}</version>
+            <type>pom</type>
+            <scope>import</scope>
+         </dependency>
+         <dependency>
+            <groupId>org.junit</groupId>
+            <artifactId>junit-bom</artifactId>
+            <version>${junit.version}</version>
+            <type>pom</type>
+            <scope>import</scope>
+         </dependency>
+
+         <!-- Project section -->
+         <dependency>
+            <groupId>com.boschsemanticstack</groupId>
+            <artifactId>semanticstack-rql-parser</artifactId>
+            <version>${project.version}</version>
+         </dependency>
+         <dependency>
+            <groupId>com.boschsemanticstack</groupId>
+            <artifactId>semanticstack-rql-model</artifactId>
+            <version>${project.version}</version>
+         </dependency>
+         <dependency>
+            <groupId>com.boschsemanticstack</groupId>
+            <artifactId>semanticstack-rql-core</artifactId>
+            <version>${project.version}</version>
+         </dependency>
+         <dependency>
+            <groupId>com.boschsemanticstack</groupId>
+            <artifactId>semanticstack-rql-2-querydsl</artifactId>
+            <version>${project.version}</version>
+         </dependency>
+
+         <!-- Third party artifacts -->
+         <dependency>
+            <groupId>jakarta.validation</groupId>
+            <artifactId>jakarta.validation-api</artifactId>
+            <version>${jakarta.version}</version>
+         </dependency>
+         <dependency>
+            <groupId>io.reactivex.rxjava2</groupId>
+            <artifactId>rxjava</artifactId>
+            <version>${rxjava.version}</version>
+         </dependency>
+         <dependency>
+            <groupId>com.querydsl</groupId>
+            <artifactId>querydsl-core</artifactId>
+            <version>${querydsl.version}</version>
+         </dependency>
+         <dependency>
+            <groupId>com.querydsl</groupId>
+            <artifactId>querydsl-jpa</artifactId>
+            <version>${querydsl.version}</version>
+            <classifier>jakarta</classifier>
+         </dependency>
+         <dependency>
+            <groupId>com.querydsl</groupId>
+            <artifactId>querydsl-apt</artifactId>
+            <version>${querydsl.version}</version>
+            <classifier>jakarta</classifier>
+         </dependency>
+
+
+         <dependency>
+            <groupId>org.antlr</groupId>
+            <artifactId>antlr4-runtime</artifactId>
+            <version>${antlr4.version}</version>
+         </dependency>
+
+
+         <!-- Artifacts for testing -->
+         <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>${h2.version}</version>
+         </dependency>
+         <dependency>
+            <groupId>org.antlr</groupId>
+            <artifactId>antlr4</artifactId>
+            <version>${antlr4.version}</version>
+         </dependency>
+         <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>${assertj.version}</version>
+         </dependency>
+         <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>${mockito.version}</version>
+         </dependency>
+      </dependencies>
+   </dependencyManagement>
+
+   <build>
+      <pluginManagement>
+         <plugins>
+            <plugin>
+               <groupId>org.codehaus.mojo</groupId>
+               <artifactId>build-helper-maven-plugin</artifactId>
+               <version>${build-helper-maven-plugin.version}</version>
+            </plugin>
+            <plugin>
+               <groupId>org.antlr</groupId>
+               <artifactId>antlr4-maven-plugin</artifactId>
+               <version>${antlr4-maven-plugin.version}</version>
+            </plugin>
+            <plugin>
+               <groupId>org.apache.maven.plugins</groupId>
+               <artifactId>maven-compiler-plugin</artifactId>
+               <version>${maven-compiler-plugin.version}</version>
+               <configuration>
+                  <source>${java-source-version}</source>
+                  <target>${java-target-version}</target>
+                  <showWarnings>true</showWarnings>
+                  <showDeprecation>true</showDeprecation>
+                  <compilerArgs>
+                     <arg>-Xlint:all</arg>
+                  </compilerArgs>
+               </configuration>
+            </plugin>
+         </plugins>
+      </pluginManagement>
+
+      <plugins>
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+         </plugin>
+      </plugins>
+
+   </build>
+
+</project>

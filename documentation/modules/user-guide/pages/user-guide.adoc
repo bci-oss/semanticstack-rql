@@ -1,0 +1,218 @@
+:page-partial:
+= User Guide Resource Query Language (RQL)
+
+This section presents the main components of the RQL.
+The RQL is a query language that allows you to select, filter, sort, and paginate the results of a query.
+
+== Syntax
+
+The excerpts of the language definition below shows the main operators and their restrictions:
+The general form of the query string looks as follows:
+[subs="quotes"]
+----
+`select=id,name&filter=ge(id,4711)&option=sort(+name,-description),limit(10,5)`
+----
+
+select:: The fields `id` and `name`
+
+filter:: for the `id` _greater or equal_ to `4711`
+
+sort:: the result _ascending_ by name and _descending_ by `description` (even though `description` is not selected)
+
+limited:: to 5 results starting at result 10 WARNING: Start of indices depends entirely on the implementation.
+
+
+=== Select
+
+The select operator trims each response down to the set of attributes defined in the arguments of the query.
+The general form of the select string looks as follows:
+
+[subs="quotes"]
+----
+select=attribute1,attribute2,attributeN
+----
+
+User-defined select can be requested via RQL for a root entity.
+The attributes names are separated by a comma.
+All child entities will then not be loaded.
+This means that response times can be significantly improved if only the requested information is returned.
+
+Example: Load (Select) only IDs and name (select) and do that only for the root entity.
+
+[subs="quotes"]
+----
+select=id,name
+----
+
+=== Filter
+
+The filter operator is used to filter the results of a query based on the specified criteria.
+The general form of the filter string looks as follows:
+
+[subs="quotes"]
+----
+filter={filter expression}
+----
+
+The value is an expression that uses one of the following operators:
+
+* Comparison: `+++<abbr title="equals">eq</abbr>+++`,
+`+++<abbr title="value is one of a given list">in</abbr>+++`,
+`+++<abbr title="not equals">ne</abbr>+++`,
+`+++<abbr title="greater than">gt</abbr>+++`,
+`+++<abbr title="greater or equal than">ge</abbr>+++`,
+`+++<abbr title="less than">lt</abbr>+++`,
+`+++<abbr title="less or equal than">le</abbr>+++`,
+`like` and `likeIgnoreCase`;
+* Logical: `and`, `or` and `not`.
+
+The following list illustrates some example filter expressions:
+likeIgnoreCase(description,"*my device*"): All digital twins that have a description containing "my device"in(twinCategory,"Machine","Device"): All digital twins that have a twinCategory of either "Machine" or "Device"and(eq(twinCategory,"Printer"), eq(labels.name,"Floor1")):
+All digital twins with given twinCategory and at least one label with name Floor1
+
+Here is a definition of the common operators (individual stores may have support for more less operators):
+
+==== Comparison Operator
+
+The following comparison operators are supported.
+.Comparison Operator
+
+[options="header"]
+|===
+| Operator Expression               | Description
+| eq(<attribute>,<value>)           | Filters objects where the value of the specified attribute equals the provided value.
+| ge(<attribute>,<value>)           | Filters for objects where the value of the specified attribute is greater than or equal to the provided value.
+| gt(<attribute>,<value>)           | Filters for objects where the value of the specified attribute is greater than the provided value.
+| in(<attribute>,<array-of-values>) | Filters for objects where the value of the specified attribute is present in the provided array.
+| le(<attribute>,<value>)           | Filters for objects where the value of the specified attribute is less than or equal to the provided value.
+| lt(<attribute>,<value>)           | Filters for objects where the value of the specified attribute is less than the provided value.
+| ne(<attribute>,<value>)           | Filters for objects where the value of the specified attribute is not equal to the provided value.
+| count()                           | The count of records in the result set of the query is not yet implemented.
+|===
+
+==== Logical Operator
+
+The following logical operators are supported.
+.Logical Operator
+
+[options="header"]
+|===
+| Logical Expression                | Description
+| and(<operator1>,<operator2>,...)  | Executes all the provided queries.
+| or(<operator1>,<operator2>,...)   | The combination of the provided queries.
+| not(<operator1>,<operator2>,...)  | Negates the provided query.
+|===
+
+=== Options
+
+The general form of the options string looks as follows:
+
+[subs="quotes"]
+----
+option=limit(_start_,_count_),sort(-+attribute1,attribute2,attributeN)
+----
+
+=== Sorting
+
+Sorts the data based on the specified attribute in the order indicated by the prefix (+ for ascending, - for descending) The attributes names are separated by a comma.
+With user-defined sorting, the client is responsible for preventing an arbitrary order of the retrieved results.
+
+[subs="quotes"]
+----
+option=sort(-+attribute1,attribute2,attributeN)
+----
+
+=== Pagination
+
+Paging is controlled by the `option=limit(_start_,_count_)` part in the query string.
+Currently, the syntax is related to the offset pagination.
+Other strategy are currently not provided but may be added in the future e.g. cursor based pagination.
+
+[subs="quotes"]
+----
+options=limit(_start_,_count_)
+----
+
+== Attribute Names
+
+Attribute names used in `select` `filter` and `sort` statements are restricted to the following syntax: +
+`[a-zA-Z_][a-zA-Z0-9/_]*`
+
+*Examples:*
+
+name:: simple attribute named 'name'
+id:: simple attribute named 'name'
+location_v_2:: simple attribute named containing underscore and numbers
+_someStrangeThing:: attributes _may_ start with underscore but why would you?
+address/street:: _nested_ attribute 'street' of parent attribute 'address'
+
+99NotValid:: *invalid* - attributes may not start with numbers
+/alsoNotValid:: *invalid* - attributes may not start with nesting separator
+willBeParsedButHasNoMeaning/:: *no meaning* - the parser will read this but it makes no sense and *may be removed in future releases*
+
+Attributes can be nested by separating them using `.`.
+
+*Example:* `address.street`
+
+=== Data types
+
+==== Integer numbers
+
+What you would expect.
+They will be parsed in the smallest java data type they fit.
+(Integer, Long, BigInteger)
+
+*Example:* `ge(foo,42)`
+
+==== Real numbers
+
+They will always be parsed into java data type `BigDecimal`.
+
+*Example:* `lt(foo,7.23246)`
+
+==== null
+
+Will get mapped to null.
+
+*Example:* `eq(foo,null)`
+
+==== Strings
+
+Can be any unicode (except unicode escapes `\u1234`) with the escaping rules closely following java:
+
+Escape-char is backslash `\`, possible escape sequences are
+
+`\\`:: Backslash itself
+`\t`:: Tabulator
+`\n`:: Newline
+`\r`:: Carriage return
+`\"`:: Double Quote
+`\f`:: Formfeed - *DO NOT USE* _this might be removed in future_
+`\b`:: Backspace - *DO NOT USE* _this might be removed in future_
+
+==== Times
+
+This parser (and model) support time literals as `OffsetDateTime` represented in a *subset* of _ISO 8601_
+Some less used features of ISO 8601 are not supported - and likely will not in near future:
+
+* Reduced Precision: giving a partial time `hh` or `hh:mm` is not supported.
+* Fractional hours and minutes (_ISO8601_ states that you can use fractions of the most precise time component (Hour, minute, second).
+As we only support a fixed precision including seconds this is not supported.
+
+So `2007-12-03T10:15Z` and `2007-12-03T10:15+4:27` are valid _ISO8601_ but *not* valid RQL
+
+Valid examples are `2007-12-03T10:15:30.0123Z` and `2007-12-03t10:15:30+04:37`.
+
+<<<
+
+=== Set comparisons
+
+The `in` statement does not support `null` as a literal and only _pure_ lists i.e. only floats, only strings or only integers.
+
+Wildcards for the like operators are `?` for a single undefined character and `*` for any number of characters.
+
+=== Simple comparisons
+
+<1> Supports all literals
+<2> Does not support booleans or null, as less/greater are not defined independent of implementation
+<3> Supports only strings

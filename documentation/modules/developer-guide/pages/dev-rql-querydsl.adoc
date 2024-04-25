@@ -1,0 +1,397 @@
+[[rql-parser]]
+= RQL to QueryDSL
+:example: ../../../../examples/semanticstack-rql-examples-querydsljpa
+
+The `rql-2-querydsl` module provides a bridge from an RQL model to a http://www.querydsl.com/[Querydsl] model.
+Querydsl strives to be a technology-agnostic, typesafe query language that can be mapped to different concrete technologies such as JPA, SQL and MongoDB.
+Using the bridge in combination with the
+https://spring.io/blog/2011/04/26/advanced-spring-data-jpa-specifications-and-querydsl/[binding of Querydsl]
+for http://projects.spring.io/spring-data/[Spring Data] enables easy usage of RQL to access a database through Spring Data repositories.
+
+****
+WARNING: JAXB annotations (or similar Jackson or Gson annotations) are not yet considered during the translation.
+****
+
+To include the plugin, use the following dependency:
+
+[source,xml,subs=attributes+]
+----
+<dependency>
+    <groupId>com.boschsemanticstack</groupId>
+    <artifactId>semanticstack-rql-2-querydsl</artifactId>
+    <version>{version}</version>
+</dependency>
+----
+
+== Features
+
+=== Select / Projection
+
+Not yet supported.
+
+=== Filtering
+
+The bridge currently supports the operators:
+
+* Comparison: `eq`, `in`, `ne`, `gt`, `ge`, `lt`, `le`, `like` and `likeIgnoreCase`;
+* Logical: `and`, `or` and `not`.
+
+Top-level properties, nested properties and collections of properties can be referenced in query expressions.
+In the following example, filters are defined on properties of a `Person` entity.
+A Person has a `firstName` top-level property, a property `addresses` that references a subentity of type `Address` and a list of `Hobby` entities.
+
+----
+filter=eq(firstName,"John")
+filter=eq(address/zipCode,1234)
+filter=like(hobbies/description,"?iking*")
+----
+
+If there are multiple constraints on entries of a collection, all constraints are applied to each entry, which means the query
+
+----
+filter=and(like(hobbies/description,"?iking*"),eq(hobbies/name,"ships"))
+----
+
+matches persons that have a hobby with the name "ships" and that hobby's description contains "?iking*".
+Thus the semantic is similar to joining the hobby once in a relational database.
+
+=== Ordering
+
+Ordering is supported for a resources properties.
+For example
+
+----
+option=sort(-adress.zipCode,+name)
+----
+
+would sort persons by `zipCode` in descending and `name` in ascending order.
+
+=== Pagination / Limits
+
+Currently, not directly supported.
+There is no generic way to use Querydsl for that.
+
+However, the `QueryModelToQueryDSL` instance contains this information afterwards so that it can be used manually with your concrete access solution (e.g. you can use this information with Spring Data repositories).
+Access paging information like this:
+
+----
+QueryModelToQueryDSL transformedQueryModel = ... // transform query
+Optional<ISlice> paging = transformedQueryModel.getPagination();
+----
+
+=== Usage & Examples
+
+==== Required dependencies
+
+[source,xml,subs=attributes+]
+----
+include::{example}/pom.xml[lines=16..19]
+...
+include::{example}/pom.xml[lines=53..62]
+----
+
+[source,xml]
+----
+		<!-- In case of using JPA: spring-data-jpa is required -->
+      <dependency>
+         <groupId>org.springframework.boot</groupId>
+         <artifactId>spring-boot-starter-data-jpa</artifactId>
+      </dependency>
+----
+
+==== Set up generation of Querydsl metamodel classes
+
+In order to query object graphs in a typesafe way, Querydsl relies on (usually automatically generated) metamodel classes.
+The meta model classes use the naming prefix *Q* to distinguish them from the model classes, e.g., a class `Entity` would have a metamodel class `QEntity`.
+
+The `rql-2-querydsl` bridge relies on the metamodel classes as well.
+See the official http://www.querydsl.com/[documentation] on how to set up Maven to generate classes for use with JPA, SQL etc.
+The following example shows how to use RQL via Querydsl on Spring Data MongoDB repositories.
+
+You need to generate the meta model classes using the Spring Data MongoDB specific annotation processor; add the following plugin configuration to the
+`pom.xml`:
+
+===== QueryDSL since 5.0.0
+
+[source,xml]
+----
+<!-- used to build QClasses during normal compile time -->
+<dependency>
+   <groupId>com.querydsl</groupId>
+   <artifactId>querydsl-apt</artifactId>
+   <version>${querydsl.version}</version>
+   <classifier>jpa</classifier>
+   <scope>provided</scope>
+</dependency>
+----
+
+Calling `mvn compile` will then generate a class `QEntity` and corresponding Q-classes for the classes of subentities that are direct parts of `Entity`.
+If your entity class hierarchy is nested deeper than one level, you need to annotate subentity classes with `@QueryEmbeddable` for the annotation processor to generate Q-classes for them, e.g.:
+
+[source,java]
+----
+import com.querydsl.core.annotations.QueryEmbeddable;
+
+@QueryEmbeddable
+public class SubEntity {
+}
+----
+
+=== Generating a Querydsl Predicate from an RQL expression
+
+Creating a Querydsl `Predicate` which you can then use to perform the actual query consists of two parts: parsing the raw RQL query and transforming it into a `Predicate`
+for your underlying store. +
+As of now the transformation process is not completely independent of the underlying store, but you'll be guided by the API.
+
+[source,java]
+----
+import com.bosch.bci.rql.model.v1.IQueryModel;
+import com.bosch.bci.rql.parser.v1.RqlParser;
+import querydsl.rql.com.boschsemanticstack.QueryModelToQueryDSL;
+import com.querydsl.core.types.Predicate;
+
+public void example() {
+	String rqlQuery = "filter=eq(firstName,\"John\")";
+	IQueryModel queryModel = RqlParser.from(rqlQuery);
+
+	// JPA-specific
+	QueryModelToQueryDSL bridge = QueryModelToQueryDSL.forJpa(QEntity.entity, queryModel);
+
+	// Generic (e.g. MongoDB)
+	QueryModelToQueryDSL bridge = QueryModelToQueryDSL.forGenericStore(QEntity.entity, queryModel);
+	...
+	Optional<Predicate> optionalPredicate = bridge.getPredicate();
+}
+----
+
+The above shown methods are convenience shortcuts, also a builder can be used which allows for more fine grained configuration.
+See chapter <<type-conversions>> for an example.
+
+=== Executing an RQL query on a Spring Data MongoDB repository
+
+To be usable with Querydsl, the repository must extend the
+`QuerydslPredicateExcecutor` interface, e.g.:
+
+[source,java]
+----
+import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.querydsl.QuerydslPredicateExecutor;
+
+public interface EntityRepository extends MongoRepository<Entity,String>,
+                                          QueryDslPredicateExecutor<Entity> {
+}
+----
+
+By using standard Spring dependency injection, the repository can be made available and queried using the generated Querydsl predicate, e.g.:
+
+[source,java]
+----
+EntityRepository repository = ...;
+Optional<Iterable<Entity>> result = optionalPredicate.map(repository::findAll);
+----
+
+=== Use paging and sorting with Spring Data
+
+The `QueryModelToQueryDSL` offers the information about the requested limit and the sort options:
+
+[source,java]
+----
+	public List<OrderSpecifier<?>> getOrdering() {...}
+
+	public Optional<ISlice> getPagination() {...}
+----
+
+Spring Data provides a `PagingAndSortingRepository` which accepts a `PageRequest` containing the sort and page information.
+In the examples there is a `QueryDslRepositoryFilter` which converts the `OrderSpecifier` and the `ISlice` into a `PageRequest`:
+
+[source,java]
+----
+include::{example}/src/main/java/com/boschsemanticstack/rql/examples/querydsljpa/controller/QueryDslRepositoryFilter.java[lines=53..77]
+----
+
+[#type-conversions]
+=== Explicit type conversions
+
+It is possible to apply explicit type conversions during the translation from RQL to Querydsl.
+This is e.g. necessary, if your domain model uses types that can't directly be assigned from the values parsed from the RQL query.
+A typical example is a UUID or a date, which both will be provided as strings.
+
+To apply type conversions, the builder for the `QueryModelToQueryDSL` bridge must be used:
+
+[source,java]
+----
+QueryModelToQueryDSL bridge =
+    // example for JPA, works the same for generic stores
+    RqlToQueryDslConverterBuilder.forJpa(QEntity.entity)
+                                 .withTypeConverter(UUID.class, UUID::fromString)
+                                 .build()
+                                 .applyTo(queryModel);
+----
+
+Any number of type converters can be registered using method chaining.
+
+[#customize-paths]
+==== Customize Paths via delegate methods
+
+For more information see https://querydsl.com/static/querydsl/4.4.0/reference/html_single/#d0e2479[QueryDSL docs]
+
+A small example to demonstrate the feature.
+
+[source,java]
+----
+public class Foo {
+   private FooBar fooBar;
+}
+
+public class FooBar{
+   private Bar bar;
+}
+
+public class Bar{
+   private String name;
+}
+
+----
+
+The main entity to handle is `Foo`.
+If you would to search for a bar name the search query/path is always `fooBars.bar.name`.
+There are a few reasons to customize this path. e.g. only `bar.name`.
+
+This is possible with a `QueryEntity` and delegate methods.
+
+The method name must match the path element.
+This means that we need the following new methods for delegation in this case.
+
+In the class `Foo`, the path `fooBars` should be able to be specified directly with `bar`.
+For that we need a method `bar`.
+
+[source,java]
+----
+
+@QueryEntity
+public class FooExtension {
+
+@QueryDelegate( QFoo.class )
+public static SetPath<FooBar, QFooBar> bar( final QFoo foo ) {
+   return foo.fooBars;
+   }
+}
+
+----
+
+In the class `FooBar`, the path `bar.name` should be able to be specified directly with `name`.
+For this we need a method `name`
+
+[source,java]
+----
+
+@QueryEntity
+public class FooBarExtension {
+
+@QueryDelegate( QFooBar.class )
+public static StringPath name( final QFooBar fooBar ) {
+   return fooBar.bar.name;
+   }
+}
+
+----
+
+Now the apt plugin will go and generate new methods in the generated classes and use these static methods.
+The extension must be outside a package which is not re-created by the apt plugin.
+
+[#exclude-paths-and-operations]
+== Exclude Paths and Operation query type
+
+=== Declared allowed paths
+
+With the possibility of the 'QueryType' you can skip and manipulate the apt generation.
+For more information see https://querydsl.com/static/querydsl/5.0.0/reference/html_single/#custom_types[QueryDSL docs]
+
+[source,java]
+----
+public class Foo {
+   @QueryType(NONE)
+   private String id;
+   @QueryType(SIMPLE)
+   private String simple;
+   private String name;
+   private Bar bar;
+}
+
+public class Bar{
+   private String name;
+}
+
+----
+
+In this example we can search for 'Foo#name' and 'Bar#name'.
+For Path 'Foo#simple' you can only use 'eq' and 'ne'.
+Path for 'Foo#id' is not generated
+
+[#like-wildcard-restriction]
+=== Restrict wildcard for Like expression
+
+With the possibility of the custom annotation 'WildcardCount' and 'RqlPattern', you can add restriction for the like expression.
+The idea is that for some like operations the number of wildcards should be limited depending on the field.
+More complicated patterns can be added via pattern e.g. wildcards may only be used at the beginning.
+
+==== Wildcard count
+
+The idea is that for some like operations the number of wildcards should be limited depending on the field e.g. for this field just 2 wildcards are allowed.
+
+Example:
+
+[source,java]
+----
+public class Foo {
+   @WildcardCount(count = 2)
+   private String id;
+
+   @WildcardCount(count = 1)
+   private String name;
+
+   private Bar bar;
+}
+
+public class Bar{
+   private String name;
+}
+
+----
+
+In this example we limit the 'Foo#id' and 'Foo#name'.
+For 'Foo#id'2 wildcards are allowed.
+For 'Foo#name' one wildcard is allowed.
+The 'bar#name' has not limits.
+
+==== Wildcard Pattern
+
+More complicated patterns can be added via pattern e.g. wildcards may only be used at the beginning or end.
+
+Example:
+
+[source,java]
+----
+public class Foo {
+   private String id;
+   private String name;
+
+   private Bar bar;
+}
+
+public class Bar{
+   @RqlPattern(regex = "^*?[^*]+$|^[^*]+?*?$")
+   private String name;
+}
+
+----
+
+In this example we limit the 'Bar#name'.
+For 'Bar#name' the wildcard is just allowed at the beginning.
+The 'id' and 'name has not limits.
+
+
+
+
+
+
