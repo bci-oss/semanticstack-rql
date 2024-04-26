@@ -1,14 +1,14 @@
 /*
- * Copyright (c)2024 Robert Bosch Manufacturing Solutions GmbH
+ * Copyright (c) 2024 Robert Bosch Manufacturing Solutions GmbH
  *
- *  See the AUTHORS file(s) distributed with this work for additional
- *  information regarding authorship.
+ * See the AUTHORS file(s) distributed with this work for additional
+ * information regarding authorship.
  *
- *  This Source Code Form is subject to the terms of the Mozilla Public
- *  License, v. 2.0. If a copy of the MPL was not distributed with this
- *  file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- *  SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: MPL-2.0
  */
 
 package com.boschsemanticstack.rql.examples.querydsljpa.controller;
@@ -18,7 +18,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.boschsemanticstack.rql.examples.querydsljpa.controller.model.Rql;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +26,8 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+
+import com.boschsemanticstack.rql.examples.querydsljpa.controller.model.Rql;
 
 @SpringBootTest
 @WebAppConfiguration

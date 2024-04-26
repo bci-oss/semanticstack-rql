@@ -1,14 +1,14 @@
 /*
- * Copyright (c)2024 Robert Bosch Manufacturing Solutions GmbH
+ * Copyright (c) 2024 Robert Bosch Manufacturing Solutions GmbH
  *
- *  See the AUTHORS file(s) distributed with this work for additional
- *  information regarding authorship.
+ * See the AUTHORS file(s) distributed with this work for additional
+ * information regarding authorship.
  *
- *  This Source Code Form is subject to the terms of the Mozilla Public
- *  License, v. 2.0. If a copy of the MPL was not distributed with this
- *  file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- *  SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: MPL-2.0
  */
 
 package com.boschsemanticstack.rql.querydsl.entities;
@@ -31,18 +31,18 @@ public class QSubEntity2 extends EntityPathBase<SubEntity2> {
 
    public final StringPath type = createString( "type" );
 
-   public final MapPath<String, String, StringPath> metadata = this.createMap( "metadata", String.class, String.class,
+   public final MapPath<String, String, StringPath> metadata = createMap( "metadata", String.class, String.class,
          StringPath.class );
 
-   public QSubEntity2( String variable ) {
+   public QSubEntity2( final String variable ) {
       super( SubEntity2.class, forVariable( variable ) );
    }
 
-   public QSubEntity2( Path<? extends SubEntity2> path ) {
+   public QSubEntity2( final Path<? extends SubEntity2> path ) {
       super( path.getType(), path.getMetadata() );
    }
 
-   public QSubEntity2( PathMetadata metadata ) {
+   public QSubEntity2( final PathMetadata metadata ) {
       super( SubEntity2.class, metadata );
    }
 }

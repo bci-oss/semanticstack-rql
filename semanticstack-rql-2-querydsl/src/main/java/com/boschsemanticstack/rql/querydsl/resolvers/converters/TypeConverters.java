@@ -1,14 +1,14 @@
 /*
- * Copyright (c)2024 Robert Bosch Manufacturing Solutions GmbH
+ * Copyright (c) 2024 Robert Bosch Manufacturing Solutions GmbH
  *
- *  See the AUTHORS file(s) distributed with this work for additional
- *  information regarding authorship.
+ * See the AUTHORS file(s) distributed with this work for additional
+ * information regarding authorship.
  *
- *  This Source Code Form is subject to the terms of the Mozilla Public
- *  License, v. 2.0. If a copy of the MPL was not distributed with this
- *  file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- *  SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: MPL-2.0
  */
 
 package com.boschsemanticstack.rql.querydsl.resolvers.converters;
@@ -28,7 +28,7 @@ import com.boschsemanticstack.rql.querydsl.resolvers.SimpleValueResolver;
 public class TypeConverters {
    private static final UnaryOperator<Object> IDENTITY = UnaryOperator.identity();
 
-   private Map<Class<?>, Function<Object, ?>> converters = new HashMap<>();
+   private final Map<Class<?>, Function<Object, ?>> converters = new HashMap<>();
 
    /**
     * Registers a converter for a target class.
@@ -51,7 +51,7 @@ public class TypeConverters {
     * @return the converted value or the original value if no converter could be found
     */
    public Object convertTo( final Class<?> targetClass, final Object value ) {
-      if (null == value || targetClass.isAssignableFrom( value.getClass() )) {
+      if ( null == value || targetClass.isAssignableFrom( value.getClass() ) ) {
          return value; // no conversion necessary
       }
       return getConverter( targetClass ).apply( value );

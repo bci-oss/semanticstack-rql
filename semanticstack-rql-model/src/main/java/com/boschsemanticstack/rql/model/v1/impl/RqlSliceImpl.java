@@ -1,14 +1,14 @@
 /*
- * Copyright (c)2024 Robert Bosch Manufacturing Solutions GmbH
+ * Copyright (c) 2024 Robert Bosch Manufacturing Solutions GmbH
  *
- *  See the AUTHORS file(s) distributed with this work for additional
- *  information regarding authorship.
+ * See the AUTHORS file(s) distributed with this work for additional
+ * information regarding authorship.
  *
- *  This Source Code Form is subject to the terms of the Mozilla Public
- *  License, v. 2.0. If a copy of the MPL was not distributed with this
- *  file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- *  SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: MPL-2.0
  */
 
 package com.boschsemanticstack.rql.model.v1.impl;
@@ -16,7 +16,7 @@ package com.boschsemanticstack.rql.model.v1.impl;
 import com.boschsemanticstack.rql.model.v1.RqlModelVisitor;
 import com.boschsemanticstack.rql.model.v1.RqlSlice;
 
-public record RqlSliceImpl( long offset, long limit ) implements RqlSlice {
+public record RqlSliceImpl(long offset, long limit) implements RqlSlice {
 
    @Override
    public <T> T accept( final RqlModelVisitor<? extends T> visitor ) {

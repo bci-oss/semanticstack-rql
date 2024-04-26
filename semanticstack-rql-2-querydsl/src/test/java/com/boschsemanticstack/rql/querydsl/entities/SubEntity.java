@@ -1,14 +1,14 @@
 /*
- * Copyright (c)2024 Robert Bosch Manufacturing Solutions GmbH
+ * Copyright (c) 2024 Robert Bosch Manufacturing Solutions GmbH
  *
- *  See the AUTHORS file(s) distributed with this work for additional
- *  information regarding authorship.
+ * See the AUTHORS file(s) distributed with this work for additional
+ * information regarding authorship.
  *
- *  This Source Code Form is subject to the terms of the Mozilla Public
- *  License, v. 2.0. If a copy of the MPL was not distributed with this
- *  file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- *  SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: MPL-2.0
  */
 
 package com.boschsemanticstack.rql.querydsl.entities;
@@ -34,7 +34,7 @@ public class SubEntity {
       return id;
    }
 
-   protected SubEntity setId( String id ) {
+   protected SubEntity setId( final String id ) {
       this.id = id;
       return this;
    }
@@ -43,7 +43,7 @@ public class SubEntity {
       return name;
    }
 
-   protected SubEntity setName( String name ) {
+   protected SubEntity setName( final String name ) {
       this.name = name;
       return this;
    }
@@ -52,7 +52,7 @@ public class SubEntity {
       return type;
    }
 
-   protected SubEntity setType( String type ) {
+   protected SubEntity setType( final String type ) {
       this.type = type;
       return this;
    }
@@ -61,7 +61,7 @@ public class SubEntity {
       return metadata;
    }
 
-   protected SubEntity setMetadata( Map<String, String> metadata ) {
+   protected SubEntity setMetadata( final Map<String, String> metadata ) {
       this.metadata = metadata;
       return this;
    }
@@ -70,7 +70,7 @@ public class SubEntity {
       return entity;
    }
 
-   public void setEntity( SubEntity3 entity ) {
+   public void setEntity( final SubEntity3 entity ) {
       this.entity = entity;
    }
 }
