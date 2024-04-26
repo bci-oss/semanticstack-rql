@@ -1,14 +1,14 @@
 /*
- * Copyright (c)2024 Robert Bosch Manufacturing Solutions GmbH
+ * Copyright (c) 2024 Robert Bosch Manufacturing Solutions GmbH
  *
- *  See the AUTHORS file(s) distributed with this work for additional
- *  information regarding authorship.
+ * See the AUTHORS file(s) distributed with this work for additional
+ * information regarding authorship.
  *
- *  This Source Code Form is subject to the terms of the Mozilla Public
- *  License, v. 2.0. If a copy of the MPL was not distributed with this
- *  file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- *  SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: MPL-2.0
  */
 
 package com.boschsemanticstack.rql.querydsl;
@@ -27,8 +27,9 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Queue;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
+import com.boschsemanticstack.rql.annotation.RqlPattern;
+import com.boschsemanticstack.rql.annotation.WildcardCount;
 import com.boschsemanticstack.rql.exceptions.IllegalValueTypeQueryException;
 import com.boschsemanticstack.rql.exceptions.NoSuchFieldQueryException;
 import com.boschsemanticstack.rql.exceptions.NonComparableFieldQueryException;
@@ -37,8 +38,6 @@ import com.boschsemanticstack.rql.model.v1.RqlFieldDirection;
 import com.boschsemanticstack.rql.model.v1.RqlFilter;
 import com.boschsemanticstack.rql.model.v1.RqlQueryModel;
 import com.boschsemanticstack.rql.model.v1.RqlSlice;
-import com.boschsemanticstack.rql.annotation.RqlPattern;
-import com.boschsemanticstack.rql.annotation.WildcardCount;
 import com.boschsemanticstack.rql.querydsl.resolvers.AbstractPathPredicateResolver;
 import com.boschsemanticstack.rql.querydsl.resolvers.PathPredicateResolver;
 import com.querydsl.core.types.Order;

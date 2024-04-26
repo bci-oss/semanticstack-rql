@@ -1,18 +1,17 @@
 /*
- * Copyright (c)2024 Robert Bosch Manufacturing Solutions GmbH
+ * Copyright (c) 2024 Robert Bosch Manufacturing Solutions GmbH
  *
- *  See the AUTHORS file(s) distributed with this work for additional
- *  information regarding authorship.
+ * See the AUTHORS file(s) distributed with this work for additional
+ * information regarding authorship.
  *
- *  This Source Code Form is subject to the terms of the Mozilla Public
- *  License, v. 2.0. If a copy of the MPL was not distributed with this
- *  file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- *  SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: MPL-2.0
  */
 
 package com.boschsemanticstack.rql.examples.querydsljpa.model;
-
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -29,15 +28,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor // JPA
 @AllArgsConstructor
 @EqualsAndHashCode
-@Table(name = "BURGER")
+@Table( name = "BURGER" )
 @Builder
 public class Burger {
-    @Id
-    private long id;
+   @Id
+   private long id;
 
-    @Column(name="NAME")
-    private String name;
+   @Column( name = "NAME" )
+   private String name;
 
-    @Column(name="DRESSING")
-    private Dressing dressing;
+   @Column( name = "DRESSING" )
+   private Dressing dressing;
 }

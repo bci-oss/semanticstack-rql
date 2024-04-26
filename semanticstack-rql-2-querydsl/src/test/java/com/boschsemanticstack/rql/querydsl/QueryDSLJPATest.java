@@ -1,19 +1,21 @@
 /*
- * Copyright (c)2024 Robert Bosch Manufacturing Solutions GmbH
+ * Copyright (c) 2024 Robert Bosch Manufacturing Solutions GmbH
  *
- *  See the AUTHORS file(s) distributed with this work for additional
- *  information regarding authorship.
+ * See the AUTHORS file(s) distributed with this work for additional
+ * information regarding authorship.
  *
- *  This Source Code Form is subject to the terms of the Mozilla Public
- *  License, v. 2.0. If a copy of the MPL was not distributed with this
- *  file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- *  SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: MPL-2.0
  */
 
 package com.boschsemanticstack.rql.querydsl;
 
 import static org.assertj.core.api.Assertions.assertThat;
+
+import org.junit.jupiter.api.Test;
 
 import com.boschsemanticstack.rql.querydsl.entities.Entity;
 import com.boschsemanticstack.rql.querydsl.entities.QEntity;
@@ -26,7 +28,6 @@ import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.JPQLSerializer;
 import com.querydsl.jpa.JPQLTemplates;
 import com.querydsl.jpa.impl.JPAQuery;
-import org.junit.jupiter.api.Test;
 
 class QueryDSLJPATest {
 
@@ -51,7 +52,7 @@ class QueryDSLJPATest {
             + "  left join subEntity.metadata as subEntity_metadata_0 on key(subEntity_metadata_0) = ?1\n"
             + "where subEntity.name = ?2 and subEntity_metadata_0 = ?3 and subEntity2.name = ?4)" );
    }
-   
+
    private String asJpaQuery( final Predicate predicate ) {
       final JPQLSerializer serializer = new JPQLSerializer( JPQLTemplates.DEFAULT );
       final JPAQuery jpaQuery = (JPAQuery) new JPAQuery().where( predicate );

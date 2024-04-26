@@ -1,14 +1,14 @@
 /*
- * Copyright (c)2024 Robert Bosch Manufacturing Solutions GmbH
+ * Copyright (c) 2024 Robert Bosch Manufacturing Solutions GmbH
  *
- *  See the AUTHORS file(s) distributed with this work for additional
- *  information regarding authorship.
+ * See the AUTHORS file(s) distributed with this work for additional
+ * information regarding authorship.
  *
- *  This Source Code Form is subject to the terms of the Mozilla Public
- *  License, v. 2.0. If a copy of the MPL was not distributed with this
- *  file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- *  SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: MPL-2.0
  */
 
 package com.boschsemanticstack.rql.querydsl.entities;
@@ -32,7 +32,7 @@ public class Entity {
       return id;
    }
 
-   protected Entity setId( String id ) {
+   protected Entity setId( final String id ) {
       this.id = id;
       return this;
    }
@@ -41,7 +41,7 @@ public class Entity {
       return specialId;
    }
 
-   protected void setSpecialId( UUID specialId ) {
+   protected void setSpecialId( final UUID specialId ) {
       this.specialId = specialId;
    }
 
@@ -49,7 +49,7 @@ public class Entity {
       return name;
    }
 
-   protected Entity setName( String name ) {
+   protected Entity setName( final String name ) {
       this.name = name;
       return this;
    }
@@ -58,7 +58,7 @@ public class Entity {
       return type;
    }
 
-   protected Entity setType( String type ) {
+   protected Entity setType( final String type ) {
       this.type = type;
       return this;
    }
@@ -67,7 +67,7 @@ public class Entity {
       return special;
    }
 
-   protected Entity setSpecial( Boolean special ) {
+   protected Entity setSpecial( final Boolean special ) {
       this.special = special;
       return this;
    }
@@ -76,7 +76,7 @@ public class Entity {
       return subEntities;
    }
 
-   protected Entity setSubEntities( List<SubEntity> subEntities ) {
+   protected Entity setSubEntities( final List<SubEntity> subEntities ) {
       this.subEntities = subEntities;
       return this;
    }
@@ -85,7 +85,7 @@ public class Entity {
       return subEntity;
    }
 
-   protected Entity setSubEntity( SubEntity subEntity ) {
+   protected Entity setSubEntity( final SubEntity subEntity ) {
       this.subEntity = subEntity;
       return this;
    }
@@ -94,16 +94,16 @@ public class Entity {
       return subEntities2;
    }
 
-   protected Entity setSubEntities2( List<SubEntity2> subEntities2 ) {
+   protected Entity setSubEntities2( final List<SubEntity2> subEntities2 ) {
       this.subEntities2 = subEntities2;
       return this;
    }
 
    protected List<String> getStringList() {
-      return this.stringList;
+      return stringList;
    }
 
-   protected Entity setStringList( List<String> stringList) {
+   protected Entity setStringList( final List<String> stringList ) {
       this.stringList = stringList;
       return this;
    }

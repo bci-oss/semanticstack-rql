@@ -1,14 +1,14 @@
 /*
- * Copyright (c)2024 Robert Bosch Manufacturing Solutions GmbH
+ * Copyright (c) 2024 Robert Bosch Manufacturing Solutions GmbH
  *
- *  See the AUTHORS file(s) distributed with this work for additional
- *  information regarding authorship.
+ * See the AUTHORS file(s) distributed with this work for additional
+ * information regarding authorship.
  *
- *  This Source Code Form is subject to the terms of the Mozilla Public
- *  License, v. 2.0. If a copy of the MPL was not distributed with this
- *  file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- *  SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: MPL-2.0
  */
 
 package com.boschsemanticstack.rql.parser.v1;
@@ -23,6 +23,11 @@ import java.time.format.DateTimeParseException;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.RuleNode;
+import org.antlr.v4.runtime.tree.TerminalNode;
 
 import com.boschsemanticstack.rql.exceptions.ParseException;
 import com.boschsemanticstack.rql.exceptions.SourceLocation;
@@ -43,10 +48,6 @@ import com.boschsemanticstack.rql.model.v1.impl.RqlSelectImpl;
 import com.boschsemanticstack.rql.model.v1.impl.RqlSliceImpl;
 import com.boschsemanticstack.rql.parser.v1.internal.InternalRqlBaseVisitor;
 import com.boschsemanticstack.rql.parser.v1.internal.InternalRqlParser;
-import org.antlr.v4.runtime.ParserRuleContext;
-import org.antlr.v4.runtime.tree.ParseTree;
-import org.antlr.v4.runtime.tree.RuleNode;
-import org.antlr.v4.runtime.tree.TerminalNode;
 
 class RqlParseTreeVisitor extends InternalRqlBaseVisitor<Object> {
 

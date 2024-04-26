@@ -1,24 +1,20 @@
 /*
- * Copyright (c)2024 Robert Bosch Manufacturing Solutions GmbH
+ * Copyright (c) 2024 Robert Bosch Manufacturing Solutions GmbH
  *
- *  See the AUTHORS file(s) distributed with this work for additional
- *  information regarding authorship.
+ * See the AUTHORS file(s) distributed with this work for additional
+ * information regarding authorship.
  *
- *  This Source Code Form is subject to the terms of the Mozilla Public
- *  License, v. 2.0. If a copy of the MPL was not distributed with this
- *  file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- *  SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: MPL-2.0
  */
 
 package com.boschsemanticstack.rql.parser.v1;
 
 import java.util.function.Function;
 
-import com.boschsemanticstack.rql.exceptions.ParseException;
-import com.boschsemanticstack.rql.exceptions.SourceLocation;
-import com.boschsemanticstack.rql.parser.v1.internal.InternalRqlLexer;
-import com.boschsemanticstack.rql.parser.v1.internal.InternalRqlParser;
 import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -26,6 +22,11 @@ import org.antlr.v4.runtime.DefaultErrorStrategy;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Recognizer;
+
+import com.boschsemanticstack.rql.exceptions.ParseException;
+import com.boschsemanticstack.rql.exceptions.SourceLocation;
+import com.boschsemanticstack.rql.parser.v1.internal.InternalRqlLexer;
+import com.boschsemanticstack.rql.parser.v1.internal.InternalRqlParser;
 
 class BaseRqlParserApi {
    public ParseResult createParseTree( final String rqlQuery ) {

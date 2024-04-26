@@ -1,14 +1,14 @@
 /*
- * Copyright (c)2024 Robert Bosch Manufacturing Solutions GmbH
+ * Copyright (c) 2024 Robert Bosch Manufacturing Solutions GmbH
  *
- *  See the AUTHORS file(s) distributed with this work for additional
- *  information regarding authorship.
+ * See the AUTHORS file(s) distributed with this work for additional
+ * information regarding authorship.
  *
- *  This Source Code Form is subject to the terms of the Mozilla Public
- *  License, v. 2.0. If a copy of the MPL was not distributed with this
- *  file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- *  SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: MPL-2.0
  */
 
 package com.boschsemanticstack.rql.querydsl.entities;
@@ -26,7 +26,7 @@ public class SubEntity2 {
       return id;
    }
 
-   protected SubEntity2 setId( String id ) {
+   protected SubEntity2 setId( final String id ) {
       this.id = id;
       return this;
    }
@@ -35,7 +35,7 @@ public class SubEntity2 {
       return name;
    }
 
-   protected SubEntity2 setName( String name ) {
+   protected SubEntity2 setName( final String name ) {
       this.name = name;
       return this;
    }
@@ -44,7 +44,7 @@ public class SubEntity2 {
       return type;
    }
 
-   protected SubEntity2 setType( String type ) {
+   protected SubEntity2 setType( final String type ) {
       this.type = type;
       return this;
    }
@@ -53,7 +53,7 @@ public class SubEntity2 {
       return metadata;
    }
 
-   protected SubEntity2 setMetadata( Map<String, String> metadata ) {
+   protected SubEntity2 setMetadata( final Map<String, String> metadata ) {
       this.metadata = metadata;
       return this;
    }

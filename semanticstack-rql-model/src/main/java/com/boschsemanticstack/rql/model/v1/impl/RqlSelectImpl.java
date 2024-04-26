@@ -1,14 +1,14 @@
 /*
- * Copyright (c)2024 Robert Bosch Manufacturing Solutions GmbH
+ * Copyright (c) 2024 Robert Bosch Manufacturing Solutions GmbH
  *
- *  See the AUTHORS file(s) distributed with this work for additional
- *  information regarding authorship.
+ * See the AUTHORS file(s) distributed with this work for additional
+ * information regarding authorship.
  *
- *  This Source Code Form is subject to the terms of the Mozilla Public
- *  License, v. 2.0. If a copy of the MPL was not distributed with this
- *  file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- *  SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: MPL-2.0
  */
 package com.boschsemanticstack.rql.model.v1.impl;
 
@@ -19,7 +19,7 @@ import com.boschsemanticstack.rql.model.v1.RqlModelNode;
 import com.boschsemanticstack.rql.model.v1.RqlModelVisitor;
 import com.boschsemanticstack.rql.model.v1.RqlSelect;
 
-public record RqlSelectImpl( List<String> attributes ) implements RqlSelect {
+public record RqlSelectImpl(List<String> attributes) implements RqlSelect {
 
    public RqlSelectImpl( final List<String> attributes ) {
       this.attributes = null == attributes
