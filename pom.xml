@@ -30,6 +30,18 @@
       <module>examples/semanticstack-rql-examples-querydsljpa</module>
    </modules>
 
+   <description>Bosch Semantic Stack RQL</description>
+   <url>Coming Soon</url>
+
+   <developers>
+      <developer>
+         <name>Bosch Semantic Stack RQL Team</name>
+         <email>semantick-stack-oss@bosch.com</email>
+         <organization>Robert Bosch Manufacturing Solutions GmbH</organization>
+         <organizationUrl>https://www.bosch-connected-industry.com/de/en/portfolio/bosch-semantic-stack</organizationUrl>
+      </developer>
+   </developers>
+
    <licenses>
       <license>
          <name>MPL-2.0</name>
@@ -38,8 +50,8 @@
    </licenses>
 
    <scm>
-      <connection>scm:git@github.com:bosch-semantic-stack/rbs-rql.git</connection>
-      <developerConnection>scm:git@github.com:bosch-semantic-stack/rbs-rql.git</developerConnection>
+      <connection>scm:git@github.com:bci-oss/semanticstack-rql.git</connection>
+      <developerConnection>scm:git@github.com:bci-oss/semanticstack-rql.git</developerConnection>
    </scm>
 
    <properties>
