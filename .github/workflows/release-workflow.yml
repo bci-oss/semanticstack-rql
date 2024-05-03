@@ -58,7 +58,6 @@ jobs:
           server-username: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
           server-password: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
           gpg-private-key: ${{ secrets.PGP_KEY }}
-          gpg-passphrase: ${{ secrets.PGP_KEY_PASSWORD }}
           overwrite-settings: false
 
       - name: Cache Maven packages
@@ -87,7 +86,7 @@ jobs:
       - name: Build and Deploy to Maven Central
         run: mvn -B clean deploy -Psign
         env:
-          PGP_KEY_PASSWORD: ${{ secrets.PGP_KEY_PASSWORD }}
+          MAVEN_GPG_PASSPHRASE: ${{ secrets.PGP_KEY_PASSWORD }}
 
       - name: Commit version changes and push to upstream repository
         uses: stefanzweifel/git-auto-commit-action@8756aa072ef5b4a080af5dc8fef36c5d586e521d # v5
