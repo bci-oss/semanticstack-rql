@@ -21,7 +21,7 @@ import com.boschsemanticstack.rql.model.v1.RqlFilter;
 
 /**
  * Annotation to restrict {@link String} type search to an element with a given regex.
- * This check is only performed if the filter option is a {@link RqlFilter.Operator.LIKE} or {@link RqlFilter.Operator.LIKE_IGNORE_CASE}.
+ * This check is only performed if the filter option is a {@link RqlFilter.Operator#LIKE} or {@link RqlFilter.Operator#LIKE_IGNORE_CASE}.
  * <p>
  * e.g.
  * filter=like(attribute,"some-*Attribute*")

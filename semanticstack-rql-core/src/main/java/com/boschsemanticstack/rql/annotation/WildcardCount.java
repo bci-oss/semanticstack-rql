@@ -21,10 +21,8 @@ import com.boschsemanticstack.rql.model.v1.RqlFilter;
 
 /**
  * Annotation to restrict {@link String} type search to an element to count the used wildcard.
- * This check is only performed if the filter option is a {@link RqlFilter.Operator.LIKE} or {@link RqlFilter.Operator.LIKE_IGNORE_CASE}.
- *
- *  e.g.
- *  filter=like(attribute,"some-*Attribute*")
+ * This check is only performed if the filter option is a {@link RqlFilter.Operator#LIKE} or {@link RqlFilter.Operator#LIKE_IGNORE_CASE}.
+ *  e.g. filter=like(attribute,"some-*Attribute*")
  *
  */
 @Retention( RetentionPolicy.RUNTIME )

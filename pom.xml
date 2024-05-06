@@ -24,8 +24,8 @@
 
    <modules>
       <module>semanticstack-rql-core</module>
-      <module>semanticstack-rql-model</module>
       <module>semanticstack-rql-parser</module>
+      <module>semanticstack-rql-model</module>
       <module>semanticstack-rql-2-querydsl</module>
       <module>examples/semanticstack-rql-examples-querydsljpa</module>
    </modules>
@@ -52,6 +52,7 @@
    <scm>
       <connection>scm:git@github.com:bci-oss/semanticstack-rql.git</connection>
       <developerConnection>scm:git@github.com:bci-oss/semanticstack-rql.git</developerConnection>
+      <url>https://github.com/bci-oss/semanticstack-rql</url>
    </scm>
 
    <properties>
@@ -69,9 +70,12 @@
       <!-- Plugin Versions -->
       <build-helper-maven-plugin.version>3.4.0</build-helper-maven-plugin.version>
       <antlr4-maven-plugin.version>${antlr4.version}</antlr4-maven-plugin.version>
+      <central-publishing-maven-plugin.version>0.4.0</central-publishing-maven-plugin.version>
       <maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
       <maven-gpg-plugin.version>3.2.4</maven-gpg-plugin.version>
-      <central-publishing-maven-plugin.version>0.4.0</central-publishing-maven-plugin.version>
+      <maven-clean-plugin.version>3.3.2</maven-clean-plugin.version>
+      <maven-javadoc-plugin.version>3.6.3</maven-javadoc-plugin.version>
+      <maven-source-plugin.version>3.3.1</maven-source-plugin.version>
 
       <!-- General settings -->
       <testreports.surefire>surefire-report</testreports.surefire>
@@ -209,6 +213,22 @@
                   </compilerArgs>
                </configuration>
             </plugin>
+            <plugin>
+               <groupId>org.apache.maven.plugins</groupId>
+               <artifactId>maven-javadoc-plugin</artifactId>
+               <version>${maven-javadoc-plugin.version}</version>
+            </plugin>
+            <plugin>
+               <groupId>org.apache.maven.plugins</groupId>
+               <artifactId>maven-source-plugin</artifactId>
+               <version>${maven-source-plugin.version}</version>
+            </plugin>
+            <plugin>
+               <groupId>org.apache.maven.plugins</groupId>
+               <artifactId>maven-clean-plugin</artifactId>
+               <version>${maven-clean-plugin.version}</version>
+            </plugin>
+
          </plugins>
       </pluginManagement>
 
@@ -216,6 +236,35 @@
          <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-compiler-plugin</artifactId>
+         </plugin>
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-source-plugin</artifactId>
+            <executions>
+               <execution>
+                  <id>attach-sources</id>
+                  <phase>process-classes</phase>
+                  <goals>
+                     <goal>jar-no-fork</goal>
+                  </goals>
+               </execution>
+            </executions>
+         </plugin>
+
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <executions>
+               <execution>
+                  <id>attach-javadocs</id>
+                  <goals>
+                     <goal>jar</goal>
+                  </goals>
+                  <configuration>
+                     <doclint>none</doclint>
+                  </configuration>
+               </execution>
+            </executions>
          </plugin>
          <plugin>
             <groupId>org.sonatype.central</groupId>

@@ -13,7 +13,16 @@
 
 package com.boschsemanticstack.rql.exceptions;
 
+/**
+ * Abstract class for illegal query argument exceptions.
+
+ */
 public abstract class IllegalQueryArgumentException extends IllegalArgumentException {
+
+   /**
+    *
+    * @param message
+    */
    protected IllegalQueryArgumentException( final String message ) {
       super( message );
    }
