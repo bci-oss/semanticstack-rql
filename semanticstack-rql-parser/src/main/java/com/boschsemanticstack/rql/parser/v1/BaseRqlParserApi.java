@@ -52,6 +52,7 @@ class BaseRqlParserApi {
          new DefaultErrorStrategy().reportError( parser, e ); // should not happen - loops back to collecting Error listener above
       }
       return result;
+      
    }
 
    private static class CollectingErrorListener extends BaseErrorListener {
