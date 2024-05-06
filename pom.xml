@@ -62,7 +62,7 @@
       <h2.version>2.2.224</h2.version>
       <junit.version>5.9.3</junit.version>
       <mockito.version>5.11.0</mockito.version>
-      <jackson.version>2.16.1</jackson.version>
+      <jackson.version>2.17.1</jackson.version>
       <querydsl.version>5.1.0</querydsl.version>
       <jakarta.version>3.0.2</jakarta.version>
       <rxjava.version>2.2.21</rxjava.version>
