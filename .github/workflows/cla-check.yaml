@@ -31,7 +31,7 @@ jobs:
           path-to-document: 'https://github.com/bci-oss/semanticstack-rql/blob/main/CLA.md' # e.g. a CLA or a DCO document
           # branch should not be protected
           branch: 'signatures'
-          allowlist: bot*
+          allowlist: NikolaiWiens,renovate[bot],bot*
           #remote-organization-name: https://github.com/bci-oss
           #remote-repository-name: bci-oss/cla-signatures
 
