@@ -19,7 +19,7 @@
 Fundamentally, RQL (Resource Query Language) serves as a query language tailored for use in REST, specifically within URIs featuring data structures resembling
 objects. This repository, in turn, provides a Java parser implemented using antlr4 to facilitate the integration of RQL on client and server side.
 
-The main parts of the RQL are: select,filter and option.
+The main parts of the RQL are: select, filter and option.
 
 ```text
 select=id&filter=eq(name, "blue")&option=limit({start},{count}),sort(-id)
