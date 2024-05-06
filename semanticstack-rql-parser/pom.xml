@@ -18,7 +18,7 @@
    <parent>
       <groupId>com.boschsemanticstack</groupId>
       <artifactId>semanticstack-rql-parent</artifactId>
-      <version>DEV-SNAPSHOT</version>
+      <version>1.0.0</version>
       <relativePath>../pom.xml</relativePath>
    </parent>
    <artifactId>semanticstack-rql-parser</artifactId>
