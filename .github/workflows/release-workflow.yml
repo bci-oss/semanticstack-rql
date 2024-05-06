@@ -8,7 +8,7 @@ on:
 jobs:
   check-preconditions:
     name: Check preconditions
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
       - name: Sanity check version
         if: ${{ !contains( github.event.inputs.release_version, '-M' ) }}
