@@ -30,10 +30,10 @@ jobs:
           path-to-signatures: 'signatures/rql/cla.json'
           path-to-document: 'https://github.com/bci-oss/semanticstack-rql/blob/main/CLA.md' # e.g. a CLA or a DCO document
           # branch should not be protected
-          branch: 'main'
+          branch: 'signatures'
           allowlist: bot*
-          remote-organization-name: https://github.com/bci-oss
-          remote-repository-name: bci-oss/cla-signatures
+          #remote-organization-name: https://github.com/bci-oss
+          #remote-repository-name: bci-oss/cla-signatures
 
           # the followings are the optional inputs - If the optional inputs are not given, then default values will be taken
           #remote-organization-name: enter the remote organization name where the signatures should be stored (Default is storing the signatures in the same repository)
