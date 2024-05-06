@@ -52,6 +52,7 @@
    <scm>
       <connection>scm:git@github.com:bci-oss/semanticstack-rql.git</connection>
       <developerConnection>scm:git@github.com:bci-oss/semanticstack-rql.git</developerConnection>
+      <url>https://github.com/bci-oss/semanticstack-rql</url>
    </scm>
 
    <properties>
