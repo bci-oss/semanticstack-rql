@@ -33,8 +33,6 @@ This repository contains a detailed developer documentation written in AsciiDoc.
 The source files (AsciiDoc) are located [here](documentation/modules/developer-guide) and are built using
 [Antora](https://antora.org/) which generates the documentation as HTML files. A site generated using Antora is self-contained and can be viewed entirely
 offline via a web browser without setting up a web server.
-To build the documentation locally, please check out and follow the instructions
-in TODO:
 
 ## Getting help
 
