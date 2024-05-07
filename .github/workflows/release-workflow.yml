@@ -54,10 +54,12 @@ jobs:
 
           # Set version in pom.xml files
           mvn -B clean install -DskipTests -Dmaven.javadoc.skip=true
-          mvn -B versions:set -DnewVersion=${{ github.event.inputs.release_version }}
+          mvn -B versions:set -DnewVersion=${release_version}
           mvn -B versions:commit
           # Set version in Antora module TODO
-          # yq eval -i '.version = "${{ github.event.inputs.release_version }}"' documentation/antora.yml
+          # yq eval -i '.version = "${release_version}"' documentation/antora.yml
+          git add .
+          git commit -m "Release version ${release_version}"
 
       - name: Commit version changes and push to upstream repository
         uses: stefanzweifel/git-auto-commit-action@8621497c8c39c72f3e2a999a26b4ca1b5058a842 # v5
