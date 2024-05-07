@@ -58,7 +58,7 @@ jobs:
           mvn -B versions:set -DnewVersion=${{ github.event.inputs.release_version }}
           mvn -B versions:commit
           # Set version in Antora module TODO
-          # yq eval -i '.version = "${{ github.event.inputs.release_version }}"' documentation/developer-guide/antora.yml
+          # yq eval -i '.version = "${{ github.event.inputs.release_version }}"' documentation/antora.yml
 
 
       - name: Build and Deploy to Maven Central
