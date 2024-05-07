@@ -63,8 +63,6 @@ jobs:
           mvn -B versions:commit
           # Set version in Antora module TODO
           # yq eval -i '.version = "${release_version}"' documentation/antora.yml
-          git add .
-          git commit -m "Release version ${release_version}"
 
       - name: Commit version changes and push to upstream repository
         uses: stefanzweifel/git-auto-commit-action@8621497c8c39c72f3e2a999a26b4ca1b5058a842 # v5
@@ -94,10 +92,11 @@ jobs:
           generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN  }}
-
-      - name: "Notify issues of release their fix is contained in"
-        uses: apexskier/github-release-commenter@3bd413ad5e1d603bfe2282f9f06f2bdcec079327 # v1.3.6
-        with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          comment-template: |
-            Release {release_link} addresses this.
+          
+      # Currently cannot use because the CLA locks closed PRs and the action cannot comment PRs
+      #- name: "Notify issues of release their fix is contained in"
+      #  uses: apexskier/github-release-commenter@3bd413ad5e1d603bfe2282f9f06f2bdcec079327 # v1.3.6
+      #  with:
+      #    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #    comment-template: |
+      #      Release {release_link} addresses this.
