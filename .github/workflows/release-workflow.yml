@@ -29,11 +29,6 @@ jobs:
     needs: [ check-preconditions ]
     runs-on: ubuntu-latest
     steps:
-      - name: Setup Git
-        run: |
-          git config user.name github-actions
-          git config user.email github-actions@github.com
-          
       - name: Checkout
         uses: actions/checkout@v4
 
@@ -50,6 +45,11 @@ jobs:
           gpg-passphrase: MAVEN_GPG_PASSPHRASE
           cache: 'maven'
           overwrite-settings: false
+          
+      - name: Setup Git
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com  
 
       - name: Set versions
         run: |
