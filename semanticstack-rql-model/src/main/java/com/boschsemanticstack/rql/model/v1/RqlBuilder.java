@@ -30,7 +30,7 @@ public class RqlBuilder {
    private RqlSelect select;
    private RqlFilter filter;
    private RqlSlice slice;
-   private RqlOrder order = new RqlOrderImpl( null );
+   private RqlOrder order = new RqlOrderImpl( Collections.emptyList() );
 
    public RqlBuilder select( final String... attributes ) {
       select = null == attributes
