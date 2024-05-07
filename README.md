@@ -19,7 +19,7 @@
 Fundamentally, RQL (Resource Query Language) serves as a query language tailored for use in REST, specifically within URIs featuring data structures resembling
 objects. This repository, in turn, provides a Java parser implemented using antlr4 to facilitate the integration of RQL on client and server side.
 
-The main parts of the RQL are: select,filter and option.
+The main parts of the RQL are: select, filter and option.
 
 ```text
 select=id&filter=eq(name, "blue")&option=limit({start},{count}),sort(-id)
@@ -33,8 +33,6 @@ This repository contains a detailed developer documentation written in AsciiDoc.
 The source files (AsciiDoc) are located [here](documentation/modules/developer-guide) and are built using
 [Antora](https://antora.org/) which generates the documentation as HTML files. A site generated using Antora is self-contained and can be viewed entirely
 offline via a web browser without setting up a web server.
-To build the documentation locally, please check out and follow the instructions
-in TODO:
 
 ## Getting help
 
