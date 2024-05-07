@@ -47,7 +47,6 @@ jobs:
           overwrite-settings: false
 
       - name: Set versions
-        continue-on-error: true
         run: |
           release_version=${{ github.event.inputs.release_version }}
           release_branch_name=${release_version%.*}.x
@@ -60,14 +59,6 @@ jobs:
           # Set version in Antora module TODO
           # yq eval -i '.version = "${{ github.event.inputs.release_version }}"' documentation/antora.yml
 
-
-      - name: Build and Deploy to Maven Central
-        run: mvn -B clean deploy -Psign
-        env:
-          MAVEN_GPG_PASSPHRASE: ${{ secrets.PGP_KEY_PASSWORD }}
-          MAVEN_CENTRAL_PASSWORD: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
-          MAVEN_CENTRAL_USERNAME: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
-
       - name: Commit version changes and push to upstream repository
         uses: stefanzweifel/git-auto-commit-action@8621497c8c39c72f3e2a999a26b4ca1b5058a842 # v5
         with:
@@ -76,6 +67,13 @@ jobs:
           commit_user_email: github-actions@github.com
           commit_author: Author <actions@github.com>
           file_pattern: 'documentation/antora.yml pom.xml */pom.xml */*/pom.xml'
+
+      - name: Build and Deploy to Maven Central
+        run: mvn -B clean deploy -Psign
+        env:
+          MAVEN_GPG_PASSPHRASE: ${{ secrets.PGP_KEY_PASSWORD }}
+          MAVEN_CENTRAL_PASSWORD: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
+          MAVEN_CENTRAL_USERNAME: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
 
       # Full release: Github
       - name: "Create Github release (full)"
