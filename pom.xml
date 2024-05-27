@@ -64,7 +64,7 @@
       <mockito.version>5.11.0</mockito.version>
       <jackson.version>2.17.1</jackson.version>
       <querydsl.version>5.1.0</querydsl.version>
-      <jakarta.version>3.0.2</jakarta.version>
+      <jakarta.version>3.1.0</jakarta.version>
       <rxjava.version>2.2.21</rxjava.version>
 
       <!-- Plugin Versions -->
