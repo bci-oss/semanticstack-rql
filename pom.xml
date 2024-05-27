@@ -68,7 +68,7 @@
       <rxjava.version>2.2.21</rxjava.version>
 
       <!-- Plugin Versions -->
-      <build-helper-maven-plugin.version>3.5.0</build-helper-maven-plugin.version>
+      <build-helper-maven-plugin.version>3.6.0</build-helper-maven-plugin.version>
       <antlr4-maven-plugin.version>${antlr4.version}</antlr4-maven-plugin.version>
       <central-publishing-maven-plugin.version>0.4.0</central-publishing-maven-plugin.version>
       <maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
