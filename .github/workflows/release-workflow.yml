@@ -61,8 +61,7 @@ jobs:
           mvn -B clean install -DskipTests -Dmaven.javadoc.skip=true
           mvn -B versions:set -DnewVersion=${release_version}
           mvn -B versions:commit
-          # Set version in Antora module TODO
-          # yq eval -i '.version = "${release_version}"' documentation/antora.yml
+          yq eval -i '.version = "${release_version}"' documentation/antora.yml
           git add .
           git commit -m "Release version ${release_version}"
 
