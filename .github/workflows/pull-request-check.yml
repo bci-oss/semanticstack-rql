@@ -41,4 +41,15 @@ jobs:
       #       -Dsonar.projectKey=<project_key> \
       #       -Dsonar.host.url=https://sonarcloud.io \
       #       -Dsonar.login=$SONAR_TOKEN
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install Antora
+        run: npm i antora
+        
+      - name: Generate Docs
+        run: npx antora antora-playbook.yml
           
