@@ -1,7 +1,6 @@
 name: Pull Request Check
 on:
   pull_request:
-    types: [opened, reopened, edited, synchronize]
     branches:
       - main
 jobs:
