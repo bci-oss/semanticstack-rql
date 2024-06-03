@@ -65,6 +65,26 @@ jobs:
           git add .
           git commit -m "Release version ${release_version}"
 
+      - name: Check code style
+        uses: dbelyaev/action-checkstyle@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          reporter: github-pr-review
+          checkstyle_config: google_checks.xml
+          level: warning
+          fail_on_error: false
+
+      # - name: SonarCloud Scan
+      #   uses: SonarSource/sonarcloud-github-action@master
+      #   env: 
+      #       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      #   with:
+      #     args: >
+      #       -Dsonar.organization=<organization> \
+      #       -Dsonar.projectKey=<project_key> \
+      #       -Dsonar.host.url=https://sonarcloud.io \
+      #       -Dsonar.login=$SONAR_TOKEN
+
       - name: Commit version changes and push to upstream repository
         uses: stefanzweifel/git-auto-commit-action@8621497c8c39c72f3e2a999a26b4ca1b5058a842 # v5
         with:
