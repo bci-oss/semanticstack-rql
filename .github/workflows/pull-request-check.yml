@@ -41,15 +41,3 @@ jobs:
 
       - name: Build and Test
         run: mvn -B clean install
-
-      - name: Install Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '18'
-
-      - name: Install Antora
-        run: npm i antora
-
-      - name: Generate Docs
-        run: npx antora antora-playbook.yml
-          
