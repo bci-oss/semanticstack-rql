@@ -1,7 +1,5 @@
 [[rql-parser]]
 = RQL Parser
-:parser-sourcedir: ../../../../semanticstack-rql-parser/src/test/java/com/boschsemanticstack/rql/parser/v1
-:example-parser-sourcedir: ../../../../semanticstack-rql-parser/src/test/java/com/boschsemanticstack/rql/examples
 
 This Maven module contains the antlr4 grammar as well as the parser to create the _RqlQueryModel_ from a string or vice versa.
 The parser is the central tool that uses antlr4 code to analyze RQL queries and convert them into an _RqlQueryModel_.
@@ -25,7 +23,19 @@ This maps the structure such as _select_, _filter_ and _option_.
 
 [source,java,indent=0,subs="+macros,+quotes"]
 ----
-include::{parser-sourcedir}/RqlParserTest.java[tags=build_model]
+      final RqlQueryModel model = RqlParser.builder()
+            .select( "att1", "att2", "att3/subAtt4" )
+            .filter( RqlBuilder.and(
+                  RqlBuilder.eq( "att2", "theSame" ),
+                  RqlBuilder.or(
+                        RqlBuilder.lt( "att1", 5238907523475022349L ),
+                        RqlBuilder.not(
+                              RqlBuilder.gt( "att1", new BigInteger( "12345678901234567890123456789012345678901234567890" ) )
+                        )
+                  ) ) )
+            .sort( RqlBuilder.asc( "att1" ), RqlBuilder.desc( "att2" ) )
+            .limit( 0, 500 )
+            .build();
 ----
 
 === Creating a string representation of the model
@@ -34,7 +44,8 @@ To create a string representation of the model, we can use the _toString()_ meth
 
 [source,java,indent=0,subs="+macros,+quotes"]
 ----
-include::{parser-sourcedir}/RqlParserTest.java[tags=model_toString]
+      final String representation = RqlParser.toString( model );
+
 ----
 
 ==== Single argument or body
@@ -44,7 +55,14 @@ To parse a query from Rest:
 
 [source,java,indent=0,subs="+macros,+quotes"]
 ----
-include::{example-parser-sourcedir}/QueryHandlingExample.java[tags=parse_query_wholeQuery]
+   private void someRestEndpoint( final String theWholeQuery ) {//<1>
+
+      // this highly depends on your rest backend therefore no api call to do this is provided
+      final RqlQueryModel from = RqlParser.from( Optional.ofNullable( theWholeQuery ).orElse( "" ) );
+
+      // do something with query model
+   }
+
 ----
 
 <1> the whole query taken from the html-body or a single query argument.
@@ -55,7 +73,24 @@ Parsing a query transported component-wise (as three independent query arguments
 
 [source,java,indent=0,subs="+macros,+quotes"]
 ----
-include::{example-parser-sourcedir}/QueryHandlingExample.java[tags=parse_query_single]
+   private void someRestEndpoint(
+         final String selectParam, // <2>
+         final String filterParam, // <2>
+         final String optionParam ) { //<2>
+
+      final String queryString = Stream.of(
+                  Optional.ofNullable( selectParam ).map( s -> "select=" ), // <1>
+                  Optional.ofNullable( filterParam ).map( s -> "filter=" ), // <1>
+                  Optional.ofNullable( optionParam ).map( s -> "option=" )  // <1>
+            )
+            .filter( Optional::isPresent )
+            .map( Optional::get )
+            .collect( Collectors.joining( "&" ) );
+
+      final RqlQueryModel from = RqlParser.from( queryString );
+
+      // do something with query model
+   }
 ----
 
 <1> the whole query taken from the html-body or a single query argument.
@@ -65,7 +100,16 @@ include::{example-parser-sourcedir}/QueryHandlingExample.java[tags=parse_query_s
 
 [source,java,linenums,options="nowrap"]
 ----
-include::{example-parser-sourcedir}/QueryHandlingExample.java[tags=send_query]
+   private Observable<RestResponse> getSomeResourceWithRqlUsingQueryParameters( final RqlQueryModel query ) {
+
+      final Map<String, String> queryParameters = RqlParser.toQueryParameters( query );
+
+      return someRestClient.post( "someAddress" )
+            .addQueryParam( "select", queryParameters.get( "select" ) ) // <1>
+            .addQueryParam( "filter", queryParameters.get( "filter" ) ) // <1>
+            .addQueryParam( "option", queryParameters.get( "option" ) ) // <1>
+            .toObservableResponse();
+   }
 ----
 
 <1> Be mindful, that each parameter part may be empty (not present in Map)
@@ -78,7 +122,11 @@ To do this the `Rql` companion object supports adding restrictions _around_ the 
 
 [source,java,linenums,options="nowrap"]
 ----
-include::{parser-sourcedir}/RqlParserTest.java[tags=model_addingRestrictions]
+      final RqlQueryModel modelWithRestriction = RqlParser.addRestriction(
+            model,
+            RqlBuilder.eq( "att2", "fizzBuzz" ), // <1>
+            RqlBuilder.or( RqlBuilder.ne( "att3", 42 ) ) // <2>
+      );
 ----
 
 <1> if the given model already has `and` as its top restriction a new `and`-clause is created using the original and new restrictions.
@@ -92,7 +140,47 @@ This can be expressed elegantly using the following construct:
 
 [source,java,linenums,options="nowrap"]
 ----
-include::{example-parser-sourcedir}/AccessPagedResourceExample.java[tags=recursive_restrequest]
+   public Observable<String> getSomethingRemote( final RqlQueryModel query ) { // <1>
+      final int pageSize = 170;  // entirely dependent on remote Service
+      return getSomeResourceRecursive( RqlParser.getPagedQuery( query, pageSize ) );
+   }
+
+   private Observable<String> getSomeResourceRecursive( final Iterator<RqlQueryModel> pagedQuery ) {
+
+      if ( pagedQuery.hasNext() ) {
+         final RqlQueryModel next = pagedQuery.next();
+         return someRestClient.post( "someAddress" )
+               .withBody( new RqlToStringWriter().visitModel( next ) )
+               .toObservableResponse()
+               .flatMap( response -> doRecursionIfMoreMeasurementsAvailable(
+                     pagedQuery,
+                     next.getOptions().getSlice().get().limit(), //<2>
+                     response )
+               );
+      }
+      return Observable.empty();
+   }
+
+   private Observable<String> doRecursionIfMoreMeasurementsAvailable(
+         final Iterator<RqlQueryModel> pagedQuery,
+         final long pageSize,
+         final RestResponse response ) {
+
+      if ( response.getResponseCode() != 200 ) {
+         return Observable.error( new RuntimeException( "Remote service responded with " + response.getResponseCode() ) );
+      }
+
+      final List<String> results = response.getBodyAsList();
+      Observable<String> observableResults = Observable.fromIterable( results );
+
+      if ( results.size() == pageSize && pagedQuery.hasNext() ) { //<3>
+         observableResults = observableResults.concatWith( Observable.defer(//<4>
+               () -> getSomeResourceRecursive( pagedQuery ) )
+         );
+      }
+
+      return observableResults;
+   }
 ----
 
 <1> the original Query may well have defined it's own slice (e.g. [25:701]) this is honored throughout the process.

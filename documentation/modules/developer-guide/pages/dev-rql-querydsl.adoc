@@ -1,6 +1,5 @@
 [[rql-parser]]
 = RQL to QueryDSL
-:example: ../../../../examples/semanticstack-rql-examples-querydsljpa
 
 The `rql-2-querydsl` module provides a bridge from an RQL model to a http://www.querydsl.com/[Querydsl] model.
 Querydsl strives to be a technology-agnostic, typesafe query language that can be mapped to different concrete technologies such as JPA, SQL and MongoDB.
@@ -85,9 +84,21 @@ Optional<ISlice> paging = transformedQueryModel.getPagination();
 
 [source,xml,subs=attributes+]
 ----
-include::{example}/pom.xml[lines=16..19]
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+   <modelVersion>4.0.0</modelVersion>
+   <parent>
 ...
-include::{example}/pom.xml[lines=53..62]
+         <artifactId>semanticstack-rql-parser</artifactId>
+      </dependency>
+      <dependency>
+         <groupId>com.h2database</groupId>
+         <artifactId>h2</artifactId>
+      </dependency>
+      <!-- Optional -->
+      <dependency>
+         <groupId>org.springframework.boot</groupId>
+         <artifactId>spring-boot-starter-data-jpa</artifactId>
 ----
 
 [source,xml]
@@ -206,7 +217,31 @@ In the examples there is a `QueryDslRepositoryFilter` which converts the `OrderS
 
 [source,java]
 ----
-include::{example}/src/main/java/com/boschsemanticstack/rql/examples/querydsljpa/controller/QueryDslRepositoryFilter.java[lines=53..77]
+   public Page<T> findWithQuery( final QueryModelToQueryDSL queryDsl ) {
+      if ( queryDsl == null ) {
+         throw new IllegalArgumentException( "Query must not be null" );
+      }
+      return find( queryDsl );
+   }
+
+   private Page<T> find( final QueryModelToQueryDSL queryDsl ) {
+      final PageRequest pageRequest = createPageRequest( queryDsl );
+      final Optional<Predicate> predicate = queryDsl.getPredicate();
+      return predicate.map( p -> repository.findAll( p, pageRequest ) ) //
+            .orElse( repository.findAll( pageRequest ) );
+   }
+
+   private PageRequest createPageRequest( final QueryModelToQueryDSL queryDsl ) {
+      // Somewhat inconsistent in the API: ISLice is from query.dsl, OrderSpecifier from spring data
+      final Optional<RqlSlice> pagination = queryDsl.getPagination();
+      final List<OrderSpecifier<?>> ordering = queryDsl.getOrdering();
+
+      final List<Sort.Order> sortOrder = ordering.stream()
+            .map( QueryDslRepositoryFilter::convert )
+            .filter( Objects::nonNull )
+            .collect( Collectors.toList() );
+
+      return pagination.map( p -> PageRequest.of( (int) p.offset(), (int) p.limit(), Sort.by( sortOrder ) ) )
 ----
 
 [#type-conversions]

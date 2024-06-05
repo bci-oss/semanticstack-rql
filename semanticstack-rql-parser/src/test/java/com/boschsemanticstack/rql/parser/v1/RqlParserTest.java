@@ -40,7 +40,6 @@ class RqlParserTest {
 
    @Test
    void shouldProvideEasyBuilder() {
-      // tag::build_model[]
       final RqlQueryModel model = RqlParser.builder()
             .select( "att1", "att2", "att3/subAtt4" )
             .filter( RqlBuilder.and(
@@ -54,10 +53,9 @@ class RqlParserTest {
             .sort( RqlBuilder.asc( "att1" ), RqlBuilder.desc( "att2" ) )
             .limit( 0, 500 )
             .build();
-      // end::build_model[]
-      // tag::model_toString[]
+
       final String representation = RqlParser.toString( model );
-      // end::model_toString[]
+
       assertThat( representation ).isEqualTo(
             "select=att1,att2,att3/subAtt4&filter=and(eq(att2,\"theSame\"),or(lt(att1,5238907523475022349),not(gt(att1,"
                   + "12345678901234567890123456789012345678901234567890))))&option=limit(0,500),sort(+att1,-att2)" );
@@ -138,13 +136,11 @@ class RqlParserTest {
             .limit( 0, 500 )
             .build();
 
-      // tag::model_addingRestrictions[]
       final RqlQueryModel modelWithRestriction = RqlParser.addRestriction(
             model,
             RqlBuilder.eq( "att2", "fizzBuzz" ), // <1>
             RqlBuilder.or( RqlBuilder.ne( "att3", 42 ) ) // <2>
       );
-      // end::model_addingRestrictions[]
 
       assertThat( RqlParser.toString( modelWithRestriction ) )
             .isEqualTo(
