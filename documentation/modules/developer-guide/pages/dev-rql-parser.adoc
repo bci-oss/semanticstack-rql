@@ -1,7 +1,5 @@
 [[rql-parser]]
 = RQL Parser
-:parser-sourcedir: ../../../../semanticstack-rql-parser/src/test/java/com/boschsemanticstack/rql/parser/v1
-:example-parser-sourcedir: ../../../../semanticstack-rql-parser/src/test/java/com/boschsemanticstack/rql/examples
 
 This Maven module contains the antlr4 grammar as well as the parser to create the _RqlQueryModel_ from a string or vice versa.
 The parser is the central tool that uses antlr4 code to analyze RQL queries and convert them into an _RqlQueryModel_.
@@ -25,7 +23,7 @@ This maps the structure such as _select_, _filter_ and _option_.
 
 [source,java,indent=0,subs="+macros,+quotes"]
 ----
-include::{parser-sourcedir}/RqlParserTest.java[tags=build_model]
+include::example$RqlParserTest.java[tags=build_model]
 ----
 
 === Creating a string representation of the model
@@ -34,7 +32,7 @@ To create a string representation of the model, we can use the _toString()_ meth
 
 [source,java,indent=0,subs="+macros,+quotes"]
 ----
-include::{parser-sourcedir}/RqlParserTest.java[tags=model_toString]
+include::example$RqlParserTest.java[tags=build_model]
 ----
 
 ==== Single argument or body
@@ -44,7 +42,7 @@ To parse a query from Rest:
 
 [source,java,indent=0,subs="+macros,+quotes"]
 ----
-include::{example-parser-sourcedir}/QueryHandlingExample.java[tags=parse_query_wholeQuery]
+include::example$QueryHandlingExample.java[tags=parse_query_wholeQuery]
 ----
 
 <1> the whole query taken from the html-body or a single query argument.
@@ -55,7 +53,7 @@ Parsing a query transported component-wise (as three independent query arguments
 
 [source,java,indent=0,subs="+macros,+quotes"]
 ----
-include::{example-parser-sourcedir}/QueryHandlingExample.java[tags=parse_query_single]
+include::example$QueryHandlingExample.java[tags=parse_query_single]
 ----
 
 <1> the whole query taken from the html-body or a single query argument.
@@ -65,7 +63,7 @@ include::{example-parser-sourcedir}/QueryHandlingExample.java[tags=parse_query_s
 
 [source,java,linenums,options="nowrap"]
 ----
-include::{example-parser-sourcedir}/QueryHandlingExample.java[tags=send_query]
+include::example$QueryHandlingExample.java[tags=send_query]
 ----
 
 <1> Be mindful, that each parameter part may be empty (not present in Map)
@@ -78,7 +76,7 @@ To do this the `Rql` companion object supports adding restrictions _around_ the 
 
 [source,java,linenums,options="nowrap"]
 ----
-include::{parser-sourcedir}/RqlParserTest.java[tags=model_addingRestrictions]
+include::example$RqlParserTest.java[tags=model_addingRestrictions]
 ----
 
 <1> if the given model already has `and` as its top restriction a new `and`-clause is created using the original and new restrictions.
@@ -92,7 +90,7 @@ This can be expressed elegantly using the following construct:
 
 [source,java,linenums,options="nowrap"]
 ----
-include::{example-parser-sourcedir}/AccessPagedResourceExample.java[tags=recursive_restrequest]
+include::example$AccessPagedResourceExample.java[tags=recursive_restrequest]
 ----
 
 <1> the original Query may well have defined it's own slice (e.g. [25:701]) this is honored throughout the process.

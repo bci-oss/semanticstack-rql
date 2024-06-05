@@ -1,6 +1,5 @@
 [[rql-parser]]
 = RQL to QueryDSL
-:example: ../../../../examples/semanticstack-rql-examples-querydsljpa
 
 The `rql-2-querydsl` module provides a bridge from an RQL model to a http://www.querydsl.com/[Querydsl] model.
 Querydsl strives to be a technology-agnostic, typesafe query language that can be mapped to different concrete technologies such as JPA, SQL and MongoDB.
@@ -85,9 +84,9 @@ Optional<ISlice> paging = transformedQueryModel.getPagination();
 
 [source,xml,subs=attributes+]
 ----
-include::{example}/pom.xml[lines=16..19]
+include::example$querydsljpa_pom.xml[lines=16..19]
 ...
-include::{example}/pom.xml[lines=53..62]
+include::example$querydsljpa_pom.xml[lines=53..62]
 ----
 
 [source,xml]
@@ -206,7 +205,7 @@ In the examples there is a `QueryDslRepositoryFilter` which converts the `OrderS
 
 [source,java]
 ----
-include::{example}/src/main/java/com/boschsemanticstack/rql/examples/querydsljpa/controller/QueryDslRepositoryFilter.java[lines=53..77]
+include::example$QueryDslRepositoryFilter.java[lines=53..77]
 ----
 
 [#type-conversions]
