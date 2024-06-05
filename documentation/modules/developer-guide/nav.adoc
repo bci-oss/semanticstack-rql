@@ -1,5 +1,0 @@
-* xref:index.adoc[Developer Guide]
-** xref:dev-rql-parser.adoc[RQL Parser]
-** xref:dev-rql-querydsl.adoc[RQL to QueryDSL]
-
-
