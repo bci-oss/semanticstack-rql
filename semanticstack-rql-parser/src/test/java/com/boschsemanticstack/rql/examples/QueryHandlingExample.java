@@ -27,7 +27,6 @@ public class QueryHandlingExample {
 
    private final RestClient someRestClient = null;
 
-   // tag::send_query[]
    private Observable<RestResponse> getSomeResourceWithRqlUsingQueryParameters( final RqlQueryModel query ) {
 
       final Map<String, String> queryParameters = RqlParser.toQueryParameters( query );
@@ -38,9 +37,7 @@ public class QueryHandlingExample {
             .addQueryParam( "option", queryParameters.get( "option" ) ) // <1>
             .toObservableResponse();
    }
-   // end::send_query[]
 
-   // tag::parse_query_single[]
    private void someRestEndpoint(
          final String selectParam, // <2>
          final String filterParam, // <2>
@@ -59,9 +56,7 @@ public class QueryHandlingExample {
 
       // do something with query model
    }
-   // end::parse_query_single[]
 
-   // tag::parse_query_wholeQuery[]
    private void someRestEndpoint( final String theWholeQuery ) {//<1>
 
       // this highly depends on your rest backend therefore no api call to do this is provided
@@ -69,8 +64,6 @@ public class QueryHandlingExample {
 
       // do something with query model
    }
-
-   // end::parse_query_wholeQuery[]
 
    private interface RestClient {
       RestClient post( String address );

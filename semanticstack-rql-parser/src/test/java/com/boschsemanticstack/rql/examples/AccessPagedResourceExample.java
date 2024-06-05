@@ -26,7 +26,6 @@ public class AccessPagedResourceExample {
 
    private final RestClient someRestClient = null;
 
-   // tag::recursive_restrequest[]
    public Observable<String> getSomethingRemote( final RqlQueryModel query ) { // <1>
       final int pageSize = 170;  // entirely dependent on remote Service
       return getSomeResourceRecursive( RqlParser.getPagedQuery( query, pageSize ) );
@@ -68,7 +67,6 @@ public class AccessPagedResourceExample {
 
       return observableResults;
    }
-   // end::recursive_restrequest[]
 
    private interface RestClient {
       RestClient post( String address );
