@@ -1,3 +1,2 @@
-** xref:rql:dev-rql-parser.adoc[RQL Parser]
-** xref:rql:dev-rql-querydsl.adoc[RQL to QueryDSL]
-** xref:rql:user-guide.adoc[RQL User Guide]
+** xref:rql:user-guide.adoc[User Guide]
+** xref:rql:developer-guide.adoc[Developer Guide]
