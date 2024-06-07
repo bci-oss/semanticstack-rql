@@ -1,5 +1,5 @@
 # Semantic Stack Resource Query Language (RQL)
-
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=bci-oss_semanticstack-rql&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=bci-oss_semanticstack-rql)
 ## Table of Contents
 
 - [Introduction](#introduction)
