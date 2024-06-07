@@ -1,6 +1,6 @@
 # Semantic Stack Resource Query Language (RQL)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=bci-oss_semanticstack-rql&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=bci-oss_semanticstack-rql)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.boschsemanticstack/semanticstack-rql-parent/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.boschsemanticstack/semanticstack-rql-parent)
+[![Maven Central]https://img.shields.io/maven-central/v/com.boschsemanticstack/semanticstack-rql-parent](https://central.sonatype.com/artifact/com.boschsemanticstack/semanticstack-rql-parent)
 
 ## Table of Contents
 
