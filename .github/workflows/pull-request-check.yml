@@ -28,9 +28,5 @@ jobs:
           level: warning
           fail_on_error: false
 
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@master
-        env: 
-
       - name: Build and Test
         run: mvn -B clean install
