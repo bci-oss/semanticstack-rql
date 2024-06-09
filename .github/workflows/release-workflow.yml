@@ -32,8 +32,18 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+
+      - name: Check code style
+        uses: dbelyaev/action-checkstyle@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          reporter: github-pr-review
+          checkstyle_config: google_checks.xml
+          level: warning
+          fail_on_error: false
+
       # Required to have Maven settings.xml set up correctly
-      - name: Set up JDK 17
+      - name: Setup JDK 17
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
@@ -64,15 +74,6 @@ jobs:
           yq eval -i '.version = "${release_version}"' documentation/antora.yml
           git add .
           git commit -m "Release version ${release_version}"
-
-      - name: Check code style
-        uses: dbelyaev/action-checkstyle@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          reporter: github-pr-review
-          checkstyle_config: google_checks.xml
-          level: warning
-          fail_on_error: false
 
       - name: Commit version changes and push to upstream repository
         uses: stefanzweifel/git-auto-commit-action@8621497c8c39c72f3e2a999a26b4ca1b5058a842 # v5
