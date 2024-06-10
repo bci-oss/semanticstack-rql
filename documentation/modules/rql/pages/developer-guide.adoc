@@ -5,10 +5,12 @@
 == RQL Parser
 
 This Maven module contains the antlr4 grammar as well as the parser to create the _RqlQueryModel_ from a string or vice versa.
+//TODO ? To which degree is the antlr4 grammar a known thing? Any external link that could be added?
 The parser is the central tool that uses antlr4 code to analyze RQL queries and convert them into an _RqlQueryModel_.
 Therefore, this module enables the interpretation of RQL queries in string format and transforms them into an internal model (RqlQueryModel) that can be further processed.
 
 To include the plugin, use the following dependency:
+//TODO Aha. So if this information is reserved for developers, the question again pops up: who are "the other" users who shape queries and who are targeted by the "user guide"?
 
 [source,xml,subs=attributes+]
 ----
@@ -23,6 +25,7 @@ To include the plugin, use the following dependency:
 
 To create a model we can use _RqlParser.builder()_.
 This maps the structure such as _select_, _filter_ and _option_.
+//TODO ? "Option" again. From looking at the model below -- "option" just means sorting and/or pagination options?
 
 [source,java,indent=0,subs="+macros,+quotes"]
 ----
@@ -41,9 +44,12 @@ This maps the structure such as _select_, _filter_ and _option_.
             .build();
 ----
 
+//TODO ? Are there specific tools people use to view such models (like visual representations, graphs, tables, whatever)? Or is all about looking at them in text form?
+
 ==== Creating a string representation of the model
 
 To create a string representation of the model, we can use the _toString()_ method of the _RqlParser_.
+//TODO ? Does that imply that people would first put everything into the model (because it might be easier to grasp) and then use the parser to convert it to strings for the actual queries?
 
 [source,java,indent=0,subs="+macros,+quotes"]
 ----
@@ -53,26 +59,27 @@ To create a string representation of the model, we can use the _toString()_ meth
 
 ===== Single argument or body
 
-Do you transport the query via html body or as a single query attribute?
-To parse a query from Rest:
+Do you transport the query via HTML body or as a single query attribute?
+To parse such a query from REST:
 
 [source,java,indent=0,subs="+macros,+quotes"]
 ----
    private void someRestEndpoint( final String theWholeQuery ) {//<1>
 
-      // this highly depends on your rest backend therefore no api call to do this is provided
+      // This highly depends on your REST backend therefore no API call to do this is provided
       final RqlQueryModel from = RqlParser.from( Optional.ofNullable( theWholeQuery ).orElse( "" ) );
 
-      // do something with query model
+      // Do something with query model
    }
 
 ----
 
-<1> the whole query taken from the html-body or a single query argument.
+<1> The whole query taken from the HTML body or a single query argument.
 
 ===== As multiple query parameters
 
 Parsing a query transported component-wise (as three independent query arguments) requires re-assembly:
+//TODO ? Those three independent query arguments: it must be three? It is three in the example below but could be any number?
 
 [source,java,indent=0,subs="+macros,+quotes"]
 ----
@@ -92,14 +99,15 @@ Parsing a query transported component-wise (as three independent query arguments
 
       final RqlQueryModel from = RqlParser.from( queryString );
 
-      // do something with query model
+      // Do something with query model
    }
 ----
 
-<1> the whole query taken from the html-body or a single query argument.
-<2> the parameter names on your api do not even need to be named `select,filter or query` they could be named `fields,restrictions,settings`
+<1> The whole query taken from the HTML body or a single query argument.
+<2> The parameter names on your API do not even need to be named `select,filter or query` they could be named `fields,restrictions,settings`.
 
-==== To query a RQL-supporting Service:
+==== To query a RQL-supporting service:
+//TODO ? Is the Digital Twin Registry a RQL-supporting service?
 
 [source,java,linenums,options="nowrap"]
 ----
@@ -116,11 +124,12 @@ Parsing a query transported component-wise (as three independent query arguments
 ----
 
 <1> Be mindful, that each parameter part may be empty (not present in Map)
+//TODO ? Why pay attention, why do empty parts matter? And which "Map"?
 
 ==== Adding restrictions to a model
 
 Often you need to enforce certain restrictions on a query that may not be circumvented by the query itself.
-E.g. restricting the query to a certain tenant or time frame.
+For example, restricting the query to a certain tenant or time frame.
 To do this the `Rql` companion object supports adding restrictions _around_ the original query (as a top-level `and(...)`):
 
 [source,java,linenums,options="nowrap"]
@@ -132,19 +141,20 @@ To do this the `Rql` companion object supports adding restrictions _around_ the 
       );
 ----
 
-<1> if the given model already has `and` as its top restriction a new `and`-clause is created using the original and new restrictions.
-<2> more than one added restriction is added to only one new `and` filter.
+<1> If the given model already has `and` as its top restriction a new `and` clause is created using the original and new restrictions.
+<2> More than one added restriction is added to only one new `and` filter.
 
-==== Accessing a paged Service
+==== Accessing a paged service
 
 Sometimes a service you want to access limits its pagesize to something smaller than you need.
+//TODO Ok, so that means that this OSS project can not only be used for a certain service but for any service?
 In this case you need to query multiple times to get all data.
 This can be expressed elegantly using the following construct:
 
 [source,java,linenums,options="nowrap"]
 ----
    public Observable<String> getSomethingRemote( final RqlQueryModel query ) { // <1>
-      final int pageSize = 170;  // entirely dependent on remote Service
+      final int pageSize = 170;  // entirely dependent on remote service
       return getSomeResourceRecursive( RqlParser.getPagedQuery( query, pageSize ) );
    }
 
@@ -186,10 +196,10 @@ This can be expressed elegantly using the following construct:
    }
 ----
 
-<1> the original Query may well have defined it's own slice (e.g. [25:701]) this is honored throughout the process.
-<2> always exists in models generated by `Rql.getPagedQuery`
-<3> continue requesting as long as a) the remote service returns as many items as requested and b) there are still more items to be requested in the original query
-<4> the deferral is needed so another request is only made after we get to this element... otherwise a `.take(15)` further up the stream would not take effect until all elements had been fetched
+<1> The original Query may well have defined it's own slice (e.g. [25:701]) this is honored throughout the process.
+<2> Always exists in models generated by `Rql.getPagedQuery`.
+<3> Continue requesting as long as a) the remote service returns as many items as requested and b) there are still more items to be requested in the original query.
+<4> The deferral is needed so another request is only made after we get to this element. Otherwise, a `.take(15)` further up the stream would not take effect until all elements had been fetched.
 
 [[rql-query-dsl]]
 == RQL to QueryDSL
@@ -225,12 +235,13 @@ Not yet supported.
 
 The bridge currently supports the operators:
 
-* Comparison: `eq`, `in`, `ne`, `gt`, `ge`, `lt`, `le`, `like` and `likeIgnoreCase`;
-* Logical: `and`, `or` and `not`.
+* Comparison: `eq`, `in`, `ne`, `gt`, `ge`, `lt`, `le`, `like` and `likeIgnoreCase`
+* Logical: `and`, `or` and `not`
 
-Top-level properties, nested properties and collections of properties can be referenced in query expressions.
+Top-level properties, nested properties, and collections of properties can be referenced in query expressions.
 In the following example, filters are defined on properties of a `Person` entity.
 A Person has a `firstName` top-level property, a property `addresses` that references a subentity of type `Address` and a list of `Hobby` entities.
+//TODO ? Does capitalization matter here? (Doesn't match with the example. Plus wondering why Hobby is not hobby if first levels seemed to be lower case.)
 
 ----
 filter=eq(firstName,"John")
@@ -238,32 +249,34 @@ filter=eq(address/zipCode,1234)
 filter=like(hobbies/description,"?iking*")
 ----
 
-If there are multiple constraints on entries of a collection, all constraints are applied to each entry, which means the query
+If there are multiple constraints on entries of a collection, all constraints are applied to each entry. 
+
+That means the following query matches persons who have a hobby with the name "ships" and that hobby's description contains "?iking*":
+//TODO ? So I would get ship enthusiasts who like hiking but also those who are into vikings?
 
 ----
 filter=and(like(hobbies/description,"?iking*"),eq(hobbies/name,"ships"))
 ----
 
-matches persons that have a hobby with the name "ships" and that hobby's description contains "?iking*".
 Thus the semantic is similar to joining the hobby once in a relational database.
 
 ==== Ordering
 
-Ordering is supported for a resources properties.
-For example
+Ordering is supported for a resource's properties.
+
+For example, the following query would sort persons by `zipCode` in descending and `name` in ascending order:
 
 ----
-option=sort(-adress.zipCode,+name)
+option=sort(-address.zipCode,+name)
 ----
 
-would sort persons by `zipCode` in descending and `name` in ascending order.
 
 ==== Pagination / Limits
 
 Currently, not directly supported.
 There is no generic way to use Querydsl for that.
 
-However, the `QueryModelToQueryDSL` instance contains this information afterwards so that it can be used manually with your concrete access solution (e.g. you can use this information with Spring Data repositories).
+However, the `QueryModelToQueryDSL` instance contains this information afterwards so that it can be used manually with your concrete access solution (e.g., you can use this information with Spring Data repositories).
 Access paging information like this:
 
 ----
@@ -275,6 +288,10 @@ Optional<ISlice> paging = transformedQueryModel.getPagination();
 
 ===== Required dependencies
 
+//TODO Add an intro sentence for this section. (Necessary to use all the dependencies?)
+
+
+//TODO ? Intro sentence for the specific dependency below.
 [source,xml,subs=attributes+]
 ----
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -294,6 +311,7 @@ Optional<ISlice> paging = transformedQueryModel.getPagination();
          <artifactId>spring-boot-starter-data-jpa</artifactId>
 ----
 
+//TODO ? Intro sentence for the specific dependency below.
 [source,xml]
 ----
 		<!-- In case of using JPA: spring-data-jpa is required -->
@@ -309,7 +327,7 @@ In order to query object graphs in a typesafe way, Querydsl relies on (usually a
 The meta model classes use the naming prefix *Q* to distinguish them from the model classes, e.g., a class `Entity` would have a metamodel class `QEntity`.
 
 The `rql-2-querydsl` bridge relies on the metamodel classes as well.
-See the official http://www.querydsl.com/[documentation] on how to set up Maven to generate classes for use with JPA, SQL etc.
+See the official http://www.querydsl.com/[documentation] on how to set up Maven to generate classes for use with JPA, SQL, etc.
 The following example shows how to use RQL via Querydsl on Spring Data MongoDB repositories.
 
 You need to generate the meta model classes using the Spring Data MongoDB specific annotation processor; add the following plugin configuration to the
