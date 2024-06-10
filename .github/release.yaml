@@ -1,15 +1,18 @@
 changelog:
   categories:
-    - title: 🛠 Breaking Changes
-      labels:
-        - major-update
-        - breaking-change
-    - title: 🛠 Dependency Upgrades
-      labels:
-        - dependencies
-      exclude:
-        labels:
-          - major-update
     - title: ⭐ New Features
       labels:
         - "*"
+    - title: ⚠️ Breaking Changes
+      labels:
+        - major-update
+        - breaking-change
+    - title: 🐞 Bug Fixes
+      labels:
+        - bugfix
+    - title: 🔨 Dependency Upgrades
+      labels:
+        - dependencies
+    - title: 📔 Documentation
+      labels:
+        - documentation
