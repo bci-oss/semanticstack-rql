@@ -1,9 +1,18 @@
 = Bosch Semantic Stack RQL
+//TODO ? How come we mention "Bosch Semantic Stack" in an open-source project? Or do we want to emphasize here that this is made for Bosch Semantic Stack just that it is also open-source? (I suppose, yes. As opposed to ESMF open-source components which highly value their independence from anything commercial or Boschy.)
 
-Fundamentally, RQL (Resource Query Language) serves as a query language tailored for use in REST, specifically within URIs featuring data structures resembling objects.
+Fundamentally, RQL (Resource Query Language) serves as a query language tailored for use with REST APIs, specifically within URIs featuring data structures that resemble objects.
+//TODO ? This is "the RQL" which specification sits on GitHub under persvr/rql, right? We might add a link.
 
-The main parts of the RQL are: select, filter and option.
+The main parts of RQL are: select, filter, and option.
+//TODO ? "Parts" means functions? Features? Use cases? Applications? 
+//TODO ? "option" means?
+//TODO (i) Aiming to rewrite towards sth like: "The main use cases for RQL are to select data, to filter data, and to ... (option?) data."
+
+//TODO ! Missing information. Why does Bosch Semantic Stack RQL exist? (To ease usage of the Digital Twin Registry.) For whom is it made? (Anybody who has digital twins or AAS in the DTR and creates queries to access them. Application developers.) Why is it open-source? (To invite users to actively work with and extend Bosch Semantic Stack RQL where they see fit (because being extensible seems to be a core feature of RQL?).) Who is behind it/maintaining it? (Bosch.)
 
 Further information can be found in the xref:rql:user-guide.adoc[User Guide].
+//TODO ? Information for whom? When it comes to shaping queries, why divide between users and developers? Aren't developers THE users here?
 
-The xref:rql:developer-guide.adoc[Developer Guide] helps you to get up-and-running with the RQL Project and how you can use it in your projects.
+The xref:rql:developer-guide.adoc[Developer Guide] helps you to get up-and-running with the RQL Project and details how you can use it in your projects.
+//TODO ? Why "The RQL Project" as opposed to "your projects"? And: is "project" an RQL-specific term here?
