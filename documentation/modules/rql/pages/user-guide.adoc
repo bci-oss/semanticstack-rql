@@ -1,13 +1,17 @@
 :page-partial:
 = User Guide Resource Query Language (RQL)
+//TODO ? Is this a general guide to RQL (which might be found elsewhere too) or is this specifically written down for the "Bosch Semantic Stack RQL"?
 
 This section presents the main components of the RQL.
+//TODO ? Same: the general RQL or this specific RQL (project)?
 The RQL is a query language that allows you to select, filter, sort, and paginate the results of a query.
 
 == Syntax
 
-The excerpts of the language definition below shows the main operators and their restrictions:
+The excerpts of the language definition below shows the main operators and their restrictions. 
+//TODO ? Aha. Excerpts. Of the language definition. Link please! (Maybe I want to read the whole specification.) -- And: Yet, this page uses "we" and also indicates "may be removed in the future" -- removed from the general RQL or from this Bosch Semantic Stack RQL?
 The general form of the query string looks as follows:
+
 [subs="quotes"]
 ----
 `select=id,name&filter=ge(id,4711)&option=sort(+name,-description),limit(10,5)`
@@ -72,10 +76,11 @@ All digital twins with given twinCategory and at least one label with name Floor
 
 Here is a definition of the common operators (individual stores may have support for more less operators):
 
-==== Comparison Operator
+==== Comparison operators
 
 The following comparison operators are supported.
-.Comparison Operator
+
+.Comparison operators
 
 [options="header"]
 |===
@@ -90,9 +95,10 @@ The following comparison operators are supported.
 | count()                           | The count of records in the result set of the query is not yet implemented.
 |===
 
-==== Logical Operator
+==== Logical operators
 
 The following logical operators are supported.
+
 .Logical Operator
 
 [options="header"]
@@ -114,43 +120,59 @@ option=limit(_start_,_count_),sort(-+attribute1,attribute2,attributeN)
 
 === Sorting
 
-Sorts the data based on the specified attribute in the order indicated by the prefix (+ for ascending, - for descending) The attributes names are separated by a comma.
+Sorts the data based on the specified attribute in the order indicated by the prefix (+ for ascending, - for descending). The attribute names are separated by a comma.
+
 With user-defined sorting, the client is responsible for preventing an arbitrary order of the retrieved results.
 
 [subs="quotes"]
 ----
 option=sort(-+attribute1,attribute2,attributeN)
 ----
+//TODO ? Why -+? Wouldn'T it suffice to only add + and the attribute names? Is it required to always note down - and +? Does the order matter?
 
 === Pagination
 
 Paging is controlled by the `option=limit(_start_,_count_)` part in the query string.
-Currently, the syntax is related to the offset pagination.
-Other strategy are currently not provided but may be added in the future e.g. cursor based pagination.
+
+Currently, the syntax is related to offset pagination.
+Other strategies are currently not provided but may be added in the future, e.g., cursor-based pagination.
+//TODO ? Users might want to know: What even is offset pagination?
 
 [subs="quotes"]
 ----
 options=limit(_start_,_count_)
 ----
+//TODO ? And I don't have to add numbers for start or count? I just literally add it like that to the query?
 
-== Attribute Names
+== Attribute names
 
-Attribute names used in `select` `filter` and `sort` statements are restricted to the following syntax: +
+Attribute names used in `select`, `filter`, and `sort` statements are restricted to the following syntax: +
 `[a-zA-Z_][a-zA-Z0-9/_]*`
+//TODO ? Isn't this rather indicating the allowed characters whereas the syntax comes in the examples below?
 
 *Examples:*
 
 name:: simple attribute named 'name'
+
 id:: simple attribute named 'name'
-location_v_2:: simple attribute named containing underscore and numbers
-_someStrangeThing:: attributes _may_ start with underscore but why would you?
+//TODO ? id ... named 'name'?
+
+location_v_2:: simple attribute name containing underscore and numbers
+
+_someStrangeThing:: attribute names _may_ start with underscore but why would you?
+//TODO ? Why not?
+
 address/street:: _nested_ attribute 'street' of parent attribute 'address'
 
-99NotValid:: *invalid* - attributes may not start with numbers
-/alsoNotValid:: *invalid* - attributes may not start with nesting separator
-willBeParsedButHasNoMeaning/:: *no meaning* - the parser will read this but it makes no sense and *may be removed in future releases*
+99NotValid:: *invalid* -- attributes must not start with numbers
+
+/alsoNotValid:: *invalid* -- attributes may not start with nesting separator
+
+willBeParsedButHasNoMeaning/:: *no meaning* -- the parser will read this but it makes no sense and *may be removed in future releases*
+//TODO ? Why doesn't it make sense? Because it is indicating a parent without adding the child?
 
 Attributes can be nested by separating them using `.`.
+//TODO ? In addition to being nested with / as indicated for "address/street"?
 
 *Example:* `address.street`
 
@@ -158,15 +180,13 @@ Attributes can be nested by separating them using `.`.
 
 ==== Integer numbers
 
-What you would expect.
-They will be parsed in the smallest java data type they fit.
-(Integer, Long, BigInteger)
+Integer numbers will be parsed in the smallest Java data type they fit (Integer, Long, BigInteger).
 
 *Example:* `ge(foo,42)`
 
 ==== Real numbers
 
-They will always be parsed into java data type `BigDecimal`.
+Real numbers will always be parsed into the Java data type `BigDecimal`.
 
 *Example:* `lt(foo,7.23246)`
 
@@ -178,9 +198,9 @@ Will get mapped to null.
 
 ==== Strings
 
-Can be any unicode (except unicode escapes `\u1234`) with the escaping rules closely following java:
+Can be any Unicode (except Unicode escapes `\u1234`) with the escaping rules closely following Java:
 
-Escape-char is backslash `\`, possible escape sequences are
+Escape-char is backslash `\`, possible escape sequences are:
 
 `\\`:: Backslash itself
 `\t`:: Tabulator
@@ -189,30 +209,36 @@ Escape-char is backslash `\`, possible escape sequences are
 `\"`:: Double Quote
 `\f`:: Formfeed - *DO NOT USE* _this might be removed in future_
 `\b`:: Backspace - *DO NOT USE* _this might be removed in future_
+//TODO ? What do they do, why would I add them to a query?
 
 ==== Times
 
-This parser (and model) support time literals as `OffsetDateTime` represented in a *subset* of _ISO 8601_
-Some less used features of ISO 8601 are not supported - and likely will not in near future:
+This parser (and model) support time literals as `OffsetDateTime` represented in a *subset* of _ISO 8601_.
+Some less used features of ISO 8601 are not supported -- and most likely will not in near future:
 
 * Reduced Precision: giving a partial time `hh` or `hh:mm` is not supported.
-* Fractional hours and minutes (_ISO8601_ states that you can use fractions of the most precise time component (Hour, minute, second).
+* Fractional hours and minutes (_ISO8601_ states that you can use fractions of the most precise time component (hour, minute, second).
 As we only support a fixed precision including seconds this is not supported.
 
-So `2007-12-03T10:15Z` and `2007-12-03T10:15+4:27` are valid _ISO8601_ but *not* valid RQL
+So `2007-12-03T10:15Z` and `2007-12-03T10:15+4:27` are valid _ISO8601_ but *not* valid RQL.
+//TODO ? Like generally not valid for RQL or not valid within this Bosch Semantic Stack RQL project? (Also, just noting that so far it was not explained how to actually set up the RQL project so that it can be used. Or is there nothing to set up because the DTR supports it just natively? (Then why is it an extra open-source project and not just a DTR feature? Can it also be used for other registries or even any other API?))
 
 Valid examples are `2007-12-03T10:15:30.0123Z` and `2007-12-03t10:15:30+04:37`.
 
 <<<
+//TODO ?
 
 === Set comparisons
+//TODO ? Means comparing data SETs? Or to set a comparison? Or that there are some comparisons that have been set by default? Lost here. What about an intro sentence and one or two examples like above?
 
-The `in` statement does not support `null` as a literal and only _pure_ lists i.e. only floats, only strings or only integers.
+The `in` statement does not support `null` as a literal and only _pure_ lists, i.e., only floats, only strings, or only integers.
 
 Wildcards for the like operators are `?` for a single undefined character and `*` for any number of characters.
 
 === Simple comparisons
+//TODO ? How do simple comparisons differ from "set comparisons"?
 
 <1> Supports all literals
 <2> Does not support booleans or null, as less/greater are not defined independent of implementation
 <3> Supports only strings
+//TODO ? Why formatting the numbers as if they described something like a legend for a chart or map? Is this just a bulleted list? What does it even mean, this list? An intro sentence would help.
