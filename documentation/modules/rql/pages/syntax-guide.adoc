@@ -1,31 +1,35 @@
 = Syntax Guide
+:source-language: rql
 :page-partial:
 //Keep :page-partial: attribute so that users of Antora versions lower than 2.2 will also be able to include the page without running into ordering problems. More details: https://docs.antora.org/antora/latest/page/page-partial/  
 
-This syntax guide describes how to compose queries that use valid Bosch Semantic Stack RQL.
 
-This section presents the main components of the RQL.
-//TODO ? Same: the general RQL or this specific RQL (project)?
-The RQL is a query language that allows you to select, filter, sort, and paginate the results of a query.
+Learn how to compose queries that are based on and conform to Bosch Semantic Stack RQL.
 
-== Syntax
+== Main operators
 
-The excerpts of the language definition below shows the main operators and their restrictions. 
-//TODO ? Aha. Excerpts. Of the language definition. Link please! (Maybe I want to read the whole specification.) -- And: Yet, this page uses "we" and also indicates "may be removed in the future" -- removed from the general RQL or from this Bosch Semantic Stack RQL?
-The general form of the query string looks as follows:
+With Bosch Semantic Stack RQL, a query that can use up to three operators: 
 
-[subs="quotes"]
+* `select`
+* `filter`
+* `option`
+
+The following example represents the general form of a Bosch Semantic Stack RQL query string.
+
 ----
-`select=id,name&filter=ge(id,4711)&option=sort(+name,-description),limit(10,5)`
+select=id,name&filter=ge(id,4711)&option=sort(+name,-description),limit(10,5)
 ----
 
-select:: The fields `id` and `name`
+The above query string means:
 
-filter:: for the `id` _greater or equal_ to `4711`
+select:: Select the attributes `id` and `name`.
 
-sort:: the result _ascending_ by name and _descending_ by `description` (even though `description` is not selected)
+filter:: Filter for `id` attribute values that are _greater than or equal to_ `4711`.
 
-limited:: to 5 results starting at result 10 WARNING: Start of indices depends entirely on the implementation.
+options:: *Sort* the results _ascending_ by `name` and _descending_ by `description`. -- Note that the attributes used for sorting (e.g., `description`) do not have to appear in the select operator. +
+// TODO ? Does that mean: data is sorted by description but description is not displayed because it was not selected?
+*Limit* the returned results to 5 results, starting at result no. 10. -- Note that the start of indices depends entirely on the implementation.
+// TODO ? Implementation of what?
 
 
 === Select
@@ -33,7 +37,7 @@ limited:: to 5 results starting at result 10 WARNING: Start of indices depends e
 The select operator trims each response down to the set of attributes defined in the arguments of the query.
 The general form of the select string looks as follows:
 
-[subs="quotes"]
+
 ----
 select=attribute1,attribute2,attributeN
 ----
@@ -45,7 +49,7 @@ This means that response times can be significantly improved if only the request
 
 Example: Load (Select) only IDs and name (select) and do that only for the root entity.
 
-[subs="quotes"]
+
 ----
 select=id,name
 ----
@@ -55,7 +59,7 @@ select=id,name
 The filter operator is used to filter the results of a query based on the specified criteria.
 The general form of the filter string looks as follows:
 
-[subs="quotes"]
+
 ----
 filter={filter expression}
 ----
@@ -81,6 +85,8 @@ Here is a definition of the common operators (individual stores may have support
 ==== Comparison operators
 
 The following comparison operators are supported.
+// TODO (old) The excerpts of the language definition below shows the main operators and their restrictions. 
+
 
 .Comparison operators
 
@@ -115,7 +121,7 @@ The following logical operators are supported.
 
 The general form of the options string looks as follows:
 
-[subs="quotes"]
+
 ----
 option=limit(_start_,_count_),sort(-+attribute1,attribute2,attributeN)
 ----
@@ -126,7 +132,7 @@ Sorts the data based on the specified attribute in the order indicated by the pr
 
 With user-defined sorting, the client is responsible for preventing an arbitrary order of the retrieved results.
 
-[subs="quotes"]
+
 ----
 option=sort(-+attribute1,attribute2,attributeN)
 ----
@@ -140,7 +146,7 @@ Currently, the syntax is related to offset pagination.
 Other strategies are currently not provided but may be added in the future, e.g., cursor-based pagination.
 //TODO ? Users might want to know: What even is offset pagination?
 
-[subs="quotes"]
+
 ----
 options=limit(_start_,_count_)
 ----
