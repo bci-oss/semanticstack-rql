@@ -4,17 +4,19 @@
 
 ## Table of Contents
 
-- [Introduction](#introduction)
-- [Getting help](#getting-help)
-- [Build and contribute](#build-and-contribute)
-- [RQL Components](#rql-components)
-    - [semanticstack-rql-parser](#semanticstack-rql-parser)
-    - [semanticstack-rql-model](#semanticstack-rql-model)
-    - [semanticstack-rql-core](#semanticstack-rql-core)
-    - [semanticstack-rql-2-querydsl](#semanticstack-rql-2-querydsl)
-    - [examples](#examples)
-    - [documentation](#documentation)
-- [License](#license)
+- [Semantic Stack Resource Query Language (RQL)](#semantic-stack-resource-query-language-rql)
+  - [Table of Contents](#table-of-contents)
+  - [Introduction](#introduction)
+  - [Getting help](#getting-help)
+  - [Build and contribute](#build-and-contribute)
+  - [Semantic Stack RQL Components](#semantic-stack-rql-components)
+    - [`semanticstack-rql-parser`](#semanticstack-rql-parser)
+    - [`semanticstack-rql-model`](#semanticstack-rql-model)
+    - [`semanticstack-rql-core`](#semanticstack-rql-core)
+    - [`semanticstack-rql-2-querydsl`](#semanticstack-rql-2-querydsl)
+    - [`examples`](#examples)
+    - [`documentation`](#documentation)
+  - [License](#license)
 
 ## Introduction
 
@@ -40,7 +42,7 @@ offline via a web browser without setting up a web server.
 
 Are you having trouble with Semantic Stack RQL? We want to help!
 
-* Check the [documentation](documentation/modules/user-guide)
+* Check the [documentation](documentation/modules/rql/pages/)
 * Ask a question the [GitHub discussions](https://github.com/bci-oss/semanticstack-rql/discussions).
 * Having issues with the Semantic Stack RQL? Open a [GitHub issue](https://github.com/bci-oss/semanticstack-rql/issues)
 

@@ -1,2 +1,2 @@
-** xref:rql:user-guide.adoc[User Guide]
+** xref:rql:syntax-guide.adoc[Syntax Guide]
 ** xref:rql:developer-guide.adoc[Developer Guide]
