@@ -31,7 +31,7 @@ This maps the structure such as _select_, _filter_ and _option_.
 [source,java,indent=0,subs="+macros,+quotes"]
 ----
       final RqlQueryModel model = RqlParser.builder()
-            .select( "att1", "att2", "att3/subAtt4" )
+            .select( "att1", "att2", "att3.subAtt4" )
             .filter( RqlBuilder.and(
                   RqlBuilder.eq( "att2", "theSame" ),
                   RqlBuilder.or(
@@ -246,8 +246,8 @@ A Person has a `firstName` top-level property, a property `addresses` that refer
 
 ----
 filter=eq(firstName,"John")
-filter=eq(address/zipCode,1234)
-filter=like(hobbies/description,"?iking*")
+filter=eq(address.zipCode,1234)
+filter=like(hobbies.description,"?iking*")
 ----
 
 If there are multiple constraints on entries of a collection, all constraints are applied to each entry. 
@@ -256,7 +256,7 @@ That means the following query matches persons who have a hobby with the name "s
 //TODO ? So I would get ship enthusiasts who like hiking but also those who are into vikings?
 
 ----
-filter=and(like(hobbies/description,"?iking*"),eq(hobbies/name,"ships"))
+filter=and(like(hobbies.description,"?iking*"),eq(hobbies.name,"ships"))
 ----
 
 Thus the semantic is similar to joining the hobby once in a relational database.
