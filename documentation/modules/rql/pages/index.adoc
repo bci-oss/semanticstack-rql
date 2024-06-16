@@ -12,5 +12,4 @@ A query that utilizes Bosch Semantic Stack RQL can have up to three main parts:
 
 For further information on how to construct valid Bosch Semantic Stack RQL queries, refer to the xref:rql:syntax-guide.adoc[Syntax Guide].
 
-For information on how to get up-and-running with the Bosch Semantic Stack RQL library, refer to the xref:rql:developer-guide.adoc[Developer Guide].
-// TODO ? One library? Or more?
+For information on how to get up-and-running with the Bosch Semantic Stack RQL libraries, refer to the xref:rql:developer-guide.adoc[Developer Guide].
