@@ -234,10 +234,7 @@ Escape-char is backslash `\`, possible escape sequences are:
 `\t`:: Tabulator
 `\n`:: Newline
 `\r`:: Carriage return
-`\"`:: Double Quote
-`\f`:: Formfeed - *DO NOT USE* _this might be removed in future_
-`\b`:: Backspace - *DO NOT USE* _this might be removed in future_
-//TODO ? What do they do, why would I add them to a query?
+`\"`:: Double quote
 
 ==== Times
 
