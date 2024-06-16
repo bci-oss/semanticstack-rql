@@ -1,11 +1,12 @@
-:page-partial:
 = Developer Guide Resource Query Language (RQL)
+:page-partial:
+//Keep :page-partial: attribute so that users of Antora versions lower than 2.2 will also be able to include the page without running into ordering problems. More details: https://docs.antora.org/antora/latest/page/page-partial/  
 
 [[rql-parser]]
 == RQL Parser
 
-This Maven module contains the antlr4 grammar as well as the parser to create the _RqlQueryModel_ from a string or vice versa.
-//TODO ? To which degree is the antlr4 grammar a known thing? Any external link that could be added?
+This Maven module contains the antlr4 grammar and the Bosch Semantic Stack RQL parser to create the _RqlQueryModel_ from a string or vice versa. For more information on antlr4, refer to https://github.com/antlr/grammars-v4[^].
+
 The parser is the central tool that uses antlr4 code to analyze RQL queries and convert them into an _RqlQueryModel_.
 Therefore, this module enables the interpretation of RQL queries in string format and transforms them into an internal model (RqlQueryModel) that can be further processed.
 
