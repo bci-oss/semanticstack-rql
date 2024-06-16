@@ -18,7 +18,7 @@ To include the plugin, use the following dependency:
 <dependency>
     <groupId>com.boschsemanticstack</groupId>
     <artifactId>semanticstack-rql-parser</artifactId>
-    <version>{version}</version>
+    <version>\{version}</version>
 </dependency>
 ----
 
@@ -222,7 +222,7 @@ To include the plugin, use the following dependency:
 <dependency>
     <groupId>com.boschsemanticstack</groupId>
     <artifactId>semanticstack-rql-2-querydsl</artifactId>
-    <version>{version}</version>
+    <version>\{version}</version>
 </dependency>
 ----
 
