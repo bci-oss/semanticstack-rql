@@ -8,7 +8,7 @@ Learn how to compose queries that are based on and conform to Bosch Semantic Sta
 
 == Main operators
 
-With Bosch Semantic Stack RQL, a query that can use up to three operators: 
+With Bosch Semantic Stack RQL, a query can use up to three operators: 
 
 * `select`
 * `filter`
@@ -27,16 +27,16 @@ select:: Select the attributes `id` and `name`.
 filter:: Filter for `id` attribute values that are _greater than or equal to_ `4711`.
 
 options:: *Sort* the results _ascending_ by `name` and _descending_ by `description`. -- Note that the attributes used for sorting (e.g., `description`) do not have to appear in the select operator. +
-// TODO ? Does that mean: data is sorted by description but description is not displayed because it was not selected?
 *Limit* the returned results to 5 results, starting at result no. 10. -- Note that the start of indices depends entirely on the implementation.
-// TODO ? Implementation of what?
+// TODO ? Implementation of what? (New sentence: "Note that the start of indices depends entirely on how you implement ... (what?).")
+// TODO ? Does it matter whether "sort" or "limit" comes first? (Note that here in this example it is first sort then limit. Further below (in the "options" section), another example swaps this order. Does the order matter? Do we recommend any order? Like: first sort the data and then take results xyz?)
 
 
-=== Select
+== Select
 
-The select operator trims each response down to the set of attributes defined in the arguments of the query.
-The general form of the select string looks as follows:
+The `select` operator trims an API response down to only a given set of attributes. That means, the data of any further attributes will not be included in the API response.
 
+The general form of the `select` operator string looks as follows:
 
 ----
 select=attribute1,attribute2,attributeN
@@ -49,16 +49,15 @@ This means that response times can be significantly improved if only the request
 
 Example: Load (Select) only IDs and name (select) and do that only for the root entity.
 
-
 ----
 select=id,name
 ----
 
-=== Filter
+== Filter
 
-The filter operator is used to filter the results of a query based on the specified criteria.
-The general form of the filter string looks as follows:
+The `filter` operator trims an API response down to match only a given set of filter criteria. That means, data not matched by the filter criteria will not be included in the API response.
 
+The general form of the `filter` operator string looks as follows:
 
 ----
 filter={filter expression}
@@ -82,7 +81,7 @@ All digital twins with given twinCategory and at least one label with name Floor
 
 Here is a definition of the common operators (individual stores may have support for more less operators):
 
-==== Comparison operators
+=== Comparison operators
 
 The following comparison operators are supported.
 // TODO (old) The excerpts of the language definition below shows the main operators and their restrictions. 
@@ -103,7 +102,7 @@ The following comparison operators are supported.
 | count()                           | The count of records in the result set of the query is not yet implemented.
 |===
 
-==== Logical operators
+=== Logical operators
 
 The following logical operators are supported.
 
@@ -117,26 +116,41 @@ The following logical operators are supported.
 | not(<operator1>,<operator2>,...)  | Negates the provided query.
 |===
 
-=== Options
+== Option
 
-The general form of the options string looks as follows:
+The `option` operator sorts and limits API responses. That means, you can prevent an arbitrary order of your retrieved results. With this user-defined sorting, clients are responsible for requesting data in the order that fits their needs. 
 
+The general form of the `option` operator string looks as follows:
 
 ----
-option=limit(_start_,_count_),sort(-+attribute1,attribute2,attributeN)
+option=limit(),sort()
 ----
+//TODO ? Does the order of the limit and sort components matter?
+
+As an example, the `options` string could look like this:
+
+----
+option=limit(10,5),sort(-attribute1,+attribute2)
+----
+
+With user-defined sorting, the client is responsible for preventing an arbitrary order of the retrieved results.
+// TODO Put this sentence elsewhere
 
 === Sorting
 
-Sorts the data based on the specified attribute in the order indicated by the prefix (+ for ascending, - for descending). The attribute names are separated by a comma.
+Sorts the data based on the specified attribute and in the order indicated by the *+* or *-* prefixes.
 
-With user-defined sorting, the client is responsible for preventing an arbitrary order of the retrieved results.
+* For ascending sort order, use the *+* prefix.
+* For descending sort order, use the *-* prefix. 
 
+To separate the attribute names that you require for sorting, use a comma.
 
+Example:
 ----
-option=sort(-+attribute1,attribute2,attributeN)
+option=sort(-attribute1,+attribute2,[+-]attributeN)
 ----
-//TODO ? Why -+? Wouldn'T it suffice to only add + and the attribute names? Is it required to always note down - and +? Does the order matter?
+In the example above, sorting order is descending for `attribute1`, then ascending for `attribute2`, and then ascending or descending for any more attributes that might be added.
+
 
 === Pagination
 
