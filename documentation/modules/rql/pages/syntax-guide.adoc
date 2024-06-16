@@ -190,8 +190,7 @@ Attribute names used in `select`, `filter`, and `sort` statements are restricted
 
 name:: simple attribute named 'name'
 
-id:: simple attribute named 'name'
-//TODO ? id ... named 'name'?
+id:: simple attribute named 'id'
 
 location_v_2:: simple attribute name containing underscore and numbers
 
