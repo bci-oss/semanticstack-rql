@@ -13,6 +13,7 @@ With Bosch Semantic Stack RQL, a query can use up to three operators:
 * `select`
 * `filter`
 * `option`
+//TODO ? Is it option or options? Found it both in singular and plural, went for singular.
 
 The following example represents the general form of a Bosch Semantic Stack RQL query string.
 
@@ -125,9 +126,9 @@ The general form of the `option` operator string looks as follows:
 ----
 option=limit(),sort()
 ----
-//TODO ? Does the order of the limit and sort components matter?
+//TODO ? Does the order of the limit and sort components matter? Found it in both variants on this page. 
 
-As an example, the `options` string could look like this:
+As an example, the `option` string could look like this:
 
 ----
 option=limit(10,5),sort(-attribute1,+attribute2)
@@ -138,33 +139,46 @@ With user-defined sorting, the client is responsible for preventing an arbitrary
 
 === Sorting
 
-Sorts the data based on the specified attribute and in the order indicated by the *+* or *-* prefixes.
+To sort the retrieved data, use the `sort` operator as part of the `option` operator.
 
-* For ascending sort order, use the *+* prefix.
-* For descending sort order, use the *-* prefix. 
+----
+option=sort([+-]attributeN)
+----
 
-To separate the attribute names that you require for sorting, use a comma.
+The `sort` operator sorts the data based on the specified attributes:
+
+* It starts sorting with the first attribute, then proceeds to the next etc. 
+* To separate the attribute names that you require for sorting, use a comma.
+* For each attribute, you can specify whether to sort the results in ascending or descending order, indicating sort order by the *+* or *-* prefix.
+** For ascending sort order, use the *+* prefix.
+** For descending sort order, use the *-* prefix. 
 
 Example:
 ----
 option=sort(-attribute1,+attribute2,[+-]attributeN)
 ----
-In the example above, sorting order is descending for `attribute1`, then ascending for `attribute2`, and then ascending or descending for any more attributes that might be added.
-
+In the example above, results will first be sorted in descending order for `attribute1`, then will further be sorted in ascending order for `attribute2`, and then ascending or descending for any more attributes that might be added.
 
 === Pagination
 
-Paging is controlled by the `option=limit(_start_,_count_)` part in the query string.
-
-Currently, the syntax is related to offset pagination.
-Other strategies are currently not provided but may be added in the future, e.g., cursor-based pagination.
-//TODO ? Users might want to know: What even is offset pagination?
-
+To control the pagination of the retrieved data, use the `limit` operator as part of the `option` operator.
 
 ----
-options=limit(_start_,_count_)
+option=limit(start,count)
 ----
-//TODO ? And I don't have to add numbers for start or count? I just literally add it like that to the query?
+
+The syntax is related to *offset pagination*. That means the `start` and `count` parts in the string above conceptually stand for the following numbers:
+
+* `start` specifies where to start fetching data, also known as _offset_
+* `count` indicates how many results to fetch per page
+
+Example:
+----
+option=limit(10,5)
+----
+In the example above, results will start at result no. 10 and 5 results will be included in the API response.
+
+Currently, only offset pagination is provided with Bosch Semantic Stack RQL. We may add cursor-based pagination in the future.
 
 == Attribute names
 
