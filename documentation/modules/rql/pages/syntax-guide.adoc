@@ -89,7 +89,6 @@ The following comparison operators are supported.
 
 
 .Comparison operators
-
 [options="header"]
 |===
 | Operator Expression               | Description
@@ -107,8 +106,7 @@ The following comparison operators are supported.
 
 The following logical operators are supported.
 
-.Logical Operator
-
+.Logical operators
 [options="header"]
 |===
 | Logical Expression                | Description
@@ -182,34 +180,29 @@ Currently, only offset pagination is provided with Bosch Semantic Stack RQL. We 
 
 == Attribute names
 
-Attribute names used in `select`, `filter`, and `sort` statements are restricted to the following syntax: +
-`[a-zA-Z_][a-zA-Z0-9/_]*`
-//TODO ? Isn't this rather indicating the allowed characters whereas the syntax comes in the examples below?
+Attribute names that get used in `select`, `filter`, and `sort` statements with Bosch Semantic Stack RQL are restricted to the following syntax:
 
-*Examples:*
+****
+`[a-zA-Z_][a-zA-Z0-9._]*`
+****
 
-name:: simple attribute named 'name'
+Attributes can be nested by separating them using a dot `.` as nesting separator.
 
-id:: simple attribute named 'id'
+The following table details some attribute name examples.
 
-location_v_2:: simple attribute name containing underscore and numbers
-
-_someStrangeThing:: attribute names _may_ start with underscore but why would you?
-//TODO ? Why not?
-
-address/street:: _nested_ attribute 'street' of parent attribute 'address'
-
-99NotValid:: *invalid* -- attributes must not start with numbers
-
-/alsoNotValid:: *invalid* -- attributes may not start with nesting separator
-
-willBeParsedButHasNoMeaning/:: *no meaning* -- the parser will read this but it makes no sense and *may be removed in future releases*
-//TODO ? Why doesn't it make sense? Because it is indicating a parent without adding the child?
-
-Attributes can be nested by separating them using `.`.
-//TODO ? In addition to being nested with / as indicated for "address/street"?
-
-*Example:* `address.street`
+.Examples
+[options="header"]
+|===
+| Example attribute name                | Description
+| `name`  | A simple attribute named 'name'.
+| `id`   | A simple attribute named 'id'.
+| `location42_v_2`  | A simple attribute name containing underscores and numbers.
+| `_someStrangeThing` | Attribute names _may_ start with an underscore (but why would you?).
+| `99NotValid` | *Invalid:* attribute names must not start with numbers.
+| `address.street` | A _nested_ attribute: the 'street' child attribute is nested in the 'address' parent attribute.
+| `.alsoNotValid` | *Invalid:* attributes must not start with the nesting separator.
+| `mightBeParsedButHasNoMeaning.` | *Meaningless:* the parser reads this but no action will follow as after the nesting separator no attribute is specified.
+|===
 
 === Data types
 
