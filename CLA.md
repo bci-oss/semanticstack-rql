@@ -9,7 +9,7 @@ make this document effective, please follow the instructions at [Semantic Stack 
 Before providing the Contribution to Us, you need to have your employer approve this Agreement this document.
 
 **If for some other reason you do not own the Copyright in the entire work of authorship**, any other author of the Contribution should also sign this – in any
-event, please contact Us at [Project Email].
+event, please contact Us at <mailto:support.semantic-stack@bosch.com> .
 
 ## 1. Definitions
 

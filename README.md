@@ -34,7 +34,7 @@ Filtering reduces the amount of retrieved entities by given criteria, paging ret
 With sorting, the retrieved results are returned in a predefined order.
 
 This repository contains a detailed developer documentation written in AsciiDoc.
-The source files (AsciiDoc) are located [here](documentation/modules/developer-guide) and are built using
+The source files (AsciiDoc) are located [here](documentation/modules/rql) and are built using
 [Antora](https://antora.org/) which generates the documentation as HTML files. A site generated using Antora is self-contained and can be viewed entirely
 offline via a web browser without setting up a web server.
 
@@ -42,7 +42,7 @@ offline via a web browser without setting up a web server.
 
 Are you having trouble with Semantic Stack RQL? We want to help!
 
-* Check the [documentation](documentation/modules/rql/pages/)
+* Check the [documentation](https://docs.bosch-semantic-stack.com/rql/index.html)
 * Ask a question the [GitHub discussions](https://github.com/bci-oss/semanticstack-rql/discussions).
 * Having issues with the Semantic Stack RQL? Open a [GitHub issue](https://github.com/bci-oss/semanticstack-rql/issues)
 
