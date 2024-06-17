@@ -79,8 +79,7 @@ To parse such a query from REST:
 
 ===== As multiple query parameters
 
-Parsing a query transported component-wise (as three independent query arguments) requires re-assembly:
-//TODO ? Those three independent query arguments: it must be three? It is three in the example below but could be any number?
+Parsing a query transported component-wise (as three independent query arguments for the `select`, `filter`, and `option` operators) requires re-assembly:
 
 [source,java,indent=0,subs="+macros,+quotes"]
 ----
