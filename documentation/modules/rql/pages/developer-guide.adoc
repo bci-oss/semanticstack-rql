@@ -60,7 +60,7 @@ To create a string representation of the model, we can use the _toString()_ meth
 
 ===== Single argument or body
 
-Do you transport the query via HTML body or as a single query attribute?
+Do you transport the query via HTTP body or as a single query attribute?
 To parse such a query from REST:
 
 [source,java,indent=0,subs="+macros,+quotes"]
@@ -75,7 +75,7 @@ To parse such a query from REST:
 
 ----
 
-<1> The whole query taken from the HTML body or a single query argument.
+<1> The whole query taken from the HTTP body or a single query argument.
 
 ===== As multiple query parameters
 
@@ -104,7 +104,7 @@ Parsing a query transported component-wise (as three independent query arguments
    }
 ----
 
-<1> The whole query taken from the HTML body or a single query argument.
+<1> The whole query taken from the HTTP body or a single query argument.
 <2> The parameter names on your API do not even need to be named `select,filter or query` they could be named `fields,restrictions,settings`.
 
 ==== To query a RQL-supporting service:
