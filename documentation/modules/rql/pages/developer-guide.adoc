@@ -11,7 +11,6 @@ The parser is the central tool that uses antlr4 code to analyze RQL queries and 
 Therefore, this module enables the interpretation of RQL queries in string format and transforms them into an internal model (RqlQueryModel) that can be further processed.
 
 To include the plugin, use the following dependency:
-//TODO Aha. So if this information is reserved for developers, the question again pops up: who are "the other" users who shape queries and who are targeted by the "user guide"?
 
 [source,xml,subs=attributes+]
 ----
@@ -26,7 +25,6 @@ To include the plugin, use the following dependency:
 
 To create a model we can use _RqlParser.builder()_.
 This maps the structure such as _select_, _filter_ and _option_.
-//TODO ? "Option" again. From looking at the model below -- "option" just means sorting and/or pagination options?
 
 [source,java,indent=0,subs="+macros,+quotes"]
 ----
@@ -45,12 +43,9 @@ This maps the structure such as _select_, _filter_ and _option_.
             .build();
 ----
 
-//TODO ? Are there specific tools people use to view such models (like visual representations, graphs, tables, whatever)? Or is all about looking at them in text form?
-
 ==== Creating a string representation of the model
 
 To create a string representation of the model, we can use the _toString()_ method of the _RqlParser_.
-//TODO ? Does that imply that people would first put everything into the model (because it might be easier to grasp) and then use the parser to convert it to strings for the actual queries?
 
 [source,java,indent=0,subs="+macros,+quotes"]
 ----
@@ -107,7 +102,6 @@ Parsing a query transported component-wise (as three independent query arguments
 <2> The parameter names on your API do not even need to be named `select,filter or query` they could be named `fields,restrictions,settings`.
 
 ==== To query a RQL-supporting service:
-//TODO ? Is the Digital Twin Registry a RQL-supporting service?
 
 [source,java,linenums,options="nowrap"]
 ----
@@ -124,7 +118,6 @@ Parsing a query transported component-wise (as three independent query arguments
 ----
 
 <1> Be mindful, that each parameter part may be empty (not present in Map)
-//TODO ? Why pay attention, why do empty parts matter? And which "Map"?
 
 ==== Adding restrictions to a model
 
@@ -147,7 +140,7 @@ To do this the `Rql` companion object supports adding restrictions _around_ the 
 ==== Accessing a paged service
 
 Sometimes a service you want to access limits its pagesize to something smaller than you need.
-//TODO Ok, so that means that this OSS project can not only be used for a certain service but for any service?
+
 In this case you need to query multiple times to get all data.
 This can be expressed elegantly using the following construct:
 
@@ -238,10 +231,10 @@ The bridge currently supports the operators:
 * Comparison: `eq`, `in`, `ne`, `gt`, `ge`, `lt`, `le`, `like` and `likeIgnoreCase`
 * Logical: `and`, `or` and `not`
 
-Top-level properties, nested properties, and collections of properties can be referenced in query expressions.
-In the following example, filters are defined on properties of a `Person` entity.
-A Person has a `firstName` top-level property, a property `addresses` that references a subentity of type `Address` and a list of `Hobby` entities.
-//TODO ? Does capitalization matter here? (Doesn't match with the example. Plus wondering why Hobby is not hobby if first levels seemed to be lower case.)
+Top-level attributes, nested attributes, and collections of attributes can be referenced in query expressions.
+
+In the following example, filters are defined on attributes of a `Person` entity. This `Person` entity has a `firstName` top-level attribute, an attribute `addresses` that references a sub-entity of type `Address` and a list of `Hobby` entities.
+//TODO ? Aren't the latter attributes and not entities? Seems the sentences should end "... an attribute `addresses` that references a nested attribute `zipCode` and a list of `hobby` attributes."
 
 ----
 filter=eq(firstName,"John")
@@ -252,7 +245,6 @@ filter=like(hobbies.description,"?iking*")
 If there are multiple constraints on entries of a collection, all constraints are applied to each entry. 
 
 That means the following query matches persons who have a hobby with the name "ships" and that hobby's description contains "?iking*":
-//TODO ? So I would get ship enthusiasts who like hiking but also those who are into vikings?
 
 ----
 filter=and(like(hobbies.description,"?iking*"),eq(hobbies.name,"ships"))
@@ -262,14 +254,13 @@ Thus the semantic is similar to joining the hobby once in a relational database.
 
 ==== Ordering
 
-Ordering is supported for a resource's properties.
+Ordering is supported for an entity's attributes.
 
 For example, the following query would sort persons by `zipCode` in descending and `name` in ascending order:
 
 ----
 option=sort(-address.zipCode,+name)
 ----
-
 
 ==== Pagination / Limits
 
@@ -288,10 +279,6 @@ Optional<ISlice> paging = transformedQueryModel.getPagination();
 
 ===== Required dependencies
 
-//TODO Add an intro sentence for this section. (Necessary to use all the dependencies?)
-
-
-//TODO ? Intro sentence for the specific dependency below.
 [source,xml,subs=attributes+]
 ----
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -311,7 +298,6 @@ Optional<ISlice> paging = transformedQueryModel.getPagination();
          <artifactId>spring-boot-starter-data-jpa</artifactId>
 ----
 
-//TODO ? Intro sentence for the specific dependency below.
 [source,xml]
 ----
 		<!-- In case of using JPA: spring-data-jpa is required -->
