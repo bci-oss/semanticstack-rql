@@ -41,7 +41,6 @@ With Bosch Semantic Stack RQL, a query can use up to three operators:
 * `select`
 * `filter`
 * `option`
-//TODO ? Is it option or options? Found it both in singular and plural, went for singular.
 
 The following example represents the general form of a Bosch Semantic Stack RQL query string.
 
@@ -55,11 +54,8 @@ select:: Select the attributes `id` and `name`.
 
 filter:: Filter for `id` attribute values that are _greater than or equal to_ `4711`.
 
-options:: *Sort* the results _ascending_ by `name` and _descending_ by `description`. -- Note that the attributes used for sorting (e.g., `description`) do not have to appear in the select operator. +
+option:: *Sort* the results _ascending_ by `name` and _descending_ by `description`. -- Note that the attributes used for sorting (e.g., `description`) do not have to appear in the select operator. +
 *Limit* the returned results to 5 results, starting at result no. 10. -- Note that the start of indices depends entirely on the implementation.
-// TODO ? Implementation of what? (New sentence: "Note that the start of indices depends entirely on how you implement ... (what?).")
-// TODO ? Does it matter whether "sort" or "limit" comes first? (Note that here in this example it is first sort then limit. Further below (in the "options" section), another example swaps this order. Does the order matter? Do we recommend any order? Like: first sort the data and then take results xyz?)
-
 
 == Select
 
@@ -113,7 +109,6 @@ filter=and(like(hobbies.description,"?iking*"),eq(hobbies.name,"ships"))
 A query containing the filter expression above would return results (e.g., entities that resemble persons) having a hobby with the name "ships" and where that hobby's description contains "?iking*". That means, results could be "biking", "viking", "vikings", "vikingships", etc.
 
 The following sections detail the common operators that come with Bosch Semantic Stack RQL. (Individual stores may have support for more or less operators.)
-// TODO ? What is an "individual store"?
 
 === Comparison operators
 
@@ -143,7 +138,6 @@ For the provided <value>, these operators accept *all literals*, i.e., every com
 
 *Data types:* +
 For the provided <value>, these operators accept *no boolean or null*, as less/greater are not defined independent of implementation.
-//TODO Unclear sentence (implementation)
 
 .Comparison operators
 [options="header"]
@@ -215,7 +209,6 @@ likeIgnoreCase(description,"*my device*")`
 ----
 
 | Returns all entities that have a description containing "my device".
-// TODO ? What does this operator do? (Found it in the developer guide.)
 
 |===
 
@@ -308,7 +301,6 @@ The general form of the `option` operator string looks as follows:
 ----
 option=limit(),sort()
 ----
-//TODO ? Does the order of the limit and sort components matter? Found it in both variants on this page. 
 
 As an example, the `option` string could look like this:
 

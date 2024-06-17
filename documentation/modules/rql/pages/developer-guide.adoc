@@ -234,7 +234,6 @@ The bridge currently supports the operators:
 Top-level attributes, nested attributes, and collections of attributes can be referenced in query expressions.
 
 In the following example, filters are defined on attributes of a `Person` entity. This `Person` entity has a `firstName` top-level attribute, an attribute `addresses` that references a sub-entity of type `Address` and a list of `Hobby` entities.
-//TODO ? Aren't the latter attributes and not entities? Seems the sentences should end "... an attribute `addresses` that references a nested attribute `zipCode` and a list of `hobby` attributes."
 
 ----
 filter=eq(firstName,"John")
