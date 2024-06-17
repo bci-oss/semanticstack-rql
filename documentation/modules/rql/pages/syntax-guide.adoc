@@ -104,6 +104,14 @@ The value of the `filter` operator is a filter expression that uses one of the f
 `like`, `likeIgnoreCase`
 * Logical: `and`, `or`, `not`
 
+Example:
+
+----
+filter=and(like(hobbies.description,"?iking*"),eq(hobbies.name,"ships"))
+----
+
+A query containing the filter expression above would return results (e.g., entities that resemble persons) having a hobby with the name "ships" and where that hobby's description contains "?iking*". That means, results could be "biking", "viking", "vikings", "vikingships", etc.
+
 The following sections detail the common operators that come with Bosch Semantic Stack RQL. (Individual stores may have support for more or less operators.)
 // TODO ? What is an "individual store"?
 
