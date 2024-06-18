@@ -55,7 +55,7 @@ select:: Select the attributes `id` and `name`.
 filter:: Filter for `id` attribute values that are _greater than or equal to_ `4711`.
 
 option:: *Sort* the results _ascending_ by `name` and _descending_ by `description`. -- Note that the attributes used for sorting (e.g., `description`) do not have to appear in the select operator. +
-*Limit* the returned results to 5 results, starting at result no. 10. -- Note that the start of indices depends entirely on the implementation.
+*Limit* the returned results to 5 results, starting at result no. 10. -- Note that the start of indices depends on a service's implementation as some databases or library's start counting at page 0 and some at page 1. 
 
 == Select
 
@@ -299,13 +299,13 @@ The `option` operator sorts and limits API responses. That means, you can preven
 The general form of the `option` operator string looks as follows:
 
 ----
-option=limit(),sort()
+option=sort(),limit()
 ----
 
 As an example, the `option` string could look like this:
 
 ----
-option=limit(10,5),sort(-attribute1,+attribute2)
+option=sort(-attribute1,+attribute2),limit(10,5)
 ----
 
 === Sorting
