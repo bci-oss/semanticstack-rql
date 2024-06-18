@@ -119,7 +119,7 @@ Note: A `count()` operator to count all entities in an API response to the query
 ==== eq, ne
 
 *Data types:* +
-For the provided <value>, these operators accept *all literals*, i.e., every common data type, including times, Boolean, null, etc.
+For the provided <value>, these operators accept *all literals*, i.e., every common data type, including times, Boolean, `null`, etc.
 
 .Comparison operators
 [options="header"]
@@ -137,7 +137,7 @@ For the provided <value>, these operators accept *all literals*, i.e., every com
 ==== ge, le, gt, lt
 
 *Data types:* +
-For the provided <value>, these operators accept *no Boolean or null*.
+For the provided <value>, these operators accept *no Boolean or `null`*.
 
 .Comparison operators
 [options="header"]
@@ -277,7 +277,7 @@ NOTE: Valid examples for Bosch Semantic Stack RQL are: +
 `2007-12-03T10:15:30.0123Z` +
 `2007-12-03t10:15:30+04:37`
 
-==== Integer numbers, real numbers, null
+==== Integer numbers, real numbers, `null`
 
 When using the Bosch Semantic Stack RQL parser, data types that come in with a query will be mapped to the corresponding Java data types. 
 
@@ -289,7 +289,7 @@ The following table details how incoming RQL data types get parsed to Java data 
 | Data type | Example | Mapping to Java data type
 | Integer number | `ge(foo,42)` | Gets parsed into the smallest fitting Java data type (`Integer`, `Long`, `BigInteger`).
 | Real number | `lt(foo,7.23246)` | Gets parsed into the Java data type `BigDecimal`.
-| Null | `eq(foo,null)` | Gets mapped to `null`.
+| `null` | `eq(foo,null)` | Gets mapped to `null`.
 |===
 
 == Option
