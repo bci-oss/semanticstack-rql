@@ -197,10 +197,10 @@ Additionally, they also support *wildcards*:
 | Operator expression               | Description
 
 | `like(<attribute>,<value>)`
-| Filters for entities where the value of the specified attribute *matches* the provided value which typically contains at least one *wildcard*.
+| Filters for entities where the value of the specified attribute *matches* the provided value – also in terms of capitalization, i.e., upper case or lower case. The provided value typically contains at least one of the following *wildcards*: `?` or `*`.
 
 | `likeIgnoreCase(<attribute>,<value>)`
-| Dito. But capitalization of the results is not required to match with the capitalization used for the string of the provided value.
+| Ditto. But here, the results' capitalization (upper case or lower case) is not required to match the capitalization used for the filter string of the provided value.
 
 a| Example: 
 
@@ -208,7 +208,7 @@ a| Example:
 likeIgnoreCase(description,"*my device*")`
 ----
 
-| Returns all entities that have a description containing "my device".
+| Returns all entities with a description containing "my device", independent of the capitalization of the words. That means results also can contain "My device", "my Device", "My Device", "MY DEVICE", etc.
 
 |===
 
