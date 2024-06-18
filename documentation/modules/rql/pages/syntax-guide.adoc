@@ -57,7 +57,7 @@ filter:: Filter for `id` attribute values that are _greater than or equal to_ `4
 option:: *Sort* the results _ascending_ by `name` and _descending_ by `description`. -- Note that the attributes used for sorting (e.g., `description`) do not have to appear in the select operator. +
 *Limit* the returned results to 5 results, starting at result no. 10. -- Note that the start of indices depends on a service's implementation as some databases or library's start counting at page 0 and some at page 1. 
 
-== Select
+== Select operator
 
 The `select` operator trims an API response down to only a given set of attributes. That means, the data of any further attributes of an entity will not be included in the API response.
 
@@ -78,7 +78,7 @@ Example: Load (select) only IDs and name (select) and do that only for the root 
 select=id,name
 ----
 
-== Filter
+== Filter operator
 
 The `filter` operator trims an API response down to match only a given set of filter criteria. That means, data not matched by the filter criteria will not be included in the API response.
 
@@ -292,7 +292,7 @@ The following table details how incoming RQL data types get parsed to Java data 
 | `null` | `eq(foo,null)` | Gets mapped to `null`.
 |===
 
-== Option
+== Option operator
 
 The `option` operator sorts and limits API responses. That means, you can prevent an arbitrary order of your retrieved results. With this user-defined sorting, clients are able and responsible for requesting data in the order that fits their needs. 
 
