@@ -119,7 +119,7 @@ Note: A `count()` operator to count all entities in an API response to the query
 ==== eq, ne
 
 *Data types:* +
-For the provided <value>, these operators accept *all literals*, i.e., every common data type, including times, boolean, null, etc.
+For the provided <value>, these operators accept *all literals*, i.e., every common data type, including times, Boolean, null, etc.
 
 .Comparison operators
 [options="header"]
@@ -137,7 +137,7 @@ For the provided <value>, these operators accept *all literals*, i.e., every com
 ==== ge, le, gt, lt
 
 *Data types:* +
-For the provided <value>, these operators accept *no boolean or null*, as less/greater are not defined independent of implementation.
+For the provided <value>, these operators accept *no Boolean or null*.
 
 .Comparison operators
 [options="header"]
@@ -236,7 +236,7 @@ and(eq(twinCategory,"Printer"), eq(labels.name,"Floor1"))
 
 === Data types
 
-The values used to filter results can be of several data types, such as strings, times, numbers, boolean, etc. While these data types are common data types, this section highlights relevant details for the use with Bosch Semantic Stack RQL.
+The values used to filter results can be of several data types, such as strings, times, numbers, Boolean, etc. While these data types are common data types, this section highlights relevant details for the use with Bosch Semantic Stack RQL.
 
 ==== Strings
 
