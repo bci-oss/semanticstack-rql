@@ -1,9 +1,15 @@
 = Bosch Semantic Stack RQL
 
-Fundamentally, RQL (Resource Query Language) serves as a query language tailored for use in REST, specifically within URIs featuring data structures resembling objects.
+Generally, a Resource Query Language (RQL) serves as a query language tailored for use with REST APIs, specifically within URIs featuring data structures that resemble objects.
 
-The main parts of the RQL are: select, filter and option.
+The *Bosch Semantic Stack RQL* open-source project comes with its own RQL grammar and the corresponding Java tooling. The RQL parser, for example, aims to support REST API owners with handling incoming queries that use the Bosch Semantic Stack RQL.
 
-Further information can be found in the xref:rql:user-guide.adoc[User Guide].
+A query that utilizes Bosch Semantic Stack RQL can have up to three main parts: 
 
-The xref:rql:developer-guide.adoc[Developer Guide] helps you to get up-and-running with the RQL Project and how you can use it in your projects.
+* `select`
+* `filter`
+* `option`
+
+For further information on how to construct valid Bosch Semantic Stack RQL queries, refer to the xref:rql:syntax-guide.adoc[Syntax Guide].
+
+For information on how to get up-and-running with the Bosch Semantic Stack RQL library, refer to the xref:rql:developer-guide.adoc[Developer Guide].

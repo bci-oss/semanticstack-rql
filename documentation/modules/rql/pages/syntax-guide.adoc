@@ -1,0 +1,352 @@
+= Syntax Guide
+:source-language: rql
+:page-partial:
+//Keep :page-partial: attribute so that users of Antora versions lower than 2.2 will also be able to include the page without running into ordering problems. More details: https://docs.antora.org/antora/latest/page/page-partial/  
+
+
+Learn how to compose queries that are based on and conform to Bosch Semantic Stack RQL.
+
+== Attribute names
+
+An API that supports Bosch Semantic Stack RQL and can be queried by it, needs the attribute names (aka field names) of its entities (aka resources) to follow a certain syntax. 
+
+Attribute names that get used in `select`, `filter`, and `sort` statements are restricted to the following *characters*:
+
+****
+`[a-zA-Z_][a-zA-Z0-9._]*`
+****
+
+Attributes can be *nested* by separating them using a dot `.` as nesting separator.
+
+The following table details some attribute name examples.
+
+.Examples
+[options="header"]
+|===
+| Example attribute name                | Description
+| `name`  | A simple attribute named 'name'.
+| `id`   | A simple attribute named 'id'.
+| `location42_v_2`  | A simple attribute name containing underscores and numbers.
+| `_someStrangeThing` | Attribute names _may_ start with an underscore (but why would you?).
+| `99NotValid` | *Invalid:* attribute names must not start with numbers.
+| `address.street` | A _nested_ attribute: the 'street' child attribute is nested in the 'address' parent attribute.
+| `.alsoNotValid` | *Invalid:* attributes must not start with the nesting separator.
+| `mightBeParsedButHasNoMeaning.` | *Meaningless:* the parser reads this but no action will follow as after the nesting separator no attribute is specified.
+|===
+
+== Main operators
+
+With Bosch Semantic Stack RQL, a query can use up to three operators: 
+
+* `select`
+* `filter`
+* `option`
+
+The following example represents the general form of a Bosch Semantic Stack RQL query string.
+
+----
+select=id,name&filter=ge(id,4711)&option=sort(+name,-description),limit(10,5)
+----
+
+The above query string means:
+
+select:: Select the attributes `id` and `name`.
+
+filter:: Filter for `id` attribute values that are _greater than or equal to_ `4711`.
+
+option:: *Sort* the results _ascending_ by `name` and _descending_ by `description`. -- Note that the attributes used for sorting (e.g., `description`) do not have to appear in the select operator. +
+*Limit* the returned results to 5 results, starting at result no. 10. -- Note that the start of indices depends on a service's implementation as some databases or library's start counting at page 0 and some at page 1. 
+
+== Select operator
+
+The `select` operator trims an API response down to only a given set of attributes. That means, the data of any further attributes of an entity will not be included in the API response.
+
+The general form of the `select` operator string looks as follows:
+
+----
+select=attribute1,attribute2,attributeN
+----
+
+User-defined select can be requested via RQL for a root entity.
+The attributes names are separated by a comma.
+All child entities will then not be loaded.
+This means that response times can be significantly improved if only the requested information is returned.
+
+Example: Load (select) only IDs and name (select) and do that only for the root entity.
+
+----
+select=id,name
+----
+
+== Filter operator
+
+The `filter` operator trims an API response down to match only a given set of filter criteria. That means, data not matched by the filter criteria will not be included in the API response.
+
+The general form of the `filter` operator string looks as follows:
+
+----
+filter={<filter expression>}
+----
+
+The value of the `filter` operator is a filter expression that uses one of the following operators:
+
+* Comparison: `+++<abbr title="equals">eq</abbr>+++`,
+`+++<abbr title="value is one of a given list">in</abbr>+++`,
+`+++<abbr title="not equals">ne</abbr>+++`,
+`+++<abbr title="greater than">gt</abbr>+++`,
+`+++<abbr title="greater or equal than">ge</abbr>+++`,
+`+++<abbr title="less than">lt</abbr>+++`,
+`+++<abbr title="less or equal than">le</abbr>+++`,
+`like`, `likeIgnoreCase`
+* Logical: `and`, `or`, `not`
+
+Example:
+
+----
+filter=and(like(hobbies.description,"?iking*"),eq(hobbies.name,"ships"))
+----
+
+A query containing the filter expression above would return results (e.g., entities that resemble persons) having a hobby with the name "ships" and where that hobby's description contains "?iking*". That means, results could be "biking", "viking", "vikings", "vikingships", etc.
+
+The following sections detail the operators that come with Bosch Semantic Stack RQL.
+
+=== Comparison operators
+
+Bosch Semantic Stack RQL supports the following comparison operators for usage with the `filter` operator.
+
+Note: A `count()` operator to count all entities in an API response to the query is not yet implemented.
+
+==== eq, ne
+
+*Data types:* +
+For the provided <value>, these operators accept *all literals*, i.e., every common data type, including times, Boolean, `null`, etc.
+
+.Comparison operators
+[options="header"]
+|===
+| Operator expression               | Description
+
+| `eq(<attribute>,<value>)`           
+| Filters for entities where the value of the specified attribute *equals* the provided value.
+
+| `ne(<attribute>,<value>)`           
+| Filters for entities where the value of the specified attribute is *not equal* to the provided value.
+|===
+
+
+==== ge, le, gt, lt
+
+*Data types:* +
+For the provided <value>, these operators accept *no Boolean or `null`*.
+
+.Comparison operators
+[options="header"]
+|===
+| Operator expression               | Description
+
+| ge(<attribute>,<value>)           
+| Filters for entities where the value of the specified attribute is *greater than or equal to* the provided value.
+
+| le(<attribute>,<value>)           
+| Filters for entities where the value of the specified attribute is *less than or equal to* the provided value.
+
+| gt(<attribute>,<value>)           
+| Filters for entities where the value of the specified attribute is *greater than* the provided value.
+
+| lt(<attribute>,<value>)           
+| Filters for entities where the value of the specified attribute is *less than* the provided value.
+
+|===
+
+==== in
+
+*Data types:* +
+For the provided <array-of-values>, this operator accepts *only _pure_ lists*, i.e., only floats, only strings, or only integers. It *does not support `null`* as a literal.
+
+.Comparison operators
+[options="header"]
+|===
+| Operator expression               | Description
+
+| in(<attribute>,<array-of-values>) 
+| Filters for entities where the value of the specified attribute is present *in the provided array*.
+
+a| Example:
+
+----
+in(twinCategory,"Machine","Device")
+----
+
+| Returns all entities that have an attribute named "twinCategory" containing values of either "Machine" or "Device".
+
+|===
+
+==== like, likeIgnoreCase
+
+*Data type:* +
+For the provided <value>, these operators accept *only strings*.
+
+Additionally, they also support *wildcards*:
+
+* Use `?` for a single undefined character.
+* Use `*` for any number of undefined characters.
+
+.Comparison operators
+[options="header"]
+|===
+| Operator expression               | Description
+
+| `like(<attribute>,<value>)`
+| Filters for entities where the value of the specified attribute *matches* the provided value – also in terms of capitalization, i.e., upper case or lower case. The provided value typically contains at least one of the following *wildcards*: `?` or `*`.
+
+| `likeIgnoreCase(<attribute>,<value>)`
+| Ditto. But here, the results' capitalization (upper case or lower case) is not required to match the capitalization used for the filter string of the provided value.
+
+a| Example: 
+
+----
+likeIgnoreCase(description,"*my device*")`
+----
+
+| Returns all entities with a description containing "my device", independent of the capitalization of the words. That means results also can contain "My device", "my Device", "My Device", "MY DEVICE", etc.
+
+|===
+
+=== Logical operators
+
+Bosch Semantic Stack RQL supports the following logical operators for usage with the `filter` operator.
+
+.Logical operators
+[options="header"]
+|===
+| Logical Expression                | Description
+| `and(<operator1>,<operator2>,...)`  | Executes all the provided queries.
+| `or(<operator1>,<operator2>,...)`   | The combination of the provided queries.
+| `not(<operator1>,<operator2>,...)`  | Negates the provided query.
+a| Example:
+
+----
+and(eq(twinCategory,"Printer"), eq(labels.name,"Floor1"))
+----
+
+| Returns all entities with the "twinCategory" attribute's value "Printer" and at least one label with name "Floor1".
+
+|===
+
+
+=== Data types
+
+The values used to filter results can be of several data types, such as strings, times, numbers, Boolean, etc. While these data types are common data types, this section highlights relevant details for the use with Bosch Semantic Stack RQL.
+
+==== Strings
+
+Can be any Unicode (except Unicode escapes `\u1234`). 
+The escaping rules of Bosch Semantic Stack RQL follow Java escaping rules closely.
+
+Escape character is the backslash `\`. 
+
+The following table lists possible escape sequences.
+
+.Escape sequences
+[options="header"]
+|===
+| How to escape | What gets escaped
+| `\\`          | Escapes the backslash itself.
+| `\t`          | Escapes a tabulator.
+| `\n`          | Escapes a new line.
+| `\r`          | Escapes a carriage return.
+| `\"`          | Escapes a double quote.
+|===
+
+==== Times
+
+The Bosch Semantic Stack RQL parser (and the corresponding model) supports time literals such as the `OffsetDateTime` represented in a *subset* of _ISO 8601_.
+
+Some less used features of _ISO 8601_ are not supported (and most likely will not be supported in the near future):
+
+* Reduced precision: giving a partial time such as `hh` or `hh:mm`
+* Fractional hours or minutes: _ISO 8601_ states that you can use fractions of the most precise time component (hour, minute, second). This is not supported by Bosch Semantic Stack RQL, which only supports a fixed precision including seconds.
+
+Therefore, the following examples are valid _ISO 8601_ but *not* valid Bosch Semantic Stack RQL:
+
+* `2007-12-03T10:15Z` (reduced precision--not supported)
+* `2007-12-03T10:15+4:27` (fractional time components--not supported) +
+&nbsp;
+
+NOTE: Valid examples for Bosch Semantic Stack RQL are: +
+`2007-12-03T10:15:30.0123Z` +
+`2007-12-03t10:15:30+04:37`
+
+==== Integer numbers, real numbers, `null`
+
+When using the Bosch Semantic Stack RQL parser, data types that come in with a query will be mapped to the corresponding Java data types. 
+
+The following table details how incoming RQL data types get parsed to Java data types.
+
+.Mapping data types
+[options="header"]
+|===
+| Data type | Example | Mapping to Java data type
+| Integer number | `ge(foo,42)` | Gets parsed into the smallest fitting Java data type (`Integer`, `Long`, `BigInteger`).
+| Real number | `lt(foo,7.23246)` | Gets parsed into the Java data type `BigDecimal`.
+| `null` | `eq(foo,null)` | Gets mapped to `null`.
+|===
+
+== Option operator
+
+The `option` operator sorts and limits API responses. That means, you can prevent an arbitrary order of your retrieved results. With this user-defined sorting, clients are able and responsible for requesting data in the order that fits their needs. 
+
+The general form of the `option` operator string looks as follows:
+
+----
+option=sort(),limit()
+----
+
+As an example, the `option` string could look like this:
+
+----
+option=sort(-attribute1,+attribute2),limit(10,5)
+----
+
+=== Sorting
+
+To sort the retrieved data, use the `sort` operator as part of the `option` operator.
+
+----
+option=sort([+-]attributeN)
+----
+
+The `sort` operator sorts the data based on the specified attributes:
+
+* It starts sorting with the first attribute, then proceeds to the next etc. 
+* To separate the attribute names that you require for sorting, use a comma.
+* For each attribute, you can specify whether to sort the results in ascending or descending order, indicating sort order by the *+* or *-* prefix.
+** For ascending sort order, use the *+* prefix.
+** For descending sort order, use the *-* prefix. 
+
+Example:
+----
+option=sort(-attribute1,+attribute2,[+-]attributeN)
+----
+In the example above, results will first be sorted in descending order for `attribute1`, then will further be sorted in ascending order for `attribute2`, and then ascending or descending for any more attributes that might be added.
+
+=== Pagination
+
+To control the pagination of the retrieved data, use the `limit` operator as part of the `option` operator.
+
+----
+option=limit(start,count)
+----
+
+The syntax is related to *offset pagination*. That means the `start` and `count` parts in the string above conceptually stand for the following numbers:
+
+* `start` specifies where to start fetching data, also known as _offset_
+* `count` indicates how many results to fetch per page
+
+Example:
+----
+option=limit(10,5)
+----
+In the example above, results will start at result no. 10 and 5 results will be included in the API response.
+
+Currently, only offset pagination is provided with Bosch Semantic Stack RQL. We may add cursor-based pagination in the future.
