@@ -28,7 +28,7 @@ import com.querydsl.core.types.dsl.CollectionPathBase;
 import com.querydsl.core.types.dsl.EntityPathBase;
 import com.querydsl.core.types.dsl.SimpleExpression;
 import com.querydsl.jpa.JPAExpressions;
-import com.querydsl.jpa.JPQLQuery;
+import com.querydsl.jpa.JPQLSubQuery;
 
 /**
  * JPA-specific version of the {@link CollectionPathResolver} that takes care of properly created queries
@@ -86,7 +86,7 @@ public class JpaCollectionPathResolver<T> extends RecursiveResolver<CollectionPa
    @Override
    public Predicate postProcess( final Predicate predicate ) {
       if ( !subCollections.isEmpty() ) {
-         final JPQLQuery<T> subQuery = JPAExpressions.selectFrom( rootResource );
+         final JPQLSubQuery<T> subQuery = JPAExpressions.selectFrom( rootResource );
          subCollections.forEach(
                ( collectionPath, collectionEntryPath ) -> addJoin( subQuery, collectionPath, collectionEntryPath ) );
          subQuery.where( predicate );
@@ -95,7 +95,7 @@ public class JpaCollectionPathResolver<T> extends RecursiveResolver<CollectionPa
       return predicate;
    }
 
-   private <P> void addJoin( final JPQLQuery<T> subQuery, final CollectionExpression<?, P> collectionPath,
+   private <P> void addJoin( final JPQLSubQuery<T> subQuery, final CollectionExpression<?, P> collectionPath,
          final EntityPath<P> collectionEntryPath ) {
       subQuery.leftJoin( collectionPath, collectionEntryPath );
    }

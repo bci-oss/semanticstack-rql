@@ -26,7 +26,7 @@
    <name>Bosch Semantic Stack RQL Examples::QueryDslWithJpa</name>
 
    <properties>
-      <spring-boot.version>3.2.2</spring-boot.version>
+      <spring-boot.version>3.3.4</spring-boot.version>
       <!-- In case that you do not use the RQL-parent pom you need to provide the querydsl-version -->
       <!-- <querydsl.version>[4.1.4,)</querydsl.version> -->
    </properties>
@@ -71,9 +71,9 @@
          <artifactId>spring-boot-starter-web</artifactId>
       </dependency>
       <dependency>
-         <groupId>com.querydsl</groupId>
+         <groupId>io.github.openfeign.querydsl</groupId>
          <artifactId>querydsl-apt</artifactId>
-         <classifier>jakarta</classifier>
+         <version>${querydsl.version}</version>
       </dependency>
       <dependency>
          <groupId>org.projectlombok</groupId>
@@ -89,6 +89,23 @@
 
    <build>
       <plugins>
+         <plugin>
+            <groupId>com.mysema.maven</groupId>
+            <artifactId>apt-maven-plugin</artifactId>
+            <executions>
+               <execution>
+                  <id>querydsl-generate-model</id>
+                  <phase>generate-sources</phase>
+                  <goals>
+                     <goal>process</goal>
+                  </goals>
+                  <configuration>
+                     <outputDirectory>target/generated-sources/java</outputDirectory>
+                     <processor>com.querydsl.apt.jpa.JPAAnnotationProcessor</processor>
+                  </configuration>
+               </execution>
+            </executions>
+         </plugin>
          <plugin>
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>build-helper-maven-plugin</artifactId>

@@ -24,8 +24,8 @@ import com.boschsemanticstack.rql.querydsl.entities.QSubEntity2;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.jpa.JPAExpressions;
-import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.JPQLSerializer;
+import com.querydsl.jpa.JPQLSubQuery;
 import com.querydsl.jpa.JPQLTemplates;
 import com.querydsl.jpa.impl.JPAQuery;
 
@@ -33,7 +33,7 @@ class QueryDSLJPATest {
 
    @Test
    void rawQueryDSLComparisonWithConstraintOnCollectionEntryAndItsSupplementsShouldReturnNothing() {
-      final JPQLQuery<Entity> waySubQuery = JPAExpressions.selectFrom( QEntity.entity )
+      final JPQLSubQuery<Entity> waySubQuery = JPAExpressions.selectFrom( QEntity.entity )
             .leftJoin( QEntity.entity.subEntities, QSubEntity.subEntity )
             .leftJoin( QEntity.entity.subEntities2 );
       final Predicate innerPredicate = new BooleanBuilder()
