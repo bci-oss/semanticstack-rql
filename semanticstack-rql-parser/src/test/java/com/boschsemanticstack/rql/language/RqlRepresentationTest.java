@@ -14,24 +14,36 @@
 package com.boschsemanticstack.rql.language;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assertions.tuple;
 
-import org.junit.jupiter.api.Test;
-
+import com.boschsemanticstack.rql.exceptions.ParseException;
 import com.boschsemanticstack.rql.model.v1.RqlFieldDirection;
 import com.boschsemanticstack.rql.model.v1.RqlFilter;
 import com.boschsemanticstack.rql.model.v1.RqlQueryModel;
 import com.boschsemanticstack.rql.model.v1.impl.RqlFieldDirectionImpl;
 import com.boschsemanticstack.rql.model.v1.impl.RqlSliceImpl;
 import com.boschsemanticstack.rql.parser.v1.RqlParser;
+import org.junit.jupiter.api.Test;
 
 class RqlRepresentationTest {
 
    @Test
+   void queryWithSlashAttributeShouldBeNotParseable() {
+      final String expression = " option=sort(+att1,-att2)"
+            + "&filter=and(eq(att2,\"theSame\"),lt(att1,5),gt(att1,42))"
+            + "&select=att1,att2,att3/subAtt4"
+            + "&option=limit(5,500)";
+
+      assertThatThrownBy( () -> RqlParser.from( expression ) ).isInstanceOf( ParseException.class )
+            .hasMessageContaining( "token recognition error at: '/'" );
+   }
+
+   @Test
    void queryWithRandomizedOrderShouldBeParsable() {
-      final String expression = " option=sort(+att1,-att2)" +
-            "&filter=and(eq(att2,\"theSame\"),lt(att1,5),gt(att1,42))" +
-            "&select=att1,att2,att3/subAtt4"
+      final String expression = " option=sort(+att1,-att2)"
+            + "&filter=and(eq(att2,\"theSame\"),lt(att1,5),gt(att1,42))"
+            + "&select=att1,att2,att3.subAtt4"
             + "&option=limit(5,500)";
 
       final RqlQueryModel query = RqlParser.from( expression );
@@ -44,9 +56,10 @@ class RqlRepresentationTest {
       assertThat( query.getOptions().getSlice().get().limit() ).isEqualTo( 500 );
       assertThat( query.getOptions().getSlice().get().offset() ).isEqualTo( 5 );
       assertThat( query.getSelect().attributes() )
-            .containsExactly( "att1", "att2", "att3/subAtt4" );
+            .containsExactly( "att1", "att2", "att3.subAtt4" );
 
-      assertThat( query.getFilter().get().getChildren() ).extracting( RqlFilter::getOperator, RqlFilter::getAttribute, RqlFilter::getValue )
+      assertThat( query.getFilter().get().getChildren() ).extracting( RqlFilter::getOperator,
+                  RqlFilter::getAttribute, RqlFilter::getValue )
             .containsExactly(
                   tuple( RqlFilter.Operator.EQ, "att2", "theSame" ),
                   tuple( RqlFilter.Operator.LT, "att1", 5 ),

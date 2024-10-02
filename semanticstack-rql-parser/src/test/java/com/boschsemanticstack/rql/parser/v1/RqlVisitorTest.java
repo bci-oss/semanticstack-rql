@@ -14,21 +14,28 @@
 package com.boschsemanticstack.rql.parser.v1;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assertions.catchThrowable;
-
-import org.junit.jupiter.api.Test;
 
 import com.boschsemanticstack.rql.exceptions.ParseException;
 import com.boschsemanticstack.rql.model.v1.RqlQueryModel;
+import org.junit.jupiter.api.Test;
 
 class RqlVisitorTest {
 
    @Test
    void first() {
-      final String expression = "select=id,name,nameWithSome/Extra1_9Chars.";
+      final String expression = "select=id,name,nameWithSome.Extra1_9Chars.";
       final RqlQueryModel model = new RqlParserApi().parseFullQuery( expression );
 
-      assertThat( model.getSelect().attributes() ).containsExactly( "id", "name", "nameWithSome/Extra1_9Chars." );
+      assertThat( model.getSelect().attributes() ).containsExactly( "id", "name", "nameWithSome.Extra1_9Chars." );
+   }
+
+   @Test
+   void firstNotParseable() {
+      final String expression = "select=id,name,nameWithSome/Extra1_9Chars.";
+      assertThatThrownBy( () -> new RqlParserApi().parseFullQuery( expression ) ).isInstanceOf( ParseException.class )
+            .hasMessageContaining( "token recognition error at: '/'" );
    }
 
    @Test

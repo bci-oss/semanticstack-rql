@@ -16,21 +16,20 @@ package com.boschsemanticstack.rql.language;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 
-import org.junit.jupiter.api.Test;
-
 import com.boschsemanticstack.rql.exceptions.ParseException;
 import com.boschsemanticstack.rql.model.v1.RqlFieldDirection;
 import com.boschsemanticstack.rql.model.v1.RqlQueryModel;
 import com.boschsemanticstack.rql.model.v1.impl.RqlFieldDirectionImpl;
 import com.boschsemanticstack.rql.model.v1.impl.RqlSliceImpl;
 import com.boschsemanticstack.rql.parser.v1.RqlParser;
+import org.junit.jupiter.api.Test;
 
 @SuppressWarnings( "java:S5976" ) // use parameterized tests => not for few instances which test content of an exception
 class RqlOptionsTest {
 
    @Test
    void optionsWithBracketsAroundShouldLeadToSyntaxError() {
-      final String expression = "   select=att1,att2,att3/subAtt4&filter=and(eq(att2,\"theSame\"),or(lt(att1,5),not(gt(att1,42))))&option="
+      final String expression = "   select=att1,att2,att3.subAtt4&filter=and(eq(att2,\"theSame\"),or(lt(att1,5),not(gt(att1,42))))&option="
             + "(limit(0,500),sort(+att1,-att2))";
 
       final Throwable throwable = catchThrowable( () -> RqlParser.from( expression ) );
