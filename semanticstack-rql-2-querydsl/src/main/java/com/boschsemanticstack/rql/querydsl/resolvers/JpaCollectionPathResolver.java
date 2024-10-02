@@ -13,13 +13,6 @@
 
 package com.boschsemanticstack.rql.querydsl.resolvers;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Queue;
-
 import com.boschsemanticstack.rql.model.v1.RqlFilter;
 import com.querydsl.core.types.CollectionExpression;
 import com.querydsl.core.types.EntityPath;
@@ -29,7 +22,13 @@ import com.querydsl.core.types.dsl.EntityPathBase;
 import com.querydsl.core.types.dsl.SimpleExpression;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.JPQLSubQuery;
-
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Queue;
+  
 /**
  * JPA-specific version of the {@link CollectionPathResolver} that takes care of properly created queries
  * in order to keep join-semantic for multiple conditions on collection entries.
