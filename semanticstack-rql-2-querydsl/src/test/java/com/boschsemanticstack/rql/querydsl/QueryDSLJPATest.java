@@ -29,7 +29,7 @@ import com.querydsl.jpa.impl.JPAQuery;
 import org.junit.jupiter.api.Test;
 
 class QueryDSLJPATest {
- 
+
   @Test
   void rawQueryDSLComparisonWithConstraintOnCollectionEntryAndItsSupplementsShouldReturnNothing() {
     final JPQLSubQuery<Entity> waySubQuery = JPAExpressions.selectFrom(QEntity.entity)

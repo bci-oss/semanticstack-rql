@@ -30,9 +30,9 @@ class RqlRepresentationTest {
 
   @Test
   void queryWithSlashAttributeShouldBeNotParseable() {
-    final String expression = " option=sort(+att1,-att2)" +
-        "&filter=and(eq(att2,\"theSame\"),lt(att1,5),gt(att1,42))" +
-        "&select=att1,att2,att3/subAtt4"
+    final String expression = " option=sort(+att1,-att2)"
+        + "&filter=and(eq(att2,\"theSame\"),lt(att1,5),gt(att1,42))"
+        + "&select=att1,att2,att3/subAtt4"
         + "&option=limit(5,500)";
 
     assertThatThrownBy(() -> RqlParser.from(expression)).isInstanceOf(ParseException.class)

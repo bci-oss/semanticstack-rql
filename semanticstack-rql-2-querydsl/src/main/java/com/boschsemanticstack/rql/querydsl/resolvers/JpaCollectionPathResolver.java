@@ -28,7 +28,7 @@ import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Queue;
-   
+
 /**
  * JPA-specific version of the {@link CollectionPathResolver} that takes care of properly created
  * queries in order to keep join-semantic for multiple conditions on collection entries. This means
