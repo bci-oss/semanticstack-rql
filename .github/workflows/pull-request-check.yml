@@ -11,11 +11,11 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Check code style
-        uses: dbelyaev/action-checkstyle@master
+        uses: dbelyaev/action-checkstyle@e89baf0f8b488b946345b7de8e975be1e3606387 # v1.5.6
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           reporter: github-pr-review
-          checkstyle_config: google_checks.xml
+          checkstyle_config: rql-checkstyle.xml
           level: warning
           fail_on_error: false
 

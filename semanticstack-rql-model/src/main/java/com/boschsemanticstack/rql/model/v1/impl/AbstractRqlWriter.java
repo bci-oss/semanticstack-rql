@@ -42,7 +42,7 @@ public abstract class AbstractRqlWriter extends RqlModelVisitor<String> {
          case OR, AND, NOT -> visitLogicOperation( model );
       };
    }
- 
+
    @Override
    public String visitLogicOperation( final RqlFilter filter ) {
       return switch ( filter.getFilterType() ) {
@@ -55,8 +55,8 @@ public abstract class AbstractRqlWriter extends RqlModelVisitor<String> {
          case NOT -> filter.getChildren().stream()
                .map( this::visitFilter )
                .collect( Collectors.joining( ",", "not(", ")" ) );
-         default ->
-               throw new IllegalArgumentException( filter.getFilterType() + "-filter is not a valid argument for visitLogicOperation!" );
+         default -> throw new IllegalArgumentException( filter.getFilterType() + "-filter is not a "
+               + "valid argument for visitLogicOperation!" );
       };
    }
 
