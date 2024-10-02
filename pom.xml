@@ -147,11 +147,11 @@
             <version>${querydsl.version}</version>
          </dependency>
          <dependency>
-            <groupId>cio.github.openfeign.querydsl</groupId>
+            <groupId>io.github.openfeign.querydsl</groupId>
             <artifactId>querydsl-apt</artifactId>
             <version>${querydsl.version}</version>
          </dependency>
-         
+
          <dependency>
             <groupId>org.antlr</groupId>
             <artifactId>antlr4-runtime</artifactId>
@@ -182,10 +182,23 @@
          </dependency>
       </dependencies>
    </dependencyManagement>
-
+   
    <build>
       <pluginManagement>
          <plugins>
+            <!-- Configure maven surefire plugin (execution of unit tests) -->
+            <plugin>
+               <groupId>org.apache.maven.plugins</groupId>
+               <artifactId>maven-surefire-plugin</artifactId>
+               <configuration>
+                  <skip>false</skip>
+                  <reportsDirectory>${project.build.directory}/${testreports.surefire}</reportsDirectory>
+                  <includes>
+                     <include>**/*Tests.java</include>
+                     <include>**/*Test.java</include>
+                  </includes>
+               </configuration>
+            </plugin>
             <plugin>
                <groupId>org.codehaus.mojo</groupId>
                <artifactId>build-helper-maven-plugin</artifactId>

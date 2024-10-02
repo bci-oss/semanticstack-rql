@@ -15,12 +15,6 @@ package com.boschsemanticstack.rql.querydsl;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.junit.jupiter.api.Test;
-
-import com.boschsemanticstack.rql.querydsl.entities.Entity;
-import com.boschsemanticstack.rql.querydsl.entities.QEntity;
-import com.boschsemanticstack.rql.querydsl.entities.QSubEntity;
-import com.boschsemanticstack.rql.querydsl.entities.QSubEntity2;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.jpa.JPAExpressions;
@@ -28,6 +22,13 @@ import com.querydsl.jpa.JPQLSerializer;
 import com.querydsl.jpa.JPQLSubQuery;
 import com.querydsl.jpa.JPQLTemplates;
 import com.querydsl.jpa.impl.JPAQuery;
+
+import org.junit.jupiter.api.Test;
+
+import com.boschsemanticstack.rql.querydsl.entities.Entity;
+import com.boschsemanticstack.rql.querydsl.entities.QEntity;
+import com.boschsemanticstack.rql.querydsl.entities.QSubEntity;
+import com.boschsemanticstack.rql.querydsl.entities.QSubEntity2;
 
 class QueryDSLJPATest {
 
