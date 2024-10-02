@@ -36,7 +36,6 @@ class RqlVisitorTest {
       final String expression = "select=id,name,nameWithSome/Extra1_9Chars.";
       assertThatThrownBy( () -> new RqlParserApi().parseFullQuery( expression ) ).isInstanceOf( ParseException.class )
             .hasMessageContaining( "token recognition error at: '/'" );
-      final RqlQueryModel model = new RqlParserApi().parseFullQuery( expression );
    }
 
    @Test
