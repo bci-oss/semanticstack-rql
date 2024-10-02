@@ -19,7 +19,7 @@ import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
 import com.boschsemanticstack.rql.querydsl.resolvers.SimpleValueResolver;
-
+ 
 /**
  * Container for all registered type converters.
  *
@@ -42,7 +42,7 @@ public class TypeConverters {
 
    /**
     * Tries to convert a value to the given target class.
-    *
+    * <p>
     * This method never fails. If no converter can be found to perform the conversion, the given input value is
     * returned as-is.
     *

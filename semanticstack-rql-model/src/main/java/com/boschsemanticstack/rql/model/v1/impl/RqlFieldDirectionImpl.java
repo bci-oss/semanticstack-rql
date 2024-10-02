@@ -14,14 +14,14 @@ package com.boschsemanticstack.rql.model.v1.impl;
 
 import com.boschsemanticstack.rql.model.v1.RqlFieldDirection;
 
-public record RqlFieldDirectionImpl(String attribute, Direction direction) implements RqlFieldDirection {
+public record RqlFieldDirectionImpl( String attribute, Direction direction ) implements RqlFieldDirection {
 
    public RqlFieldDirectionImpl {
       if ( attribute == null || direction == null ) {
          throw new IllegalArgumentException( "Neither attribute nor direction may be null!" );
       }
    }
-
+ 
    /*
     * (non-Javadoc)
     *
@@ -29,7 +29,7 @@ public record RqlFieldDirectionImpl(String attribute, Direction direction) imple
     */
    @Override
    public String toString() {
-      return attribute + (direction == Direction.ASCENDING ? " ASC" : " DESC");
+      return attribute + ( direction == Direction.ASCENDING ? " ASC" : " DESC" );
    }
 
    @Override

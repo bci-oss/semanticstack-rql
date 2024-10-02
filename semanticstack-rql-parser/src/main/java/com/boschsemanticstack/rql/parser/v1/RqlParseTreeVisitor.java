@@ -24,11 +24,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.antlr.v4.runtime.ParserRuleContext;
-import org.antlr.v4.runtime.tree.ParseTree;
-import org.antlr.v4.runtime.tree.RuleNode;
-import org.antlr.v4.runtime.tree.TerminalNode;
-
 import com.boschsemanticstack.rql.exceptions.ParseException;
 import com.boschsemanticstack.rql.exceptions.SourceLocation;
 import com.boschsemanticstack.rql.model.v1.RqlFieldDirection;
@@ -49,6 +44,11 @@ import com.boschsemanticstack.rql.model.v1.impl.RqlSliceImpl;
 import com.boschsemanticstack.rql.parser.v1.internal.InternalRqlBaseVisitor;
 import com.boschsemanticstack.rql.parser.v1.internal.InternalRqlParser;
 
+import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.RuleNode;
+import org.antlr.v4.runtime.tree.TerminalNode;
+
 class RqlParseTreeVisitor extends InternalRqlBaseVisitor<Object> {
 
    @Override
@@ -63,7 +63,7 @@ class RqlParseTreeVisitor extends InternalRqlBaseVisitor<Object> {
 
       return combiner.build();
    }
-
+ 
    private static class ModelCombiner {
       RqlSelect select;
       RqlFilter filter;
@@ -399,7 +399,7 @@ class RqlParseTreeVisitor extends InternalRqlBaseVisitor<Object> {
     */
    @Override
    public Object visitChildren( final RuleNode node ) {
-      return (node == null)
+      return ( node == null )
             ? defaultResult()
             : super.visitChildren( node );
    }

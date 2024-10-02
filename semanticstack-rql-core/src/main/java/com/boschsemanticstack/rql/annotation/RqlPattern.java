@@ -33,7 +33,7 @@ public @interface RqlPattern {
     * @return the regex of allowed pattern.
     */
    String regex();
-
+ 
    /**
     * @return a customize error message
     */

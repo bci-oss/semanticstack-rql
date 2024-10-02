@@ -20,7 +20,7 @@ import java.util.Optional;
  * @see RqlQueryModel
  */
 public interface RqlOptions extends RqlModelNode {
-
+ 
    RqlOrder getOrder();
 
    Optional<RqlSlice> getSlice();

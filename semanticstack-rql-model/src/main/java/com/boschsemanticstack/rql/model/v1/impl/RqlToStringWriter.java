@@ -20,7 +20,7 @@ import java.util.stream.Stream;
 import com.boschsemanticstack.rql.model.v1.RqlQueryModel;
 
 public class RqlToStringWriter extends AbstractRqlWriter {
-
+ 
    @Override
    public String visitModel( final RqlQueryModel model ) {
       return Stream.of(

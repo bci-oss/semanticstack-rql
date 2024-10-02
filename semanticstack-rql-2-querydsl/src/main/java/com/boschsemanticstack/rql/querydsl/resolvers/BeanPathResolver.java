@@ -18,6 +18,7 @@ import java.lang.reflect.Method;
 import java.util.Queue;
 
 import com.boschsemanticstack.rql.model.v1.RqlFilter;
+
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BeanPath;
 import com.querydsl.core.types.dsl.SimpleExpression;
@@ -32,7 +33,7 @@ public class BeanPathResolver extends RecursiveResolver<BeanPath<?>> {
    public BeanPathResolver( final AbstractPathPredicateResolver parentResolver ) {
       super( parentResolver );
    }
-
+ 
    @Override
    public Predicate resolve( final SimpleExpression root, final Field field, final Queue<String> pathElements, final RqlFilter filter )
          throws ReflectiveOperationException {
@@ -40,7 +41,8 @@ public class BeanPathResolver extends RecursiveResolver<BeanPath<?>> {
    }
 
    @Override
-   public Predicate resolveMethod( final SimpleExpression root, final Method method, final Queue<String> pathElements, final RqlFilter filter )
+   public Predicate resolveMethod( final SimpleExpression root, final Method method, final Queue<String> pathElements,
+         final RqlFilter filter )
          throws ReflectiveOperationException {
       return super.resolveMethod( (SimpleExpression) method.invoke( root ), method, pathElements, filter );
    }

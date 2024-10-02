@@ -21,6 +21,7 @@ import java.util.Queue;
 
 import com.boschsemanticstack.rql.exceptions.NoSuchFieldQueryException;
 import com.boschsemanticstack.rql.model.v1.RqlFilter;
+
 import com.querydsl.core.types.Path;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.CollectionPathBase;
@@ -36,7 +37,7 @@ import com.querydsl.core.types.dsl.SimpleExpression;
 // java:S3740 parameterized types - thy are not known for the expressions handled here so they cannot be given explicitely
 public class CollectionPathResolver extends RecursiveResolver<CollectionPathBase<?, ?, ?>> {
    private final SimpleValueResolver simpleValueResolver;
-
+ 
    public CollectionPathResolver( final AbstractPathPredicateResolver parentResolver,
          final SimpleValueResolver simpleValueResolver ) {
       super( parentResolver );
@@ -52,14 +53,16 @@ public class CollectionPathResolver extends RecursiveResolver<CollectionPathBase
    }
 
    @Override
-   public Predicate resolveMethod( final SimpleExpression root, final Method method, final Queue<String> pathElements, final RqlFilter filter )
+   public Predicate resolveMethod( final SimpleExpression root, final Method method, final Queue<String> pathElements,
+         final RqlFilter filter )
          throws ReflectiveOperationException {
 
       final CollectionPathBase collectionPathBase = (CollectionPathBase) method.invoke( root );
       return resolveExpression( collectionPathBase, pathElements, filter );
    }
 
-   public Predicate resolveExpression( final CollectionPathBase collectionPathBase, final Queue<String> pathElements, final RqlFilter filter )
+   public Predicate resolveExpression( final CollectionPathBase collectionPathBase, final Queue<String> pathElements,
+         final RqlFilter filter )
          throws ReflectiveOperationException {
 
       if ( pathElements.isEmpty() ) {
@@ -93,7 +96,8 @@ public class CollectionPathResolver extends RecursiveResolver<CollectionPathBase
       return new CollectionPathStep( collectionExpression, SimpleExpression.class );
    }
 
-   SimpleExpression getCollectionSubQueryExpression( final CollectionPathBase collectionPathBase, final SimpleExpression collectionExpression ) {
+   SimpleExpression getCollectionSubQueryExpression( final CollectionPathBase collectionPathBase,
+         final SimpleExpression collectionExpression ) {
       try {
          // we need to instantiate the collection's query type for a proper subquery or join
          final Constructor<? extends SimpleExpression> constructor = collectionExpression.getClass().getConstructor( Path.class );

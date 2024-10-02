@@ -34,7 +34,7 @@ public class RqlToQueryDslConverterBuilder {
    private final EntityPathBase rootResource;
    private Consumer<QueryModelToQueryDSL> predicateResolverConfigurer;
    private final TypeConverters typeConverters = new TypeConverters();
-
+ 
    private RqlToQueryDslConverterBuilder( final EntityPathBase rootResource ) {
       super();
       this.rootResource = rootResource;

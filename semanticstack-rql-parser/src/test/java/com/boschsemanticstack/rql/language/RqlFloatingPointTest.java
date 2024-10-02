@@ -17,11 +17,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.math.BigDecimal;
 
-import org.junit.jupiter.api.Test;
-
 import com.boschsemanticstack.rql.model.v1.RqlFilter;
 import com.boschsemanticstack.rql.model.v1.RqlQueryModel;
 import com.boschsemanticstack.rql.parser.v1.RqlParser;
+
+import org.junit.jupiter.api.Test;
 
 class RqlFloatingPointTest {
 
@@ -36,7 +36,7 @@ class RqlFloatingPointTest {
       assertThat( model.getFilter().get().getValue() ).isEqualTo( new BigDecimal( "12345.5432109876" ) );
       assertThat( model.getFilter().get().getChildren() ).isEmpty();
    }
-
+ 
    @Test
    void shouldParseSimpleFloatingPointSyntaxZeroIntoBigDecimal() {
       final String expression = "filter=eq(id,0.0)";

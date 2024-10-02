@@ -16,7 +16,7 @@ package com.boschsemanticstack.rql.model.v1;
 import java.util.List;
 
 public interface RqlModelNode {
-
+ 
    <T> T accept( RqlModelVisitor<? extends T> visitor );
 
    @SuppressWarnings( "squid:S1452" )

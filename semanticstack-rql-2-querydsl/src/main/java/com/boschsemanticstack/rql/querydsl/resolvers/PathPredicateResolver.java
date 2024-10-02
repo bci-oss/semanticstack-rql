@@ -36,7 +36,7 @@ public interface PathPredicateResolver<T extends Expression<?>, P> {
     * AbstractPathPredicateResolver}, so there should never be the need to implement this method yourself.
     */
    Class<T> getHandledPathType();
-
+ 
    /**
     * Performs the actual resolution to a Predicate type.
     *

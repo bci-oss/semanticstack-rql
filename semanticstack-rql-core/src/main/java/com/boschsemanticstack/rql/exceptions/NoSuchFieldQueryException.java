@@ -17,7 +17,7 @@ public class NoSuchFieldQueryException extends IllegalQueryArgumentException {
    public NoSuchFieldQueryException( final String message ) {
       super( message );
    }
-
+ 
    public NoSuchFieldQueryException( final String message, final Throwable cause ) {
       super( message, cause );
    }

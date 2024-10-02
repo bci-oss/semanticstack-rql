@@ -33,7 +33,7 @@ public class QSubEntity3 extends EntityPathBase<SubEntity> {
    public QSubEntity3( final Path<? extends SubEntity> path ) {
       super( path.getType(), path.getMetadata() );
    }
-
+ 
    public QSubEntity3( final PathMetadata metadata ) {
       super( SubEntity.class, metadata );
    }

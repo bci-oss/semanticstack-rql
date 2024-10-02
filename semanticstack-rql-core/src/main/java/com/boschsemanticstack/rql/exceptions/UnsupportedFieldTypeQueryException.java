@@ -12,7 +12,7 @@
  */
 
 package com.boschsemanticstack.rql.exceptions;
-
+ 
 public class UnsupportedFieldTypeQueryException extends IllegalQueryArgumentException {
    public UnsupportedFieldTypeQueryException( final String message ) {
       super( message );

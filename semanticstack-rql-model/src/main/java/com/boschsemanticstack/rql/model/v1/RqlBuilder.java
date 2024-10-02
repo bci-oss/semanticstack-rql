@@ -31,7 +31,7 @@ public class RqlBuilder {
    private RqlFilter filter;
    private RqlSlice slice;
    private RqlOrder order = new RqlOrderImpl( Collections.emptyList() );
-
+ 
    public RqlBuilder select( final String... attributes ) {
       select = null == attributes
             ? null

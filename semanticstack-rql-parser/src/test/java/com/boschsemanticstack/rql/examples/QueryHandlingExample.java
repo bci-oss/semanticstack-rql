@@ -37,7 +37,7 @@ public class QueryHandlingExample {
             .addQueryParam( "option", queryParameters.get( "option" ) ) // <1>
             .toObservableResponse();
    }
-
+ 
    private void someRestEndpoint(
          final String selectParam, // <2>
          final String filterParam, // <2>

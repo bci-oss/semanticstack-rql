@@ -18,16 +18,15 @@ import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 import java.util.stream.Stream;
 
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
-
 import com.boschsemanticstack.rql.parser.v1.RqlParser;
 import com.boschsemanticstack.rql.querydsl.entities.QEntity;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.jpa.JPQLSerializer;
 import com.querydsl.jpa.JPQLTemplates;
 import com.querydsl.jpa.impl.JPAQuery;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 class QueryDSLCollectionJPATest {
 
@@ -44,7 +43,7 @@ class QueryDSLCollectionJPATest {
       final String generatedQuery = asJpaQuery( predicate );
       assertThat( generatedQuery ).isEqualTo( expectedQuery );
    }
-
+ 
    private QueryModelToQueryDSL getJpaQuery( final String queryParams ) {
       return QueryModelToQueryDSL.forJpa( QEntity.entity, RqlParser.from( queryParams ) );
    }

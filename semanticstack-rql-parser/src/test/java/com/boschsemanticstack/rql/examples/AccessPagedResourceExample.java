@@ -30,7 +30,7 @@ public class AccessPagedResourceExample {
       final int pageSize = 170;  // entirely dependent on remote Service
       return getSomeResourceRecursive( RqlParser.getPagedQuery( query, pageSize ) );
    }
-
+ 
    private Observable<String> getSomeResourceRecursive( final Iterator<RqlQueryModel> pagedQuery ) {
 
       if ( pagedQuery.hasNext() ) {

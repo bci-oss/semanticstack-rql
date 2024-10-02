@@ -17,5 +17,4 @@ public class NonComparableFieldQueryException extends IllegalQueryArgumentExcept
    public NonComparableFieldQueryException( final String property ) {
       super( "Operation is not allowed on " + property );
    }
-
 }

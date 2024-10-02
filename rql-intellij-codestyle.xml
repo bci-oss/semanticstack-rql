@@ -31,7 +31,7 @@
             <emptyLine/>
             <package name="javax" withSubpackages="true" static="false"/>
             <emptyLine/>
-            <package name="org.eclipse.esmf" withSubpackages="true" static="false"/>
+            <package name="com.boschsemanticstack.rql" withSubpackages="true" static="false"/>
             <emptyLine/>
             <package name="" withSubpackages="true" static="false"/>
          </value>

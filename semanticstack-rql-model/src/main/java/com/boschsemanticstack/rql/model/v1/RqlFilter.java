@@ -19,7 +19,7 @@ import java.util.List;
  * @see RqlQueryModel
  */
 public interface RqlFilter extends RqlModelNode {
-
+ 
    enum FilterType {
       AND,
       OR,

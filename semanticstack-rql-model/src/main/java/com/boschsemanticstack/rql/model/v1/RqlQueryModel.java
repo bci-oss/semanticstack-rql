@@ -27,7 +27,7 @@ public interface RqlQueryModel extends RqlModelNode {
 
    @NotNull
    RqlOptions getOptions();
-
+ 
    @Override
    default <T> T accept( final RqlModelVisitor<? extends T> visitor ) {
       return visitor.visitModel( this );
