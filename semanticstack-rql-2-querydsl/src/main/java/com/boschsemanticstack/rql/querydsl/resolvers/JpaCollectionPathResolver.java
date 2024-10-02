@@ -28,22 +28,24 @@ import com.querydsl.core.types.dsl.CollectionPathBase;
 import com.querydsl.core.types.dsl.EntityPathBase;
 import com.querydsl.core.types.dsl.SimpleExpression;
 import com.querydsl.jpa.JPAExpressions;
-import com.querydsl.jpa.JPQLQuery;
-
+import com.querydsl.jpa.JPQLSubQuery;
+ 
 /**
- * JPA-specific version of the {@link CollectionPathResolver} that takes care of properly created queries
- * in order to keep join-semantic for multiple conditions on collection entries.
- * This means all predicats will be applied to the same collection entry.
+ * JPA-specific version of the {@link CollectionPathResolver} that takes care of properly created
+ * queries in order to keep join-semantic for multiple conditions on collection entries. This means
+ * all predicats will be applied to the same collection entry.
  */
 @SuppressWarnings( { "java:S3740" } )
 // java:S3740 parameterized types - thy are not known for the expressions handled here so they cannot be given explicitely
 public class JpaCollectionPathResolver<T> extends RecursiveResolver<CollectionPathBase<?, ?, ?>> {
+
    private final SimpleValueResolver simpleValueResolver;
 
    private final Map<CollectionExpression, EntityPath> subCollections = new LinkedHashMap<>();
    private final EntityPathBase<T> rootResource;
 
-   public JpaCollectionPathResolver( final AbstractPathPredicateResolver parentResolver, final EntityPathBase<T> rootResource,
+   public JpaCollectionPathResolver( final AbstractPathPredicateResolver parentResolver,
+         final EntityPathBase<T> rootResource,
          final SimpleValueResolver simpleValueResolver ) {
       super( parentResolver );
       this.rootResource = rootResource;
@@ -51,18 +53,21 @@ public class JpaCollectionPathResolver<T> extends RecursiveResolver<CollectionPa
    }
 
    @Override
-   public Predicate resolve( final SimpleExpression root, final Field field, final Queue<String> pathElements, final RqlFilter filter )
+   public Predicate resolve( final SimpleExpression root, final Field field,
+         final Queue<String> pathElements, final RqlFilter filter )
          throws ReflectiveOperationException {
       return resolveCollection( (CollectionPathBase) field.get( root ), pathElements, filter );
    }
 
    @Override
-   public Predicate resolveMethod( final SimpleExpression root, final Method method, final Queue<String> pathElements, final RqlFilter filter )
+   public Predicate resolveMethod( final SimpleExpression root, final Method method,
+         final Queue<String> pathElements, final RqlFilter filter )
          throws ReflectiveOperationException {
       return resolveCollection( (CollectionPathBase) method.invoke( root ), pathElements, filter );
    }
 
-   public Predicate resolveCollection( final CollectionPathBase collectionPath, final Queue<String> pathElements, final RqlFilter filter )
+   public Predicate resolveCollection( final CollectionPathBase collectionPath,
+         final Queue<String> pathElements, final RqlFilter filter )
          throws ReflectiveOperationException {
 
       final SimpleExpression anyCollectionEntryPath = collectionPath.any();
@@ -70,7 +75,8 @@ public class JpaCollectionPathResolver<T> extends RecursiveResolver<CollectionPa
          return simpleValueResolver.resolve( anyCollectionEntryPath, null, pathElements, filter );
       } else {
          final Class<? extends SimpleExpression> typeOfCollectionEntries = anyCollectionEntryPath.getClass();
-         final Field subentityQInstanceField = Arrays.stream( typeOfCollectionEntries.getDeclaredFields() )
+         final Field subentityQInstanceField = Arrays.stream(
+                     typeOfCollectionEntries.getDeclaredFields() )
                .filter( entityField -> entityField.getType()
                      .equals(
                            typeOfCollectionEntries ) )
@@ -86,16 +92,18 @@ public class JpaCollectionPathResolver<T> extends RecursiveResolver<CollectionPa
    @Override
    public Predicate postProcess( final Predicate predicate ) {
       if ( !subCollections.isEmpty() ) {
-         final JPQLQuery<T> subQuery = JPAExpressions.selectFrom( rootResource );
+         final JPQLSubQuery<T> subQuery = JPAExpressions.selectFrom( rootResource );
          subCollections.forEach(
-               ( collectionPath, collectionEntryPath ) -> addJoin( subQuery, collectionPath, collectionEntryPath ) );
+               ( collectionPath, collectionEntryPath ) -> addJoin( subQuery, collectionPath,
+                     collectionEntryPath ) );
          subQuery.where( predicate );
          return rootResource.in( subQuery );
       }
       return predicate;
    }
 
-   private <P> void addJoin( final JPQLQuery<T> subQuery, final CollectionExpression<?, P> collectionPath,
+   private <P> void addJoin( final JPQLSubQuery<T> subQuery,
+         final CollectionExpression<?, P> collectionPath,
          final EntityPath<P> collectionEntryPath ) {
       subQuery.leftJoin( collectionPath, collectionEntryPath );
    }

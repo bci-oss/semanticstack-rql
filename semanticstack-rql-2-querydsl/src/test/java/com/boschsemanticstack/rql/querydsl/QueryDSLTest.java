@@ -29,13 +29,6 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
-
 import com.boschsemanticstack.rql.exceptions.IllegalValueTypeQueryException;
 import com.boschsemanticstack.rql.exceptions.NoSuchFieldQueryException;
 import com.boschsemanticstack.rql.exceptions.ParseException;
@@ -46,6 +39,12 @@ import com.boschsemanticstack.rql.parser.v1.RqlParser;
 import com.boschsemanticstack.rql.querydsl.entities.QEntity;
 import com.boschsemanticstack.rql.querydsl.entities.QWildcardEntity;
 import com.querydsl.core.types.Predicate;
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 class QueryDSLTest {
 
@@ -79,7 +78,7 @@ class QueryDSLTest {
             arguments( "testFilter_withSubResourceMapPropertyDotSeparated_shouldReturnPredicateForEntityWithSuchASubEntity",
                   "ne(subEntity.metadata.key1,\"value1\")", "entity.subEntity.metadata.get(key1) != value1" ),
             arguments( "testFilter_withSubResourceMapPropertySlashSeparated_shouldReturnPredicateForEntityWithSuchASubEntity",
-                  "ne(subEntity/metadata/key1,\"value1\")", "entity.subEntity.metadata.get(key1) != value1" ),
+                  "ne(subEntity.metadata.key1,\"value1\")", "entity.subEntity.metadata.get(key1) != value1" ),
             arguments( "testFilter_withSubResourcePropertyEqualsString_shouldReturnPredicateForEntityWithSuchASubEntity",
                   "ne(subEntity.name,\"value1\")",
                   "entity.subEntity.name != value1" ),
