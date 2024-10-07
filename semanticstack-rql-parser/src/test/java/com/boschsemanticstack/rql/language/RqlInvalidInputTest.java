@@ -19,7 +19,6 @@ import static org.assertj.core.api.Assertions.catchThrowable;
 import com.boschsemanticstack.rql.exceptions.ParseException;
 import com.boschsemanticstack.rql.exceptions.SourceLocation;
 import com.boschsemanticstack.rql.parser.v1.RqlParser;
-
 import org.junit.jupiter.api.Test;
 
 class RqlInvalidInputTest {
@@ -35,7 +34,7 @@ class RqlInvalidInputTest {
             .isInstanceOf( ParseException.class )
             .hasMessageContaining( "mismatched input '\"att2\"'" );
    }
- 
+
    @Test
    void shouldThrowOnTrailingPercentageAfterAttributeName() {
       final String invalidRql = "select = att1%%%&filter = eq(att2%%%,\"SomeThing\")";
