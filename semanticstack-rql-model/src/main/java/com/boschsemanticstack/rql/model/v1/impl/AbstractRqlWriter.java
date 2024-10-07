@@ -59,7 +59,7 @@ public abstract class AbstractRqlWriter extends RqlModelVisitor<String> {
                + "valid argument for visitLogicOperation!" );
       };
    }
-
+ 
    @Override
    public String visitComparison( final RqlFilter filter ) {
       return filter.getOperator().getName() + "(" + filter.getAttribute() + "," + valuesToString( filter ) + ")";

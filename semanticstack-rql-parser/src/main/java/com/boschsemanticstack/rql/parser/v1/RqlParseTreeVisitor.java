@@ -43,7 +43,6 @@ import com.boschsemanticstack.rql.model.v1.impl.RqlSelectImpl;
 import com.boschsemanticstack.rql.model.v1.impl.RqlSliceImpl;
 import com.boschsemanticstack.rql.parser.v1.internal.InternalRqlBaseVisitor;
 import com.boschsemanticstack.rql.parser.v1.internal.InternalRqlParser;
-
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.RuleNode;
@@ -63,7 +62,7 @@ class RqlParseTreeVisitor extends InternalRqlBaseVisitor<Object> {
 
       return combiner.build();
    }
- 
+
    private static class ModelCombiner {
       RqlSelect select;
       RqlFilter filter;
