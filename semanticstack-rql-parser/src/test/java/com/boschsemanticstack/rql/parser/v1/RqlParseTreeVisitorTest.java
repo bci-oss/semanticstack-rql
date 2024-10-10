@@ -19,6 +19,7 @@ import static org.assertj.core.api.Assertions.catchThrowable;
 import com.boschsemanticstack.rql.exceptions.ParseException;
 import com.boschsemanticstack.rql.model.v1.RqlFilter;
 import com.boschsemanticstack.rql.model.v1.RqlQueryModel;
+
 import org.junit.jupiter.api.Test;
 
 class RqlParseTreeVisitorTest {

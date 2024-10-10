@@ -19,8 +19,9 @@ import static org.assertj.core.api.Assertions.catchThrowable;
 import com.boschsemanticstack.rql.exceptions.ParseException;
 import com.boschsemanticstack.rql.model.v1.RqlQueryModel;
 import com.boschsemanticstack.rql.parser.v1.RqlParser;
-import org.junit.jupiter.api.Test;
 
+import org.junit.jupiter.api.Test;
+ 
 class RqlPartialInputTest {
 
    @Test

@@ -21,11 +21,12 @@ import java.util.stream.Stream;
 import com.boschsemanticstack.rql.model.v1.RqlFilter;
 import com.boschsemanticstack.rql.model.v1.RqlQueryModel;
 import com.boschsemanticstack.rql.parser.v1.RqlParser;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
- 
+  
 class RqlFloatingPointTest {
 
    @ParameterizedTest

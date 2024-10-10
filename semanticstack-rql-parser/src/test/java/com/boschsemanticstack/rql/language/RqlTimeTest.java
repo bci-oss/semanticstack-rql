@@ -24,6 +24,7 @@ import com.boschsemanticstack.rql.exceptions.ParseException;
 import com.boschsemanticstack.rql.model.v1.RqlFilter;
 import com.boschsemanticstack.rql.model.v1.RqlQueryModel;
 import com.boschsemanticstack.rql.parser.v1.RqlParser;
+
 import org.junit.jupiter.api.Test;
 
 class RqlTimeTest {
@@ -38,7 +39,7 @@ class RqlTimeTest {
             .isInstanceOf( ParseException.class )
             .hasMessageContaining( "mismatched input" );
    }
-
+ 
    @Test
    void shouldNotParseIso8601ZuluWithMinutesAndSecondsMissing() {
       final String expression = "filter=eq(created,2007-12-03T10:15+4:27)";

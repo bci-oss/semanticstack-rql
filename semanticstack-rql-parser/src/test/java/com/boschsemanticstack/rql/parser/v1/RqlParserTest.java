@@ -21,8 +21,9 @@ import java.util.List;
 
 import com.boschsemanticstack.rql.model.v1.RqlBuilder;
 import com.boschsemanticstack.rql.model.v1.RqlQueryModel;
-import org.junit.jupiter.api.Test;
 
+import org.junit.jupiter.api.Test;
+ 
 class RqlParserTest {
 
    @Test

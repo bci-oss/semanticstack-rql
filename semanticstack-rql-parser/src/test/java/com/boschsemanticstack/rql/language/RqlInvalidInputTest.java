@@ -19,8 +19,9 @@ import static org.assertj.core.api.Assertions.catchThrowable;
 import com.boschsemanticstack.rql.exceptions.ParseException;
 import com.boschsemanticstack.rql.exceptions.SourceLocation;
 import com.boschsemanticstack.rql.parser.v1.RqlParser;
-import org.junit.jupiter.api.Test;
 
+import org.junit.jupiter.api.Test;
+ 
 class RqlInvalidInputTest {
 
    @Test

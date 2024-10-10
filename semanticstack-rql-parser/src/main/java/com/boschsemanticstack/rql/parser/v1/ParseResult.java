@@ -18,6 +18,7 @@ import java.util.List;
 
 import com.boschsemanticstack.rql.exceptions.ParseException;
 import com.boschsemanticstack.rql.parser.v1.internal.InternalRqlParser;
+
 import org.antlr.v4.runtime.ParserRuleContext;
 
 class ParseResult {
