@@ -48,7 +48,7 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.RuleNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
- 
+
 class RqlParseTreeVisitor extends InternalRqlBaseVisitor<Object> {
 
    @Override
@@ -71,17 +71,17 @@ class RqlParseTreeVisitor extends InternalRqlBaseVisitor<Object> {
       RqlOrder order;
 
       private void add( final RqlModelNode node ) {
-         if ( node instanceof RqlSelect ) {
-            trySetSelect( (RqlSelect) node );
+         if ( node instanceof RqlSelect rqlSelect ) {
+            trySetSelect( rqlSelect );
             return;
          }
-         if ( node instanceof RqlFilter ) {
-            trySetFilter( (RqlFilter) node );
+         if ( node instanceof RqlFilter rqlFilter ) {
+            trySetFilter( rqlFilter );
             return;
          }
-         if ( node instanceof RqlOptions ) {
-            trySetSlice( (RqlOptions) node );
-            trySetOrder( (RqlOptions) node );
+         if ( node instanceof RqlOptions rqlOptions ) {
+            trySetSlice( rqlOptions );
+            trySetOrder( rqlOptions );
             return;
          }
          if ( node != null ) {
