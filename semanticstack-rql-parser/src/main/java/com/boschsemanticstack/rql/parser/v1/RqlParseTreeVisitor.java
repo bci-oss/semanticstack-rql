@@ -43,11 +43,12 @@ import com.boschsemanticstack.rql.model.v1.impl.RqlSelectImpl;
 import com.boschsemanticstack.rql.model.v1.impl.RqlSliceImpl;
 import com.boschsemanticstack.rql.parser.v1.internal.InternalRqlBaseVisitor;
 import com.boschsemanticstack.rql.parser.v1.internal.InternalRqlParser;
+
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.RuleNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
-
+ 
 class RqlParseTreeVisitor extends InternalRqlBaseVisitor<Object> {
 
    @Override
