@@ -27,7 +27,7 @@ public class Entity {
    private List<SubEntity> subEntities;
    private List<SubEntity2> subEntities2;
    private List<String> stringList;
-
+ 
    protected String getId() {
       return id;
    }

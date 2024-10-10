@@ -22,7 +22,7 @@ public class ParseException extends RuntimeException {
    public ParseException( final String message ) {
       this( message, (SourceLocation) null );
    }
-
+ 
    public ParseException( final String message, final SourceLocation sourceLocation ) {
       super( message );
       this.sourceLocation = sourceLocation;

@@ -16,7 +16,7 @@ package com.boschsemanticstack.rql.model.v1.impl;
 import com.boschsemanticstack.rql.model.v1.RqlModelVisitor;
 import com.boschsemanticstack.rql.model.v1.RqlSlice;
 
-public record RqlSliceImpl(long offset, long limit) implements RqlSlice {
+public record RqlSliceImpl( long offset, long limit ) implements RqlSlice {
 
    @Override
    public <T> T accept( final RqlModelVisitor<? extends T> visitor ) {
@@ -27,7 +27,7 @@ public record RqlSliceImpl(long offset, long limit) implements RqlSlice {
    public String toString() {
       return "Offset=" + offset + ", limit=" + limit;
    }
-
+ 
    @Override
    public boolean equals( final Object o ) {
       if ( this == o ) {
@@ -47,8 +47,8 @@ public record RqlSliceImpl(long offset, long limit) implements RqlSlice {
 
    @Override
    public int hashCode() {
-      int result = (int) (offset() ^ (offset() >>> 32));
-      result = 31 * result + (int) (limit() ^ (limit() >>> 32));
+      int result = (int) ( offset() ^ ( offset() >>> 32 ) );
+      result = 31 * result + (int) ( limit() ^ ( limit() >>> 32 ) );
       return result;
    }
 }

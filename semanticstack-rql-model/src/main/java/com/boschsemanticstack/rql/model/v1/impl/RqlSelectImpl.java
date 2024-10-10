@@ -19,14 +19,14 @@ import com.boschsemanticstack.rql.model.v1.RqlModelNode;
 import com.boschsemanticstack.rql.model.v1.RqlModelVisitor;
 import com.boschsemanticstack.rql.model.v1.RqlSelect;
 
-public record RqlSelectImpl(List<String> attributes) implements RqlSelect {
+public record RqlSelectImpl( List<String> attributes ) implements RqlSelect {
 
    public RqlSelectImpl( final List<String> attributes ) {
       this.attributes = null == attributes
             ? Collections.emptyList()
             : List.copyOf( attributes );
    }
-
+ 
    /*
     * (non-Javadoc)
     *

@@ -38,7 +38,7 @@ class RqlOptionsTest {
             .isInstanceOf( ParseException.class )
             .hasMessageContaining( "extraneous input '('" );
    }
-
+ 
    @Test
    void shouldThrowOnDoubleLimitClauseInExplodedFormSyntax() {
       final String expression = "select=id,name&filter=eq(id,\"47*\")&option=limit(1,2)&option=limit(5,7)";

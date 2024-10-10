@@ -55,10 +55,11 @@ public abstract class AbstractRqlWriter extends RqlModelVisitor<String> {
          case NOT -> filter.getChildren().stream()
                .map( this::visitFilter )
                .collect( Collectors.joining( ",", "not(", ")" ) );
-         default -> throw new IllegalArgumentException( filter.getFilterType() + "-filter is not a valid argument for visitLogicOperation!" );
+         default -> throw new IllegalArgumentException( filter.getFilterType() + "-filter is not a "
+               + "valid argument for visitLogicOperation!" );
       };
    }
-
+ 
    @Override
    public String visitComparison( final RqlFilter filter ) {
       return filter.getOperator().getName() + "(" + filter.getAttribute() + "," + valuesToString( filter ) + ")";
@@ -112,6 +113,6 @@ public abstract class AbstractRqlWriter extends RqlModelVisitor<String> {
 
    @Override
    public String visitFieldDirection( final RqlFieldDirection model ) {
-      return (model.direction() == RqlFieldDirection.Direction.ASCENDING ? "+" : "-") + model.attribute();
+      return ( model.direction() == RqlFieldDirection.Direction.ASCENDING ? "+" : "-" ) + model.attribute();
    }
 }

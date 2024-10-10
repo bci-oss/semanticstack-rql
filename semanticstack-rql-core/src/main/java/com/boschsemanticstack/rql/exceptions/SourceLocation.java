@@ -16,7 +16,7 @@ package com.boschsemanticstack.rql.exceptions;
 import java.io.Serializable;
 
 public class SourceLocation implements Serializable {
-
+ 
    private final int line;
    private final int column;
 

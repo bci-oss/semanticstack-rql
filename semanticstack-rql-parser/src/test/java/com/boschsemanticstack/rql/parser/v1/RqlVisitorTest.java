@@ -30,7 +30,7 @@ class RqlVisitorTest {
 
       assertThat( model.getSelect().attributes() ).containsExactly( "id", "name", "nameWithSome.Extra1_9Chars." );
    }
-
+ 
    @Test
    void firstNotParseable() {
       final String expression = "select=id,name,nameWithSome/Extra1_9Chars.";

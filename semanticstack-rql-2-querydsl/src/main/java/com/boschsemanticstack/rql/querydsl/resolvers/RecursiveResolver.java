@@ -42,7 +42,7 @@ public class RecursiveResolver<T extends Expression<?>> extends AbstractPathPred
    private final AbstractPathPredicateResolver parentResolver;
 
    private final MethodHandle delegatingResolve;
-
+ 
    /**
     * Instantiates a {@link RecursiveResolver} that will delegate the actual resolution back to the {@link
     * PathPredicateResolver#resolve(SimpleExpression, Field, Queue, RqlFilter)} method of the given parent resolver.
@@ -80,7 +80,8 @@ public class RecursiveResolver<T extends Expression<?>> extends AbstractPathPred
    @Override
    @SuppressWarnings( "squid:S1181" )
    // do not catch Error/Throwable: API of MethodHandle does not allow anything else - mitigation is to rethrow Error and RuntimeEx
-   public Predicate resolveMethod( final SimpleExpression root, final Method method, final Queue<String> pathElements, final RqlFilter filter )
+   public Predicate resolveMethod( final SimpleExpression root, final Method method, final Queue<String> pathElements,
+         final RqlFilter filter )
          throws ReflectiveOperationException {
       try {
          return (Predicate) delegatingResolve.invokeWithArguments( parentResolver, root, method, pathElements, filter );

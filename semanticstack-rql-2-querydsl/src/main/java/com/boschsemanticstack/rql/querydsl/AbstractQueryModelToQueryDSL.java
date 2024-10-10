@@ -70,7 +70,7 @@ public abstract class AbstractQueryModelToQueryDSL<R> extends AbstractPathPredic
          return size() > 50;
       }
    } );
-
+ 
    private R predicate;
    private RqlSlice pagination;
    private final List<OrderSpecifier<?>> ordering = new ArrayList<>();

@@ -22,25 +22,22 @@ import com.boschsemanticstack.rql.model.v1.RqlFilter;
 /**
  * Annotation to restrict {@link String} type search to an element to count the used wildcard.
  * This check is only performed if the filter option is a {@link RqlFilter.Operator#LIKE} or {@link RqlFilter.Operator#LIKE_IGNORE_CASE}.
- *  e.g. filter=like(attribute,"some-*Attribute*")
- *
+ * e.g. filter=like(attribute,"some-*Attribute*")
  */
 @Retention( RetentionPolicy.RUNTIME )
 @Target( { ElementType.FIELD, ElementType.METHOD } )
 public @interface WildcardCount {
    /**
-    *
     * @return {@link String}s which are counted for the validation.
     */
    char[] wildcards() default { '*', '%' };
-
+ 
    /**
     * @return the number of allowed wildcards.
     */
    int count() default 1;
 
    /**
-    *
     * @return a customize error message
     */
    String errorMessage() default "";

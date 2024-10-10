@@ -44,7 +44,8 @@ public class MapPathResolver extends AbstractPathPredicateResolver<MapPath<?, ?,
    }
 
    @Override
-   public Predicate resolveMethod( final SimpleExpression root, final Method method, final Queue<String> pathElements, final RqlFilter filter )
+   public Predicate resolveMethod( final SimpleExpression root, final Method method, final Queue<String> pathElements,
+         final RqlFilter filter )
          throws ReflectiveOperationException {
       final MapPath mapPath = (MapPath) method.invoke( root );
       return resolveExpression( mapPath, pathElements, filter );

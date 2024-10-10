@@ -24,7 +24,7 @@ public interface RqlSelect extends RqlModelNode {
     * defined by the select() part of the RQL expression
     */
    boolean contains( String attribute );
-
+ 
    /**
     * @return true if no attributes are provided
     */

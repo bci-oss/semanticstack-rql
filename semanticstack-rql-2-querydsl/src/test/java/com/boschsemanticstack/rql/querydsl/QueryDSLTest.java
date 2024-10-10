@@ -54,7 +54,7 @@ class QueryDSLTest {
       final QueryModelToQueryDSL query = getQuery( queryParams );
       assertThat( query.getPredicate() ).isNotPresent();
    }
-
+ 
    /**
     * Generates Simple in => out tests
     */

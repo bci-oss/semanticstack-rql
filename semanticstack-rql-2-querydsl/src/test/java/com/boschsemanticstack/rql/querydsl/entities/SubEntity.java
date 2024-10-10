@@ -33,7 +33,7 @@ public class SubEntity {
    protected String getId() {
       return id;
    }
-
+ 
    protected SubEntity setId( final String id ) {
       this.id = id;
       return this;

@@ -21,7 +21,7 @@ public interface RqlOrder extends RqlModelNode {
     * @return a not-null, not-empty collection
     */
    List<RqlFieldDirection> fieldDirections();
-
+ 
    default boolean isEmpty() {
       return fieldDirections().isEmpty();
    }

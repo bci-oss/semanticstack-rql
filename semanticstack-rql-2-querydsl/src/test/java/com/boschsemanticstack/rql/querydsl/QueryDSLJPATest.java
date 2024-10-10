@@ -29,7 +29,7 @@ import com.querydsl.jpa.impl.JPAQuery;
 import org.junit.jupiter.api.Test;
 
 class QueryDSLJPATest {
- 
+
    @Test
    void rawQueryDSLComparisonWithConstraintOnCollectionEntryAndItsSupplementsShouldReturnNothing() {
       final JPQLSubQuery<Entity> waySubQuery = JPAExpressions.selectFrom( QEntity.entity )
@@ -51,7 +51,7 @@ class QueryDSLJPATest {
             + "  left join subEntity.metadata as subEntity_metadata_0 on key(subEntity_metadata_0) = ?1\n"
             + "where subEntity.name = ?2 and subEntity_metadata_0 = ?3 and subEntity2.name = ?4)" );
    }
-
+ 
    private String asJpaQuery( final Predicate predicate ) {
       final JPQLSerializer serializer = new JPQLSerializer( JPQLTemplates.DEFAULT );
       final JPAQuery jpaQuery = (JPAQuery) new JPAQuery().where( predicate );

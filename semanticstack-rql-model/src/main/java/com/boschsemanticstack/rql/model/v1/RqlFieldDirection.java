@@ -22,7 +22,7 @@ import java.util.List;
  * @see RqlQueryModel
  */
 public interface RqlFieldDirection extends RqlModelNode {
-
+ 
    enum Direction {
       ASCENDING, DESCENDING
    }

@@ -42,7 +42,7 @@ import com.querydsl.core.types.dsl.StringExpression;
 public class SimpleValueResolver extends AbstractPathPredicateResolver<SimpleExpression<?>, Predicate> {
 
    private final TypeConverters typeConverters;
-
+ 
    public SimpleValueResolver( final TypeConverters typeConverters ) {
       super();
       this.typeConverters = typeConverters;

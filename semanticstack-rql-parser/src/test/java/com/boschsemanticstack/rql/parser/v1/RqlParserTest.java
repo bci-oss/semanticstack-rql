@@ -19,11 +19,11 @@ import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.List;
 
-import org.junit.jupiter.api.Test;
-
 import com.boschsemanticstack.rql.model.v1.RqlBuilder;
 import com.boschsemanticstack.rql.model.v1.RqlQueryModel;
 
+import org.junit.jupiter.api.Test;
+ 
 class RqlParserTest {
 
    @Test

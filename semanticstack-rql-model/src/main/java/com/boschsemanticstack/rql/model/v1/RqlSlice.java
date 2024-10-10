@@ -30,7 +30,7 @@ public interface RqlSlice extends RqlModelNode {
    default <T> T accept( final RqlModelVisitor<? extends T> visitor ) {
       return visitor.visitSlice( this );
    }
-
+ 
    @Override
    default List<? extends RqlModelNode> getChildren() {
       return Collections.emptyList();

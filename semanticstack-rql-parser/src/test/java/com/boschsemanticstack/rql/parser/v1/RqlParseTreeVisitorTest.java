@@ -16,11 +16,11 @@ package com.boschsemanticstack.rql.parser.v1;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 
-import org.junit.jupiter.api.Test;
-
 import com.boschsemanticstack.rql.exceptions.ParseException;
 import com.boschsemanticstack.rql.model.v1.RqlFilter;
 import com.boschsemanticstack.rql.model.v1.RqlQueryModel;
+
+import org.junit.jupiter.api.Test;
 
 class RqlParseTreeVisitorTest {
 

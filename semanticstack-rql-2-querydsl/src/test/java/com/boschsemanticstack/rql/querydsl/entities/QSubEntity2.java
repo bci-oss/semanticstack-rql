@@ -30,7 +30,7 @@ public class QSubEntity2 extends EntityPathBase<SubEntity2> {
    public final StringPath name = createString( "name" );
 
    public final StringPath type = createString( "type" );
-
+ 
    public final MapPath<String, String, StringPath> metadata = createMap( "metadata", String.class, String.class,
          StringPath.class );
 

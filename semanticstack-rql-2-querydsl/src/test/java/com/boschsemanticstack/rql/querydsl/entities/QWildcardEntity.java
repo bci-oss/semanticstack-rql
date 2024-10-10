@@ -35,7 +35,7 @@ public class QWildcardEntity extends EntityPathBase<WildcardEntity> {
    public final StringPath count2 = createString( "count2" );
 
    public final StringPath regex1 = createString( "regex1" );
-
+ 
    public final StringPath regex2 = createString( "regex2" );
 
    public final StringPath error1 = createString( "error1" );
@@ -72,5 +72,4 @@ public class QWildcardEntity extends EntityPathBase<WildcardEntity> {
    public ListPath<SubEntity, QSubEntity> subEntities() {
       return subEntities;
    }
-
 }

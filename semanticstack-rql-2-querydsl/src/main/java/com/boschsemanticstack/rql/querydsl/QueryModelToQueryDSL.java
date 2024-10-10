@@ -39,7 +39,7 @@ import com.querydsl.core.types.dsl.SimpleExpression;
 @SuppressWarnings( { "java:S3740" } )
 // java:S3740 parameterized types - thy are not known for the expressions handled here so they cannot be given explicitly
 public class QueryModelToQueryDSL extends AbstractQueryModelToQueryDSL<Predicate> {
-
+ 
    /**
     * Transform {@link RqlQueryModel} into predicates, paging and sorting information
     * for a given Querydsl query type.
@@ -99,20 +99,20 @@ public class QueryModelToQueryDSL extends AbstractQueryModelToQueryDSL<Predicate
    @Override
    protected Predicate digest( final RqlFilter filter ) {
       switch ( filter.getFilterType() ) {
-      case AND:
-         final BooleanBuilder booleanBuilder = new BooleanBuilder();
-         filter.getChildren().forEach( operand -> booleanBuilder.and( digest( operand ) ) );
-         return booleanBuilder.getValue();
-      case OR:
-         final BooleanBuilder booleanBuilderOr = new BooleanBuilder();
-         filter.getChildren().forEach( operand -> booleanBuilderOr.or( digest( operand ) ) );
-         return booleanBuilderOr.getValue();
-      case NOT:
-         return digest( filter.getChildren() ).not();
-      case VALUE:
-         return getValuePredicate( filter );
-      default:
-         throw new IllegalArgumentException( "Unknown filter type " + filter.getFilterType() + " for " + filter );
+         case AND:
+            final BooleanBuilder booleanBuilder = new BooleanBuilder();
+            filter.getChildren().forEach( operand -> booleanBuilder.and( digest( operand ) ) );
+            return booleanBuilder.getValue();
+         case OR:
+            final BooleanBuilder booleanBuilderOr = new BooleanBuilder();
+            filter.getChildren().forEach( operand -> booleanBuilderOr.or( digest( operand ) ) );
+            return booleanBuilderOr.getValue();
+         case NOT:
+            return digest( filter.getChildren() ).not();
+         case VALUE:
+            return getValuePredicate( filter );
+         default:
+            throw new IllegalArgumentException( "Unknown filter type " + filter.getFilterType() + " for " + filter );
       }
    }
 

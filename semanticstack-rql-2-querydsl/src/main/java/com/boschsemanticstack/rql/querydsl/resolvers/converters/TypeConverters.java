@@ -41,10 +41,8 @@ public class TypeConverters {
    }
 
    /**
-    * Tries to convert a value to the given target class.
-    *
-    * This method never fails. If no converter can be found to perform the conversion, the given input value is
-    * returned as-is.
+    * Tries to convert a value to the given target class.This method never fails. If no converter can be found to perform the conversion,
+    * the given input value is returned as-is.
     *
     * @param targetClass the class the value should be converted to
     * @param value the value to convert

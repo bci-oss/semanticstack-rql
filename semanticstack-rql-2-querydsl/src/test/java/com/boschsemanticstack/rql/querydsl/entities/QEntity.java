@@ -37,7 +37,7 @@ public class QEntity extends EntityPathBase<Entity> {
    public final StringPath name = createString( "name" );
 
    public final StringPath type = createString( "type" );
-
+ 
    public final BooleanPath special = createBoolean( "special" );
 
    public final QSubEntity subEntity;

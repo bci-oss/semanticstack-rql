@@ -29,7 +29,7 @@ import com.querydsl.core.types.dsl.EntityPathBase;
 import com.querydsl.core.types.dsl.SimpleExpression;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.JPQLSubQuery;
- 
+  
 /**
  * JPA-specific version of the {@link CollectionPathResolver} that takes care of properly created
  * queries in order to keep join-semantic for multiple conditions on collection entries. This means

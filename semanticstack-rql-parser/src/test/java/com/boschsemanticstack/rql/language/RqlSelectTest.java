@@ -24,66 +24,65 @@ import org.junit.jupiter.api.Test;
 
 class RqlSelectTest {
 
-  @Test
-  void select_withRegularSyntax_shouldBeNotParsable() {
-    final String queryString = RqlParser.toString(
-        RqlParser.builder().select("abc", "def/ghi", "jk.lmnop").build());
-    assertThatThrownBy(() -> RqlParser.from(queryString)).isInstanceOf(ParseException.class)
-        .hasMessageContaining("token recognition error at: '/'");
-  }
+   @Test
+   void select_withRegularSyntax_shouldBeNotParsable() {
+      final String queryString = RqlParser.toString(
+            RqlParser.builder().select( "abc", "def/ghi", "jk.lmnop" ).build() );
+      assertThatThrownBy( () -> RqlParser.from( queryString ) ).isInstanceOf( ParseException.class )
+            .hasMessageContaining( "token recognition error at: '/'" );
+   }
+ 
+   @Test
+   void select_withRegularSyntax_shouldBeParsable() {
+      final String queryString = RqlParser.toString(
+            RqlParser.builder().select( "abc", "def.ghi", "jk.lmnop" ).build() );
+      final RqlQueryModel parsedQueryModel = RqlParser.from( queryString );
+      assertThat( parsedQueryModel.getSelect().attributes() ).containsExactly( "abc", "def.ghi",
+            "jk.lmnop" );
+   }
 
-  @Test
-  void select_withRegularSyntax_shouldBeParsable() {
-    final String queryString = RqlParser.toString(
-        RqlParser.builder().select("abc", "def.ghi", "jk.lmnop").build());
-    final RqlQueryModel parsedQueryModel = RqlParser.from(queryString);
-    assertThat(parsedQueryModel.getSelect().attributes()).containsExactly("abc", "def.ghi",
-        "jk.lmnop");
-  }
+   @Test
+   void select_withMultipleParameters_shouldBeParsable() {
+      final String queryString = "select=abc&select=def.ghi,jk.lmnop";
+      try {
+         RqlParser.from( queryString );
+         fail();
+      } catch ( final ParseException e ) {
+         assertThat( e ).hasMessageStartingWith( "No more than one select statement allowed" );
+      }
+   }
 
-  @Test
-  void select_withMultipleParameters_shouldBeParsable() {
-    final String queryString = "select=abc&select=def.ghi,jk.lmnop";
-    try {
-      RqlParser.from(queryString);
-      fail();
-    } catch (final ParseException e) {
-      assertThat(e).hasMessageStartingWith("No more than one select statement allowed");
-    }
-  }
+   @Test
+   void select_withParameterMultiValue_shouldNotBeParsable() {
+      final String queryString = "select=abc,def/ghi,jk.lmnop";
+      assertThatThrownBy( () -> RqlParser.from( queryString ) ).isInstanceOf( ParseException.class )
+            .hasMessageContaining( "token recognition error at: '/'" );
+   }
 
-  @Test
-  void select_withParameterMultiValue_shouldNotBeParsable() {
-    final String queryString = "select=abc,def/ghi,jk.lmnop";
-    assertThatThrownBy(() -> RqlParser.from(queryString)).isInstanceOf(ParseException.class)
-        .hasMessageContaining("token recognition error at: '/'");
-  }
+   @Test
+   void select_withParameterMultiValue_shouldBeParsable() {
+      final String queryString = "select=abc,def.ghi,jk.lmnop";
+      final RqlQueryModel parsedQueryModel = RqlParser.from( queryString );
+      assertThat( parsedQueryModel.getSelect().attributes() ).containsExactly( "abc", "def.ghi",
+            "jk.lmnop" );
+   }
 
-  @Test
-  void select_withParameterMultiValue_shouldBeParsable() {
-    final String queryString = "select=abc,def.ghi,jk.lmnop";
-    final RqlQueryModel parsedQueryModel = RqlParser.from(queryString);
-    assertThat(parsedQueryModel.getSelect().attributes()).containsExactly("abc", "def.ghi",
-        "jk.lmnop");
-  }
+   @Test
+   void select_Syntax_shouldBeParsable() {
+      final String queryString = RqlParser.toString(
+            RqlParser.builder().select( "abc", "def.ghi", "jk.lmnop" ).build() );
+      final RqlQueryModel parsedQueryModel = RqlParser.from( queryString );
+      assertThat( parsedQueryModel.getSelect().attributes() ).containsExactly( "abc", "def.ghi",
+            "jk.lmnop" );
+   }
 
-
-  @Test
-  void select_Syntax_shouldBeParsable() {
-    final String queryString = RqlParser.toString(
-        RqlParser.builder().select("abc", "def.ghi", "jk.lmnop").build());
-    final RqlQueryModel parsedQueryModel = RqlParser.from(queryString);
-    assertThat(parsedQueryModel.getSelect().attributes()).containsExactly("abc", "def.ghi",
-        "jk.lmnop");
-  }
-
-  @Test
-  void select_Syntax_shouldBeNotParsable() {
-    final String queryString = RqlParser.toString(
-        RqlParser.builder().select("abc", "def.ghi", "jk/lmnop").build());
-    assertThatThrownBy(
-        () -> RqlParser.from(queryString)).isInstanceOf(
-            ParseException.class)
-        .hasMessageContaining("token recognition error at: '/'");
-  }
+   @Test
+   void select_Syntax_shouldBeNotParsable() {
+      final String queryString = RqlParser.toString(
+            RqlParser.builder().select( "abc", "def.ghi", "jk/lmnop" ).build() );
+      assertThatThrownBy(
+            () -> RqlParser.from( queryString ) ).isInstanceOf(
+                  ParseException.class )
+            .hasMessageContaining( "token recognition error at: '/'" );
+   }
 }

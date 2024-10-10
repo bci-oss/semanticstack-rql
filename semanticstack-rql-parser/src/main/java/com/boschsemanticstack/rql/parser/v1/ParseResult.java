@@ -16,10 +16,10 @@ package com.boschsemanticstack.rql.parser.v1;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.antlr.v4.runtime.ParserRuleContext;
-
 import com.boschsemanticstack.rql.exceptions.ParseException;
 import com.boschsemanticstack.rql.parser.v1.internal.InternalRqlParser;
+
+import org.antlr.v4.runtime.ParserRuleContext;
 
 class ParseResult {
    private final List<ParseException> errors = new ArrayList<>();

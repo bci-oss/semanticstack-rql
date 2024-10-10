@@ -15,6 +15,11 @@ package com.boschsemanticstack.rql.parser.v1;
 
 import java.util.function.Function;
 
+import com.boschsemanticstack.rql.exceptions.ParseException;
+import com.boschsemanticstack.rql.exceptions.SourceLocation;
+import com.boschsemanticstack.rql.parser.v1.internal.InternalRqlLexer;
+import com.boschsemanticstack.rql.parser.v1.internal.InternalRqlParser;
+
 import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -22,11 +27,6 @@ import org.antlr.v4.runtime.DefaultErrorStrategy;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Recognizer;
-
-import com.boschsemanticstack.rql.exceptions.ParseException;
-import com.boschsemanticstack.rql.exceptions.SourceLocation;
-import com.boschsemanticstack.rql.parser.v1.internal.InternalRqlLexer;
-import com.boschsemanticstack.rql.parser.v1.internal.InternalRqlParser;
 
 class BaseRqlParserApi {
    public ParseResult createParseTree( final String rqlQuery ) {
@@ -45,7 +45,7 @@ class BaseRqlParserApi {
       parser.removeErrorListeners(); // default error listener prints to System.out
       parser.addErrorListener( errorListener );
       result.setParser( parser );
-
+ 
       try {
          result.setParseTree( startingRule.apply( parser ) );
       } catch ( final RecognitionException e ) {

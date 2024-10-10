@@ -32,7 +32,7 @@ public class RqlFilterImpl implements RqlFilter {
    private final String attribute;
    private final Operator operator;
    private final List<Object> values = new ArrayList<>();
-
+ 
    public RqlFilterImpl( final String name, final Operator comparisonType, final Object value ) {
       filterType = FilterType.VALUE;
       attribute = name;

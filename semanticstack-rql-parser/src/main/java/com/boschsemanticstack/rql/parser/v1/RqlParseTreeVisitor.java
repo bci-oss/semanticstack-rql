@@ -24,11 +24,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.antlr.v4.runtime.ParserRuleContext;
-import org.antlr.v4.runtime.tree.ParseTree;
-import org.antlr.v4.runtime.tree.RuleNode;
-import org.antlr.v4.runtime.tree.TerminalNode;
-
 import com.boschsemanticstack.rql.exceptions.ParseException;
 import com.boschsemanticstack.rql.exceptions.SourceLocation;
 import com.boschsemanticstack.rql.model.v1.RqlFieldDirection;
@@ -48,6 +43,11 @@ import com.boschsemanticstack.rql.model.v1.impl.RqlSelectImpl;
 import com.boschsemanticstack.rql.model.v1.impl.RqlSliceImpl;
 import com.boschsemanticstack.rql.parser.v1.internal.InternalRqlBaseVisitor;
 import com.boschsemanticstack.rql.parser.v1.internal.InternalRqlParser;
+
+import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.RuleNode;
+import org.antlr.v4.runtime.tree.TerminalNode;
 
 class RqlParseTreeVisitor extends InternalRqlBaseVisitor<Object> {
 
@@ -71,17 +71,17 @@ class RqlParseTreeVisitor extends InternalRqlBaseVisitor<Object> {
       RqlOrder order;
 
       private void add( final RqlModelNode node ) {
-         if ( node instanceof RqlSelect ) {
-            trySetSelect( (RqlSelect) node );
+         if ( node instanceof RqlSelect rqlSelect ) {
+            trySetSelect( rqlSelect );
             return;
          }
-         if ( node instanceof RqlFilter ) {
-            trySetFilter( (RqlFilter) node );
+         if ( node instanceof RqlFilter rqlFilter ) {
+            trySetFilter( rqlFilter );
             return;
          }
-         if ( node instanceof RqlOptions ) {
-            trySetSlice( (RqlOptions) node );
-            trySetOrder( (RqlOptions) node );
+         if ( node instanceof RqlOptions rqlOptions ) {
+            trySetSlice( rqlOptions );
+            trySetOrder( rqlOptions );
             return;
          }
          if ( node != null ) {
@@ -399,7 +399,7 @@ class RqlParseTreeVisitor extends InternalRqlBaseVisitor<Object> {
     */
    @Override
    public Object visitChildren( final RuleNode node ) {
-      return (node == null)
+      return ( node == null )
             ? defaultResult()
             : super.visitChildren( node );
    }
