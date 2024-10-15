@@ -97,7 +97,7 @@ intLiteralList
     ;
 
 optionExpression
-    : sortExpression (',' limitOrCursorExpression)? | limitOrCursorExpression (',' sortExpression)?
+    : sortExpression (',' limitOrCursorExpression)? | limitOrCursorExpression (',' sortExpression)? | invalidExpression?
     ;
 
 limitOrCursorExpression
@@ -114,6 +114,18 @@ limitExpression
 
 cursorExpression
     : 'cursor' '(' (StringLiteral ',')? IntLiteral ')'
+    ;
+
+// Error rule to catch invalid combinations
+invalidExpression
+    : (limitExpression ',' cursorExpression)
+    | (cursorExpression  ',' limitExpression)
+    | (sortExpression ',' cursorExpression  ',' limitExpression)
+    | (sortExpression ','  limitExpression ',' cursorExpression)
+    | (limitExpression ',' cursorExpression ',' sortExpression)
+    | (cursorExpression ',' limitExpression ',' sortExpression)
+    | (cursorExpression ',' sortExpression ',' limitExpression)
+    | (limitExpression ',' sortExpression ',' cursorExpression)
     ;
 
 literal
@@ -209,3 +221,4 @@ fragment CharEscapeSeq : '\\' ('b' | 't' | 'n' | 'f' | 'r' | '"' | '\\');
 WS
    : [ \t\n\r] + -> skip
    ;
+

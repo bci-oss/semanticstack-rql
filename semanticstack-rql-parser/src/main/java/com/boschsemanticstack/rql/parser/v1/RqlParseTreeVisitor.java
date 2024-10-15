@@ -152,10 +152,11 @@ class RqlParseTreeVisitor extends InternalRqlBaseVisitor<Object> {
    public RqlOptions visitOptionList( final InternalRqlParser.OptionListContext ctx ) {
 
       final InternalRqlParser.OptionExpressionContext optionExpression = ctx.optionExpression();
-
       if ( optionExpression == null ) {
          return RqlOptionsImpl.emptyOptions();
       }
+
+      visitInvalidExpression( optionExpression.invalidExpression() );
 
       final RqlOrder order = visitSortExpression( optionExpression.sortExpression() );
       if ( optionExpression.limitOrCursorExpression() == null ) {
@@ -174,6 +175,14 @@ class RqlParseTreeVisitor extends InternalRqlBaseVisitor<Object> {
             : new RqlOrderImpl( ctx.sortFieldIdentifier().stream()
             .map( this::visitSortFieldIdentifier )
             .toList() );
+   }
+
+   @Override
+   public Object visitInvalidExpression( final InternalRqlParser.InvalidExpressionContext ctx ) {
+      if ( ctx == null ) {
+         return null;
+      }
+      throw new ParseException( "Cursor and Limit cannot be used together" );
    }
 
    @Override

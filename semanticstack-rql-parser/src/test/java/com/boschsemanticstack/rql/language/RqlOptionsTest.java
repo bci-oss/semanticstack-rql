@@ -46,7 +46,7 @@ class RqlOptionsTest {
 
    @Test
    void optionsWithoutCommaShouldLeadToSyntaxError() {
-      final String expression = "select=id,name&filter=eq(id,\"47*\")&option=sort(+name,-description)limit(1,2)";
+      final String expression = "select=id,name&filter=eq(id,\"47*\")&option=sort(+name,-description)limit(1,2)cursor(2)";
 
       final Throwable throwable = catchThrowable( () -> RqlParser.from( expression ) );
 
@@ -122,35 +122,45 @@ class RqlOptionsTest {
          "option=,cursor(\"abc\",10)",
          "option=,limit(100,10)",
          "option=,sort(+id)",
-         "option=limit(100),limit(100)",
-         "option=limit(100),cursor(100)",
+         "option=cursor(\"abc\",10)cursor(10)",
+         "option=sort(+id)sort(+id)",
+         "option=limit(100,10)limit(100,10)",
+         "option=sort(+id)limit(100)",
+         "option=limit(100,10)sort(+id)",
+         "option=sort(+id)cursor(100)",
+         "option=cursor(100)sort(+id)",
+         "option=cursor(100),limit(10,100)sort(+id)"
    } )
-   void shouldThrowExtraneousInputWrongOptionSyntax( final String expression ) {
+   void shouldThrowMismatchInputWrongOptionSyntax( final String expression ) {
       final Throwable throwable = catchThrowable( () -> RqlParser.from( expression ) );
       assertThat( throwable ).isInstanceOf( ParseException.class )
-            .hasMessageContaining( "extraneous input" );
+            .hasMessageContaining( "mismatched input" );
+   }
+
+   @ParameterizedTest
+   @ValueSource( strings = {
+         "option=cursor(100),limit(10,100)",
+         "option=cursor(100),limit(10,100),sort(+id)",
+   } )
+   void shouldThrowInvalidExpressionSyntax( final String expression ) {
+      final Throwable throwable = catchThrowable( () -> RqlParser.from( expression ) );
+      assertThat( throwable ).isInstanceOf( ParseException.class )
+            .hasMessageContaining( "Cursor and Limit cannot be used together" );
    }
 
    @ParameterizedTest
    @ValueSource( strings = {
          "option=cursor(\"abc\",10),cursor(\"abc\",10)",
          "option=cursor(\"abc\",10),cursor(10)",
-         "option=cursor(\"abc\",10)cursor(10)",
          "option=sort(+id),sort(+id)",
-         "option=sort(+id)sort(+id)",
-         "option=limit(100)limit(100)",
-         "option=sort(+id)limit(100)",
          "option=limit(100)sort(+id)",
-         "option=sort(+id)cursor(100)",
-         "option=cursor(100)sort(+id)",
-         "option=cursor(100),limit(100)",
-         "option=cursor(100),limit(100)sort(+id)",
-         "option=cursor(100),limit(100),sort(+id)",
+         "option=limit(100,10),limit(100,10)",
+         "option=limit(100,10),cursor(100,10)",
    } )
-   void shouldThrowMismatchInputWrongOptionSyntax( final String expression ) {
+   void shouldThrowNoViableAlternativeOptionSyntax( final String expression ) {
       final Throwable throwable = catchThrowable( () -> RqlParser.from( expression ) );
       assertThat( throwable ).isInstanceOf( ParseException.class )
-            .hasMessageContaining( "mismatched input" );
+            .hasMessageContaining( "no viable alternative at input" );
    }
 
    @ParameterizedTest
