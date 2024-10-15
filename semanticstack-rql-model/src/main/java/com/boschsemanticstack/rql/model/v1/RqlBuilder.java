@@ -33,7 +33,7 @@ public class RqlBuilder {
    private RqlSlice slice;
    private RqlCursor cursor;
    private RqlOrder order = new RqlOrderImpl( Collections.emptyList() );
-
+ 
    public RqlBuilder select( final String... attributes ) {
       select = null == attributes
             ? null

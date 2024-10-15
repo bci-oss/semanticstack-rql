@@ -39,7 +39,7 @@ public class RqlOptionsImpl implements RqlOptions {
       this.cursor = cursor;
       this.order = null == order ? new RqlOrderImpl( null ) : order;
    }
-
+ 
    @NotNull
    @Override
    public RqlOrder getOrder() {
