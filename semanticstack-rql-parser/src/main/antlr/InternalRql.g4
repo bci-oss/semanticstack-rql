@@ -98,7 +98,7 @@ intLiteralList
     ;
 
 option
-    : sortExpression? (limitExpression | cursorExpression | cursorExpressionWitStart)?
+    : sortExpression? (limitExpression | cursorExpression | cursorExpressionWithStart)?
     ;
 
 sortExpression
@@ -109,7 +109,7 @@ limitExpression
     : 'limit' '(' IntLiteral ',' IntLiteral ')'
     ;
 
-cursorExpressionWitStart
+cursorExpressionWithStart
     : 'cursor' '(' StringLiteral ',' IntLiteral ')'
     ;
 
