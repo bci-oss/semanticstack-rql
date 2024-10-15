@@ -150,69 +150,21 @@ class RqlParseTreeVisitor extends InternalRqlBaseVisitor<Object> {
 
    @Override
    public RqlOptions visitOptionList( final InternalRqlParser.OptionListContext ctx ) {
-      final List<Object> options = null == ctx || null == ctx.option()
-            ? Collections.emptyList()
-            : ctx.option().stream()
-            .map( this::visitOption )
-            .toList();
 
-      checkOnlyOneLimit( options );
-      checkOnlyOneCursor( options );
-      checkOnlyOneOrder( options );
+      final InternalRqlParser.OptionExpressionContext optionExpression = ctx.optionExpression();
 
-      final RqlSlice slice = options.stream()
-            .filter( RqlSlice.class::isInstance )
-            .map( RqlSlice.class::cast )
-            .findAny()
-            .orElse( null );
-
-      final RqlCursor cursor = options.stream()
-            .filter( RqlCursor.class::isInstance )
-            .map( RqlCursor.class::cast )
-            .findAny()
-            .orElse( null );
-
-      final RqlOrder order = options.stream()
-            .filter( RqlOrder.class::isInstance )
-            .map( RqlOrder.class::cast )
-            .findAny()
-            .orElse( new RqlOrderImpl( null ) );
-
-      if ( cursor != null && slice != null ) {
-         throw new ParseException( "Cursor and Slice cannot be used together" );
+      if ( optionExpression == null ) {
+         return RqlOptionsImpl.emptyOptions();
       }
+
+      final RqlOrder order = visitSortExpression( optionExpression.sortExpression() );
+      if ( optionExpression.limitOrCursorExpression() == null ) {
+         return new RqlOptionsImpl( null, order, null );
+      }
+      final RqlSlice slice = visitLimitExpression( optionExpression.limitOrCursorExpression().limitExpression() );
+      final RqlCursor cursor = visitCursorExpression( optionExpression.limitOrCursorExpression().cursorExpression() );
 
       return new RqlOptionsImpl( slice, order, cursor );
-   }
-
-   private void checkOnlyOneLimit( final List<Object> options ) {
-      if ( options.stream()
-            .filter( RqlSlice.class::isInstance )
-            .limit( 2 )
-            .count()
-            > 1 ) {
-         throw new ParseException( "No more than one limit statement allowed" );
-      }
-   }
-
-   private void checkOnlyOneCursor( final List<Object> options ) {
-      if ( options.stream()
-            .filter( RqlCursor.class::isInstance )
-            .limit( 2 )
-            .count()
-            > 1 ) {
-         throw new ParseException( "No more than one cursor statement allowed" );
-      }
-   }
-
-   private void checkOnlyOneOrder( final List<Object> options ) {
-      if ( options.stream()
-            .filter( RqlOrder.class::isInstance )
-            .limit( 2 )
-            .count()
-            > 1 ) {
-         throw new ParseException( "No more than one sort statement allowed" );
-      }
    }
 
    @Override
@@ -234,11 +186,17 @@ class RqlParseTreeVisitor extends InternalRqlBaseVisitor<Object> {
 
    @Override
    public RqlSlice visitLimitExpression( final InternalRqlParser.LimitExpressionContext ctx ) {
+      if ( ctx == null ) {
+         return null;
+      }
       return new RqlSliceImpl( Long.parseLong( ctx.IntLiteral( 0 ).getText() ), Long.parseLong( ctx.IntLiteral( 1 ).getText() ) );
    }
 
    @Override
    public RqlCursor visitCursorExpression( final InternalRqlParser.CursorExpressionContext ctx ) {
+      if ( ctx == null ) {
+         return null;
+      }
       if ( ctx.StringLiteral() == null ) {
          return new RqlCursorImpl( Long.parseLong( ctx.IntLiteral().getText() ) );
       }

@@ -45,9 +45,8 @@ filterList // entrypoint for filter if already partitioned
     : '(' filterExpression (',' filterExpression)* ')'
     ;
 
-//TODO
 optionList // entrypoint for options if already partitioned
-    : 'option' '=' option (',' option)* // uniqueness is checked in parse-tree visitor code
+    : 'option' '=' optionExpression
     ;
 // end toplevel expressions
 
@@ -97,8 +96,12 @@ intLiteralList
     : IntLiteral (',' IntLiteral)*
     ;
 
-option
-    : sortExpression? (limitExpression | cursorExpression)?
+optionExpression
+    : sortExpression (',' limitOrCursorExpression)? | limitOrCursorExpression (',' sortExpression)?
+    ;
+
+limitOrCursorExpression
+    : limitExpression | cursorExpression
     ;
 
 sortExpression

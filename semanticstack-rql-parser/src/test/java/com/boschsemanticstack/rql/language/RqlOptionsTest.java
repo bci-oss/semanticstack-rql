@@ -44,6 +44,17 @@ class RqlOptionsTest {
             .hasMessageContaining( "extraneous input '('" );
    }
 
+   @Test
+   void optionsWithoutCommaShouldLeadToSyntaxError() {
+      final String expression = "select=id,name&filter=eq(id,\"47*\")&option=sort(+name,-description)limit(1,2)";
+
+      final Throwable throwable = catchThrowable( () -> RqlParser.from( expression ) );
+
+      assertThat( throwable )
+            .isInstanceOf( ParseException.class )
+            .hasMessageContaining( "extraneous input 'limit'" );
+   }
+
    @ParameterizedTest
    @ValueSource( strings = {
          "select=id,name&filter=eq(id,\"47*\")&option=limit(1,2)&option=limit(5,7)",
