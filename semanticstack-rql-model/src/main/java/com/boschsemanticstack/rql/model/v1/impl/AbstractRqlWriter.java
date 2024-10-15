@@ -15,8 +15,10 @@ package com.boschsemanticstack.rql.model.v1.impl;
 
 import java.time.OffsetDateTime;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.boschsemanticstack.rql.model.v1.RqlCursor;
 import com.boschsemanticstack.rql.model.v1.RqlFieldDirection;
 import com.boschsemanticstack.rql.model.v1.RqlFilter;
 import com.boschsemanticstack.rql.model.v1.RqlModelVisitor;
@@ -59,7 +61,7 @@ public abstract class AbstractRqlWriter extends RqlModelVisitor<String> {
                + "valid argument for visitLogicOperation!" );
       };
    }
- 
+
    @Override
    public String visitComparison( final RqlFilter filter ) {
       return filter.getOperator().getName() + "(" + filter.getAttribute() + "," + valuesToString( filter ) + ")";
@@ -102,6 +104,17 @@ public abstract class AbstractRqlWriter extends RqlModelVisitor<String> {
       return model == null
             ? null
             : String.format( "limit(%d,%d)", model.offset(), model.limit() );
+   }
+
+   @Override
+   public String visitCursor( final RqlCursor model ) {
+      if ( model == null ) {
+         return null;
+      }
+
+      final Optional<String> cursor = model.cursor();
+      return cursor.map( s -> String.format( "cursor(%s,%d)", getValueAsString( s ), model.limit() ) )
+            .orElseGet( () -> String.format( "cursor(%d)", model.limit() ) );
    }
 
    @Override

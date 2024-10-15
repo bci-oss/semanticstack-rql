@@ -14,6 +14,7 @@
 package com.boschsemanticstack.rql.parser.v1;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.math.BigInteger;
 import java.util.Arrays;
@@ -23,7 +24,7 @@ import com.boschsemanticstack.rql.model.v1.RqlBuilder;
 import com.boschsemanticstack.rql.model.v1.RqlQueryModel;
 
 import org.junit.jupiter.api.Test;
- 
+
 class RqlParserTest {
 
    @Test
@@ -39,7 +40,7 @@ class RqlParserTest {
    }
 
    @Test
-   void shouldProvideEasyBuilder() {
+   void shouldProvideEasySliceBuilder() {
       final RqlQueryModel model = RqlParser.builder()
             .select( "att1", "att2", "att3/subAtt4" )
             .filter( RqlBuilder.and(
@@ -59,6 +60,52 @@ class RqlParserTest {
       assertThat( representation ).isEqualTo(
             "select=att1,att2,att3/subAtt4&filter=and(eq(att2,\"theSame\"),or(lt(att1,5238907523475022349),not(gt(att1,"
                   + "12345678901234567890123456789012345678901234567890))))&option=limit(0,500),sort(+att1,-att2)" );
+   }
+
+   @Test
+   void shouldProvideEasyCursorBuilder() {
+      RqlBuilder builder = RqlParser.builder()
+            .select( "att1", "att2", "att3/subAtt4" )
+            .filter( RqlBuilder.and(
+                  RqlBuilder.eq( "att2", "theSame" ),
+                  RqlBuilder.or(
+                        RqlBuilder.lt( "att1", 5238907523475022349L ),
+                        RqlBuilder.not(
+                              RqlBuilder.gt( "att1", new BigInteger( "12345678901234567890123456789012345678901234567890" ) )
+                        )
+                  ) ) )
+            .sort( RqlBuilder.asc( "att1" ), RqlBuilder.desc( "att2" ) )
+            .cursor( "a", 500 );
+
+      final String representation = RqlParser.toString( builder.build() );
+
+      assertThat( representation ).isEqualTo(
+            "select=att1,att2,att3/subAtt4&filter=and(eq(att2,\"theSame\"),or(lt(att1,5238907523475022349),not(gt(att1,"
+                  + "12345678901234567890123456789012345678901234567890))))&option=cursor(\"a\",500),sort(+att1,-att2)" );
+
+      builder = builder.cursor( 100 );
+
+      final String representation2 = RqlParser.toString( builder.build() );
+
+      assertThat( representation2 ).isEqualTo(
+            "select=att1,att2,att3/subAtt4&filter=and(eq(att2,\"theSame\"),or(lt(att1,5238907523475022349),not(gt(att1,"
+                  + "12345678901234567890123456789012345678901234567890))))&option=cursor(100),sort(+att1,-att2)" );
+   }
+
+   @Test
+   void shouldProvideEasyCursorAndSliceBuilder() {
+      RqlBuilder builder = RqlParser.builder()
+            .cursor( "a", 500 )
+            .limit( 0, 100 );
+      assertThatThrownBy( builder::build ).isInstanceOf( IllegalArgumentException.class )
+            .hasMessageContaining( "Cursor and Slice cannot be used together" );
+
+      builder = RqlParser.builder()
+            .cursor( 100 )
+            .limit( 0, 100 );
+
+      assertThatThrownBy( builder::build ).isInstanceOf( IllegalArgumentException.class )
+            .hasMessageContaining( "Cursor and Slice cannot be used together" );
    }
 
    @Test

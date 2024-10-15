@@ -45,6 +45,7 @@ filterList // entrypoint for filter if already partitioned
     : '(' filterExpression (',' filterExpression)* ')'
     ;
 
+//TODO
 optionList // entrypoint for options if already partitioned
     : 'option' '=' option (',' option)* // uniqueness is checked in parse-tree visitor code
     ;
@@ -85,19 +86,19 @@ literalList
     ;
 
 stringLiteralList
-    : StringLiteral (',' StringLiteral)*  //TODO: should we allow null here? Possible problem with oracle
+    : StringLiteral (',' StringLiteral)*
     ;
 
 floatLiteralList
-    : FloatLiteral (',' FloatLiteral)*  //TODO: should we allow null here? Possible problem with oracle
+    : FloatLiteral (',' FloatLiteral)*
     ;
 
 intLiteralList
-    : IntLiteral (',' IntLiteral)*  //TODO: should we allow null here? Possible problem with oracle
+    : IntLiteral (',' IntLiteral)*
     ;
 
 option
-    : (sortExpression | limitExpression)*
+    : sortExpression? (limitExpression | cursorExpression | cursorExpressionWitStart)?
     ;
 
 sortExpression
@@ -106,6 +107,14 @@ sortExpression
 
 limitExpression
     : 'limit' '(' IntLiteral ',' IntLiteral ')'
+    ;
+
+cursorExpressionWitStart
+    : 'cursor' '(' StringLiteral ',' IntLiteral ')'
+    ;
+
+cursorExpression
+    : 'cursor' '(' IntLiteral ')'
     ;
 
 literal

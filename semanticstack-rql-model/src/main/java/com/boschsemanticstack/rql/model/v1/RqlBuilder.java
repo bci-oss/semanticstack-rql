@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import com.boschsemanticstack.rql.model.v1.impl.RqlCursorImpl;
 import com.boschsemanticstack.rql.model.v1.impl.RqlFieldDirectionImpl;
 import com.boschsemanticstack.rql.model.v1.impl.RqlFilterImpl;
 import com.boschsemanticstack.rql.model.v1.impl.RqlOptionsImpl;
@@ -30,8 +31,9 @@ public class RqlBuilder {
    private RqlSelect select;
    private RqlFilter filter;
    private RqlSlice slice;
+   private RqlCursor cursor;
    private RqlOrder order = new RqlOrderImpl( Collections.emptyList() );
- 
+
    public RqlBuilder select( final String... attributes ) {
       select = null == attributes
             ? null
@@ -58,8 +60,21 @@ public class RqlBuilder {
       return this;
    }
 
+   public RqlBuilder cursor( final String cursorValue, final long limit ) {
+      cursor = new RqlCursorImpl( cursorValue, limit );
+      return this;
+   }
+
+   public RqlBuilder cursor( final long limit ) {
+      cursor = new RqlCursorImpl( limit );
+      return this;
+   }
+
    public RqlQueryModel build() {
-      return new RqlQueryModelImpl( select, filter, new RqlOptionsImpl( slice, order ) );
+      if ( cursor != null && slice != null ) {
+         throw new IllegalArgumentException( "Cursor and Slice cannot be used together" );
+      }
+      return new RqlQueryModelImpl( select, filter, new RqlOptionsImpl( slice, order, cursor ) );
    }
 
    public static RqlFilter eq( final String attribute, final Object value ) {

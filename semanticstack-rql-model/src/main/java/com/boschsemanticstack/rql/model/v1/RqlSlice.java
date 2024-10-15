@@ -16,7 +16,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * contains parameters for paging support if not the whole resultset is wanted.
+ * contains parameters for paging support if not the whole result set is wanted.
  *
  * @see RqlQueryModel
  */
@@ -30,7 +30,7 @@ public interface RqlSlice extends RqlModelNode {
    default <T> T accept( final RqlModelVisitor<? extends T> visitor ) {
       return visitor.visitSlice( this );
    }
- 
+
    @Override
    default List<? extends RqlModelNode> getChildren() {
       return Collections.emptyList();

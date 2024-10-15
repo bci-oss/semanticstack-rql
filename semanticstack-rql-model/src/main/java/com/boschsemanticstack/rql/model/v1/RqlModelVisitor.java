@@ -16,7 +16,7 @@ package com.boschsemanticstack.rql.model.v1;
 public abstract class RqlModelVisitor<T> {
 
    public abstract T visitModel( RqlQueryModel model );
- 
+
    public abstract T visitSelect( RqlSelect selectModel );
 
    public abstract T visitFilter( RqlFilter model );
@@ -24,6 +24,8 @@ public abstract class RqlModelVisitor<T> {
    public abstract T visitOptions( RqlOptions model );
 
    public abstract T visitSlice( RqlSlice model );
+
+   public abstract T visitCursor( RqlCursor model );
 
    public abstract T visitOrder( RqlOrder model );
 

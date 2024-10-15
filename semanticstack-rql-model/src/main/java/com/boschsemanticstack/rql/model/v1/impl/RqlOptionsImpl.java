@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.boschsemanticstack.rql.model.v1.RqlCursor;
 import com.boschsemanticstack.rql.model.v1.RqlModelNode;
 import com.boschsemanticstack.rql.model.v1.RqlModelVisitor;
 import com.boschsemanticstack.rql.model.v1.RqlOptions;
@@ -29,13 +30,16 @@ public class RqlOptionsImpl implements RqlOptions {
 
    private final RqlSlice slice;
 
+   private final RqlCursor cursor;
+
    private final RqlOrder order;
 
-   public RqlOptionsImpl( final RqlSlice slice, final RqlOrder order ) {
+   public RqlOptionsImpl( final RqlSlice slice, final RqlOrder order, final RqlCursor cursor ) {
       this.slice = slice;
+      this.cursor = cursor;
       this.order = null == order ? new RqlOrderImpl( null ) : order;
    }
- 
+
    @NotNull
    @Override
    public RqlOrder getOrder() {
@@ -45,6 +49,11 @@ public class RqlOptionsImpl implements RqlOptions {
    @Override
    public Optional<RqlSlice> getSlice() {
       return Optional.ofNullable( slice );
+   }
+
+   @Override
+   public Optional<RqlCursor> getCursor() {
+      return Optional.ofNullable( cursor );
    }
 
    @Override
@@ -59,9 +68,12 @@ public class RqlOptionsImpl implements RqlOptions {
 
    @Override
    public List<? extends RqlModelNode> getChildren() {
-      final List<RqlModelNode> result = new ArrayList<>( 2 );
+      final List<RqlModelNode> result = new ArrayList<>( 3 );
       if ( slice != null ) {
          result.add( slice );
+      }
+      if ( cursor != null ) {
+         result.add( cursor );
       }
       if ( !order.fieldDirections().isEmpty() ) {
          result.add( order );
@@ -75,6 +87,6 @@ public class RqlOptionsImpl implements RqlOptions {
    }
 
    public static RqlOptions emptyOptions() {
-      return new RqlOptionsImpl( null, null );
+      return new RqlOptionsImpl( null, null, null );
    }
 }

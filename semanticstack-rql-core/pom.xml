@@ -23,11 +23,5 @@
    </parent>
    <artifactId>semanticstack-rql-core</artifactId>
    <name>Bosch Semantic Stack RQL Exceptions</name>
-
-   <dependencies>
-      <dependency>
-         <groupId>com.boschsemanticstack</groupId>
-         <artifactId>semanticstack-rql-model</artifactId>
-      </dependency>
-   </dependencies>
+   
 </project>

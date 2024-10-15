@@ -14,15 +14,20 @@
 package com.boschsemanticstack.rql.language;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assertions.catchThrowable;
 
 import com.boschsemanticstack.rql.exceptions.ParseException;
 import com.boschsemanticstack.rql.model.v1.RqlFieldDirection;
 import com.boschsemanticstack.rql.model.v1.RqlQueryModel;
+import com.boschsemanticstack.rql.model.v1.impl.RqlCursorImpl;
 import com.boschsemanticstack.rql.model.v1.impl.RqlFieldDirectionImpl;
 import com.boschsemanticstack.rql.model.v1.impl.RqlSliceImpl;
 import com.boschsemanticstack.rql.parser.v1.RqlParser;
+
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 @SuppressWarnings( "java:S5976" ) // use parameterized tests => not for few instances which test content of an exception
 class RqlOptionsTest {
@@ -38,21 +43,24 @@ class RqlOptionsTest {
             .isInstanceOf( ParseException.class )
             .hasMessageContaining( "extraneous input '('" );
    }
- 
-   @Test
-   void shouldThrowOnDoubleLimitClauseInExplodedFormSyntax() {
-      final String expression = "select=id,name&filter=eq(id,\"47*\")&option=limit(1,2)&option=limit(5,7)";
 
-      final Throwable throwable = catchThrowable( () -> RqlParser.from( expression ) );
-
-      assertThat( throwable )
+   @ParameterizedTest
+   @ValueSource( strings = {
+         "select=id,name&filter=eq(id,\"47*\")&option=limit(1,2)&option=limit(5,7)",
+         "select=id,name&option=cursor(\"abc\",10)&option=sort(+name,-description)",
+         "select=id,name&option=sort(+name,-description)&option=limit(5,10)",
+         "select=id,name&option=limit(5,10)&option=sort(+name,-description)",
+         "select=id,name&option=sort(+name,-description)&option=limit(5,10)&option=cursor(\"abc\",10)"
+   } )
+   void shouldThrowDoubleOptionException( final String expression ) {
+      assertThatThrownBy( () -> RqlParser.from( expression ) )
             .isInstanceOf( ParseException.class )
-            .hasMessageContaining( "No more than one limit statement allowed" );
+            .hasMessageContaining( "No more than one options statement allowed" );
    }
 
    @Test
-   void shouldParseOptionsInAnyOrderInExplodedFormSortBeforeLimit() {
-      final String sortLimitExpression = "select=id,name&option=sort(+name,-description)&option=limit(5,10)";
+   void shouldParseCursorWithSortOptions() {
+      final String sortLimitExpression = "select=id,name&option=sort(+name,-description),cursor(\"abc\",10)";
 
       final RqlQueryModel sortLimitParseTree = RqlParser.from( sortLimitExpression );
 
@@ -62,22 +70,38 @@ class RqlOptionsTest {
                   new RqlFieldDirectionImpl( "description", RqlFieldDirection.Direction.DESCENDING )
             );
 
-      assertThat( sortLimitParseTree.getOptions().getSlice() ).contains( new RqlSliceImpl( 5, 10 ) );
+      assertThat( sortLimitParseTree.getOptions().getCursor() ).contains( new RqlCursorImpl( "abc", 10 ) );
    }
 
    @Test
-   void shouldParseOptionsInAnyOrderInExplodedFormLimitBeforeSort() {
-      final String limitSortExpression = "select=id,name&option=limit(5,10)&option=sort(+name,-description)";
+   void shouldParseCursorOptions() {
+      final String sortLimitExpression = "select=id,name&option=cursor(\"abc\",10)";
 
-      final RqlQueryModel limitSortParseTree = RqlParser.from( limitSortExpression );
+      final RqlQueryModel sortLimitParseTree = RqlParser.from( sortLimitExpression );
 
-      assertThat( limitSortParseTree.getOptions().getOrder().fieldDirections() )
-            .containsExactly(
-                  new RqlFieldDirectionImpl( "name", RqlFieldDirection.Direction.ASCENDING ),
-                  new RqlFieldDirectionImpl( "description", RqlFieldDirection.Direction.DESCENDING )
-            );
+      assertThat( sortLimitParseTree.getOptions().getCursor() ).contains( new RqlCursorImpl( "abc", 10 ) );
+   }
 
-      assertThat( limitSortParseTree.getOptions().getSlice() ).contains( new RqlSliceImpl( 5, 10 ) );
+   @Test
+   void shouldParseCursorOptionsWithoutStart() {
+      final String sortLimitExpression = "select=id,name&option=cursor(10)";
+
+      final RqlQueryModel sortLimitParseTree = RqlParser.from( sortLimitExpression );
+
+      assertThat( sortLimitParseTree.getOptions().getCursor() ).contains( new RqlCursorImpl( 10 ) );
+   }
+
+   @ParameterizedTest
+   @ValueSource( strings = {
+         "select=id,name&filter=eq(id,\"47*\")&option=cursor(\"abc\",10),cursor(\"abc\",10)",
+         "select=id,name&filter=eq(id,\"47*\")&option=cursor(\"abc\",10),cursor(10)",
+   } )
+   void shouldThrowOnDoubleCursorClause( final String expression ) {
+      final Throwable throwable = catchThrowable( () -> RqlParser.from( expression ) );
+
+      assertThat( throwable )
+            .isInstanceOf( ParseException.class )
+            .hasMessageContaining( "No more than one cursor statement allowed" );
    }
 
    @Test
@@ -89,6 +113,21 @@ class RqlOptionsTest {
       assertThat( throwable )
             .isInstanceOf( ParseException.class )
             .hasMessageContaining( "No more than one limit statement allowed" );
+   }
+
+   @Test
+   void shouldParseOptionsInAnyOrderCursorBeforeSort() {
+      final String limitSortExpression = "select=id,name&option=cursor(\"abc\",10),sort(+name,-description)";
+
+      final RqlQueryModel limitSortParseTree = RqlParser.from( limitSortExpression );
+
+      assertThat( limitSortParseTree.getOptions().getOrder().fieldDirections() )
+            .containsExactly(
+                  new RqlFieldDirectionImpl( "name", RqlFieldDirection.Direction.ASCENDING ),
+                  new RqlFieldDirectionImpl( "description", RqlFieldDirection.Direction.DESCENDING )
+            );
+
+      assertThat( limitSortParseTree.getOptions().getCursor() ).contains( new RqlCursorImpl( "abc", 10 ) );
    }
 
    @Test

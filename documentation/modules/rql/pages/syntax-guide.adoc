@@ -8,7 +8,7 @@ Learn how to compose queries that are based on and conform to Bosch Semantic Sta
 
 == Attribute names
 
-An API that supports Bosch Semantic Stack RQL and can be queried by it, needs the attribute names (aka field names) of its entities (aka resources) to follow a certain syntax. 
+An API that supports Bosch Semantic Stack RQL and can be queried by it, needs the attribute names (aka field names) of its entities (aka resources) to follow a certain syntax.
 
 Attribute names that get used in `select`, `filter`, and `sort` statements are restricted to the following *characters*:
 
@@ -36,7 +36,7 @@ The following table details some attribute name examples.
 
 == Main operators
 
-With Bosch Semantic Stack RQL, a query can use up to three operators: 
+With Bosch Semantic Stack RQL, a query can use up to three operators:
 
 * `select`
 * `filter`
@@ -55,11 +55,12 @@ select:: Select the attributes `id` and `name`.
 filter:: Filter for `id` attribute values that are _greater than or equal to_ `4711`.
 
 option:: *Sort* the results _ascending_ by `name` and _descending_ by `description`. -- Note that the attributes used for sorting (e.g., `description`) do not have to appear in the select operator. +
-*Limit* the returned results to 5 results, starting at result no. 10. -- Note that the start of indices depends on a service's implementation as some databases or library's start counting at page 0 and some at page 1. 
+*Limit* the returned results to 5 results, starting at result no. 10. -- Note that the start of indices depends on a service's implementation as some databases or library's start counting at page 0 and some at page 1.
 
 == Select operator
 
-The `select` operator trims an API response down to only a given set of attributes. That means, the data of any further attributes of an entity will not be included in the API response.
+The `select` operator trims an API response down to only a given set of attributes.
+That means, the data of any further attributes of an entity will not be included in the API response.
 
 The general form of the `select` operator string looks as follows:
 
@@ -80,7 +81,8 @@ select=id,name
 
 == Filter operator
 
-The `filter` operator trims an API response down to match only a given set of filter criteria. That means, data not matched by the filter criteria will not be included in the API response.
+The `filter` operator trims an API response down to match only a given set of filter criteria.
+That means, data not matched by the filter criteria will not be included in the API response.
 
 The general form of the `filter` operator string looks as follows:
 
@@ -106,7 +108,8 @@ Example:
 filter=and(like(hobbies.description,"?iking*"),eq(hobbies.name,"ships"))
 ----
 
-A query containing the filter expression above would return results (e.g., entities that resemble persons) having a hobby with the name "ships" and where that hobby's description contains "?iking*". That means, results could be "biking", "viking", "vikings", "vikingships", etc.
+A query containing the filter expression above would return results (e.g., entities that resemble persons) having a hobby with the name "ships" and where that hobby's description contains "?iking*".
+That means, results could be "biking", "viking", "vikings", "vikingships", etc.
 
 The following sections detail the operators that come with Bosch Semantic Stack RQL.
 
@@ -126,13 +129,12 @@ For the provided <value>, these operators accept *all literals*, i.e., every com
 |===
 | Operator expression               | Description
 
-| `eq(<attribute>,<value>)`           
+| `eq(<attribute>,<value>)`
 | Filters for entities where the value of the specified attribute *equals* the provided value.
 
-| `ne(<attribute>,<value>)`           
+| `ne(<attribute>,<value>)`
 | Filters for entities where the value of the specified attribute is *not equal* to the provided value.
 |===
-
 
 ==== ge, le, gt, lt
 
@@ -144,16 +146,16 @@ For the provided <value>, these operators accept *no Boolean or `null`*.
 |===
 | Operator expression               | Description
 
-| ge(<attribute>,<value>)           
+| ge(<attribute>,<value>)
 | Filters for entities where the value of the specified attribute is *greater than or equal to* the provided value.
 
-| le(<attribute>,<value>)           
+| le(<attribute>,<value>)
 | Filters for entities where the value of the specified attribute is *less than or equal to* the provided value.
 
-| gt(<attribute>,<value>)           
+| gt(<attribute>,<value>)
 | Filters for entities where the value of the specified attribute is *greater than* the provided value.
 
-| lt(<attribute>,<value>)           
+| lt(<attribute>,<value>)
 | Filters for entities where the value of the specified attribute is *less than* the provided value.
 
 |===
@@ -161,14 +163,15 @@ For the provided <value>, these operators accept *no Boolean or `null`*.
 ==== in
 
 *Data types:* +
-For the provided <array-of-values>, this operator accepts *only _pure_ lists*, i.e., only floats, only strings, or only integers. It *does not support `null`* as a literal.
+For the provided <array-of-values>, this operator accepts *only _pure_ lists*, i.e., only floats, only strings, or only integers.
+It *does not support `null`* as a literal.
 
 .Comparison operators
 [options="header"]
 |===
 | Operator expression               | Description
 
-| in(<attribute>,<array-of-values>) 
+| in(<attribute>,<array-of-values>)
 | Filters for entities where the value of the specified attribute is present *in the provided array*.
 
 a| Example:
@@ -202,7 +205,7 @@ Additionally, they also support *wildcards*:
 | `likeIgnoreCase(<attribute>,<value>)`
 | Ditto. But here, the results' capitalization (upper case or lower case) is not required to match the capitalization used for the filter string of the provided value.
 
-a| Example: 
+a| Example:
 
 ----
 likeIgnoreCase(description,"*my device*")`
@@ -233,17 +236,17 @@ and(eq(twinCategory,"Printer"), eq(labels.name,"Floor1"))
 
 |===
 
-
 === Data types
 
-The values used to filter results can be of several data types, such as strings, times, numbers, Boolean, etc. While these data types are common data types, this section highlights relevant details for the use with Bosch Semantic Stack RQL.
+The values used to filter results can be of several data types, such as strings, times, numbers, Boolean, etc.
+While these data types are common data types, this section highlights relevant details for the use with Bosch Semantic Stack RQL.
 
 ==== Strings
 
-Can be any Unicode (except Unicode escapes `\u1234`). 
+Can be any Unicode (except Unicode escapes `\u1234`).
 The escaping rules of Bosch Semantic Stack RQL follow Java escaping rules closely.
 
-Escape character is the backslash `\`. 
+Escape character is the backslash `\`.
 
 The following table lists possible escape sequences.
 
@@ -265,7 +268,8 @@ The Bosch Semantic Stack RQL parser (and the corresponding model) supports time 
 Some less used features of _ISO 8601_ are not supported (and most likely will not be supported in the near future):
 
 * Reduced precision: giving a partial time such as `hh` or `hh:mm`
-* Fractional hours or minutes: _ISO 8601_ states that you can use fractions of the most precise time component (hour, minute, second). This is not supported by Bosch Semantic Stack RQL, which only supports a fixed precision including seconds.
+* Fractional hours or minutes: _ISO 8601_ states that you can use fractions of the most precise time component (hour, minute, second).
+This is not supported by Bosch Semantic Stack RQL, which only supports a fixed precision including seconds.
 
 Therefore, the following examples are valid _ISO 8601_ but *not* valid Bosch Semantic Stack RQL:
 
@@ -279,7 +283,7 @@ NOTE: Valid examples for Bosch Semantic Stack RQL are: +
 
 ==== Integer numbers, real numbers, `null`
 
-When using the Bosch Semantic Stack RQL parser, data types that come in with a query will be mapped to the corresponding Java data types. 
+When using the Bosch Semantic Stack RQL parser, data types that come in with a query will be mapped to the corresponding Java data types.
 
 The following table details how incoming RQL data types get parsed to Java data types.
 
@@ -294,12 +298,14 @@ The following table details how incoming RQL data types get parsed to Java data 
 
 == Option operator
 
-The `option` operator sorts and limits API responses. That means, you can prevent an arbitrary order of your retrieved results. With this user-defined sorting, clients are able and responsible for requesting data in the order that fits their needs. 
-
+The `option` operator sorts and limits API responses.
+That means, you can prevent an arbitrary order of your retrieved results.
+With this user-defined sorting, clients are able and responsible for requesting data in the order that fits their needs.
+`Limit` and `cursor` describe 2 pagination strategies and cannot be used together.
 The general form of the `option` operator string looks as follows:
 
 ----
-option=sort(),limit()
+option=sort(),limit(),cursor()
 ----
 
 As an example, the `option` string could look like this:
@@ -318,35 +324,68 @@ option=sort([+-]attributeN)
 
 The `sort` operator sorts the data based on the specified attributes:
 
-* It starts sorting with the first attribute, then proceeds to the next etc. 
+* It starts sorting with the first attribute, then proceeds to the next etc.
 * To separate the attribute names that you require for sorting, use a comma.
 * For each attribute, you can specify whether to sort the results in ascending or descending order, indicating sort order by the *+* or *-* prefix.
 ** For ascending sort order, use the *+* prefix.
-** For descending sort order, use the *-* prefix. 
+** For descending sort order, use the *-* prefix.
 
 Example:
+
 ----
 option=sort(-attribute1,+attribute2,[+-]attributeN)
 ----
+
 In the example above, results will first be sorted in descending order for `attribute1`, then will further be sorted in ascending order for `attribute2`, and then ascending or descending for any more attributes that might be added.
 
 === Pagination
 
-To control the pagination of the retrieved data, use the `limit` operator as part of the `option` operator.
+To control the pagination of the retrieved data, use the `limit` or `cursor` operator as part of the `option` operator.
+Only one of the two strategies can be used.
+Limit is often used as offset pagination, where cursor is cursor pagination or also known as key set pagination.
+
+=== Offset Pagination
 
 ----
 option=limit(start,count)
 ----
 
-The syntax is related to *offset pagination*. That means the `start` and `count` parts in the string above conceptually stand for the following numbers:
+The syntax is related to *offset pagination*.
+That means the `start` and `count` parts in the string above conceptually stand for the following numbers:
 
 * `start` specifies where to start fetching data, also known as _offset_
 * `count` indicates how many results to fetch per page
 
 Example:
+
 ----
 option=limit(10,5)
 ----
+
 In the example above, results will start at result no. 10 and 5 results will be included in the API response.
 
-Currently, only offset pagination is provided with Bosch Semantic Stack RQL. We may add cursor-based pagination in the future.
+Currently, only offset pagination is provided with Bosch Semantic Stack RQL.
+
+=== Cursor Pagination
+
+----
+option=cursor(start?,limit)
+----
+
+The syntax is related to *cursor pagination*.
+That means the `start` and `limits` parts in the string above conceptually stand for the following numbers:
+
+* `start` specifies where to start fetching data, also known as cursor.
+If cursor is empty you will start at the beginning.
+* `limit` indicates how many results maximal to fetch.
+When there are more result, you will receive a new cursor for the next request.
+
+Example:
+
+----
+option=limit("myCursor",10)
+----
+
+----
+option=limit(100)
+----

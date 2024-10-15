@@ -12,25 +12,33 @@
  */
 package com.boschsemanticstack.rql.model.v1;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 /**
- * contains parameters for paging support if not the whole result set is wanted.
+ * contains parameters for cursor paging support if not the whole result set is wanted.
  *
  * @see RqlQueryModel
  */
-public interface RqlOptions extends RqlModelNode {
+public interface RqlCursor extends RqlModelNode {
 
-   RqlOrder getOrder();
+   Optional<String> cursor();
 
-   Optional<RqlSlice> getSlice();
-
-   Optional<RqlCursor> getCursor();
-
-   boolean isEmpty();
+   long limit();
 
    @Override
    default <T> T accept( final RqlModelVisitor<? extends T> visitor ) {
-      return visitor.visitOptions( this );
+      return visitor.visitCursor( this );
+   }
+
+   @Override
+   default List<? extends RqlModelNode> getChildren() {
+      return Collections.emptyList();
+   }
+
+   @Override
+   default int getChildCount() {
+      return 0;
    }
 }
