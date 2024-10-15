@@ -74,11 +74,8 @@ class RqlRepresentationTest {
       assertThat( query.getFilter().get().getChildren() ).extracting( RqlFilter::getOperator,
                   RqlFilter::getAttribute, RqlFilter::getValue )
             .containsExactly(
-                  tuple( RqlFilter.Operator.EQ, "att2", "theSame" ),
-                  tuple( RqlFilter.Operator.LT, "att1", 5 ),
-                  tuple( RqlFilter.Operator.GT, "att1", 42 )
-
-            );
+                  tuple( RqlFilter.Operator.EQ, "att2", "theSame" ), tuple( RqlFilter.Operator.LT, "att1", 5 ),
+                  tuple( RqlFilter.Operator.GT, "att1", 42 ) );
    }
 
    @ParameterizedTest
@@ -103,9 +100,7 @@ class RqlRepresentationTest {
             .containsExactly(
                   tuple( RqlFilter.Operator.EQ, "att2", "theSame" ),
                   tuple( RqlFilter.Operator.LT, "att1", 5 ),
-                  tuple( RqlFilter.Operator.GT, "att1", 42 )
-
-            );
+                  tuple( RqlFilter.Operator.GT, "att1", 42 ) );
    }
 
    @ParameterizedTest
@@ -131,9 +126,7 @@ class RqlRepresentationTest {
             .containsExactly(
                   tuple( RqlFilter.Operator.EQ, "att2", "theSame" ),
                   tuple( RqlFilter.Operator.LT, "att1", 5 ),
-                  tuple( RqlFilter.Operator.GT, "att1", 42 )
-
-            );
+                  tuple( RqlFilter.Operator.GT, "att1", 42 ) );
    }
 
    @ParameterizedTest

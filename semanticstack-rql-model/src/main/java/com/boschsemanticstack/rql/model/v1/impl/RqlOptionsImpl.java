@@ -19,7 +19,6 @@ import java.util.Optional;
 
 import com.boschsemanticstack.rql.model.v1.RqlCursor;
 import com.boschsemanticstack.rql.model.v1.RqlModelNode;
-import com.boschsemanticstack.rql.model.v1.RqlModelVisitor;
 import com.boschsemanticstack.rql.model.v1.RqlOptions;
 import com.boschsemanticstack.rql.model.v1.RqlOrder;
 import com.boschsemanticstack.rql.model.v1.RqlSlice;
@@ -39,7 +38,7 @@ public class RqlOptionsImpl implements RqlOptions {
       this.cursor = cursor;
       this.order = null == order ? new RqlOrderImpl( null ) : order;
    }
- 
+
    @NotNull
    @Override
    public RqlOrder getOrder() {
@@ -59,11 +58,6 @@ public class RqlOptionsImpl implements RqlOptions {
    @Override
    public boolean isEmpty() {
       return null == slice && order.isEmpty();
-   }
-
-   @Override
-   public <T> T accept( final RqlModelVisitor<? extends T> visitor ) {
-      return visitor.visitOptions( this );
    }
 
    @Override

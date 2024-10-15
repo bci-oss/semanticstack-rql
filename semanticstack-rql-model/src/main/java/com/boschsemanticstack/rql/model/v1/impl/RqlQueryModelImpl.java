@@ -17,7 +17,6 @@ import java.util.Collections;
 import java.util.Optional;
 
 import com.boschsemanticstack.rql.model.v1.RqlFilter;
-import com.boschsemanticstack.rql.model.v1.RqlModelVisitor;
 import com.boschsemanticstack.rql.model.v1.RqlOptions;
 import com.boschsemanticstack.rql.model.v1.RqlQueryModel;
 import com.boschsemanticstack.rql.model.v1.RqlSelect;
@@ -46,10 +45,5 @@ public class RqlQueryModelImpl implements RqlQueryModel {
    @Override
    public RqlOptions getOptions() {
       return options;
-   }
-
-   @Override
-   public <T> T accept( final RqlModelVisitor<? extends T> visitor ) {
-      return visitor.visitModel( this );
    }
 }

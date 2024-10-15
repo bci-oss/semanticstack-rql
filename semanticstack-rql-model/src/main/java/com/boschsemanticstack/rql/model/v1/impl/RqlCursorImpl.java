@@ -17,8 +17,13 @@ import java.util.Objects;
 import java.util.Optional;
 
 import com.boschsemanticstack.rql.model.v1.RqlCursor;
-import com.boschsemanticstack.rql.model.v1.RqlModelVisitor;
 
+/**
+ * RqlCursorImpl present the cursor pagination
+ *
+ * @param cursor the optional cursor when empty then start from begin
+ * @param limit the limit of the result
+ */
 public record RqlCursorImpl( Optional<String> cursor, long limit ) implements RqlCursor {
 
    public RqlCursorImpl( final String cursor, final long limit ) {
@@ -30,16 +35,11 @@ public record RqlCursorImpl( Optional<String> cursor, long limit ) implements Rq
    }
 
    @Override
-   public <T> T accept( final RqlModelVisitor<? extends T> visitor ) {
-      return visitor.visitCursor( this );
-   }
-
-   @Override
    public String toString() {
-      return "RqlCursorImpl{" +
-            "cursor=" + cursor +
-            ", limit=" + limit +
-            '}';
+      return "RqlCursorImpl{"
+            + "cursor=" + cursor
+            + ", limit=" + limit
+            + '}';
    }
 
    @Override
