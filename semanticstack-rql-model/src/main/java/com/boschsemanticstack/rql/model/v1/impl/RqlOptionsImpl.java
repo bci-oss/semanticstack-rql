@@ -57,7 +57,7 @@ public class RqlOptionsImpl implements RqlOptions {
 
    @Override
    public boolean isEmpty() {
-      return null == slice && order.isEmpty();
+      return slice == null && cursor == null && order.isEmpty();
    }
 
    @Override

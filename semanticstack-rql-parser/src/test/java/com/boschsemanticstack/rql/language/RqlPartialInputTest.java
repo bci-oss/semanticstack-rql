@@ -18,10 +18,11 @@ import static org.assertj.core.api.Assertions.catchThrowable;
 
 import com.boschsemanticstack.rql.exceptions.ParseException;
 import com.boschsemanticstack.rql.model.v1.RqlQueryModel;
+import com.boschsemanticstack.rql.model.v1.impl.RqlCursorImpl;
 import com.boschsemanticstack.rql.parser.v1.RqlParser;
 
 import org.junit.jupiter.api.Test;
- 
+
 class RqlPartialInputTest {
 
    @Test
@@ -58,5 +59,18 @@ class RqlPartialInputTest {
             .describedAs( "Parsing select only string should lead to empty options." )
             .isTrue();
       assertThat( model.getSelect().attributes() ).containsExactly( "id", "name" );
+   }
+
+   @Test
+   void optionsOnlyShouldBeParseable() {
+      final String expression = "option=cursor(500)";
+
+      final RqlQueryModel model = RqlParser.from( expression );
+
+      assertThat( model.getSelect().isEmpty() ).isTrue();
+      assertThat( model.getFilter() ).isEmpty();
+
+      assertThat( model.getOptions().isEmpty() ).isFalse();
+      assertThat( model.getOptions().getCursor() ).contains( new RqlCursorImpl( 500 ) );
    }
 }
