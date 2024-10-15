@@ -242,7 +242,7 @@ class RqlParseTreeVisitor extends InternalRqlBaseVisitor<Object> {
    }
 
    @Override
-   public Object visitCursorExpressionWitStart( final InternalRqlParser.CursorExpressionWitStartContext ctx ) {
+   public Object visitCursorExpressionWithStart( final InternalRqlParser.CursorExpressionWithStartContext ctx ) {
       return new RqlCursorImpl( unescapeStringLiteral( ctx.StringLiteral() ),
             Long.parseLong( ctx.IntLiteral().getText() ) );
    }
