@@ -22,6 +22,7 @@ import java.time.OffsetDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.boschsemanticstack.rql.exceptions.ParseException;
@@ -238,12 +239,10 @@ class RqlParseTreeVisitor extends InternalRqlBaseVisitor<Object> {
 
    @Override
    public RqlCursor visitCursorExpression( final InternalRqlParser.CursorExpressionContext ctx ) {
-      return new RqlCursorImpl( Long.parseLong( ctx.IntLiteral().getText() ) );
-   }
-
-   @Override
-   public Object visitCursorExpressionWithStart( final InternalRqlParser.CursorExpressionWithStartContext ctx ) {
-      return new RqlCursorImpl( unescapeStringLiteral( ctx.StringLiteral() ),
+      if ( ctx.StringLiteral() == null ) {
+         return new RqlCursorImpl( Long.parseLong( ctx.IntLiteral().getText() ) );
+      }
+      return new RqlCursorImpl( Optional.ofNullable( unescapeStringLiteral( ctx.StringLiteral() ) ),
             Long.parseLong( ctx.IntLiteral().getText() ) );
    }
 
@@ -377,7 +376,7 @@ class RqlParseTreeVisitor extends InternalRqlBaseVisitor<Object> {
 
    private OffsetDateTime parseOffsetDateTime( final InternalRqlParser.LinearilyOrderableLiteralContext ctx ) {
       try {
-         return OffsetDateTime.parse( ctx.getText().replace( ",", "." ) );// workaround to support ',' separated fractional seconds
+         return OffsetDateTime.parse( ctx.getText().replace( ",", "." ) );
       } catch ( final DateTimeParseException e ) {
          throw new ParseException( e.getMessage(),
                new SourceLocation( ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine() + 1 ), e );

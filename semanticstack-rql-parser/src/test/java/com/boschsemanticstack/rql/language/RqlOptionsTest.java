@@ -170,4 +170,13 @@ class RqlOptionsTest {
 
       assertThat( limitSortParseTree.getOptions().getSlice() ).contains( new RqlSliceImpl( 5, 10 ) );
    }
+
+   @Test
+   void cursorNullValueShouldParseable() {
+      final String limitSortExpression = "select=id,name&option=cursor(\"null\",10)";
+
+      final RqlQueryModel limitSortParseTree = RqlParser.from( limitSortExpression );
+
+      assertThat( limitSortParseTree.getOptions().getCursor() ).contains( new RqlCursorImpl( "null", 10 ) );
+   }
 }
