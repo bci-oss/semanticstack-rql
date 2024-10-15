@@ -137,19 +137,33 @@ class RqlRepresentationTest {
                + "-att2),limit(100,0)",
          "filter=and(eq(att2,\"theSame\"),lt(att1,5),gt(att1,42))&select=att1,att2,att3.subAtt4&option=sort(+att1,-att2),limit(100,0),"
                + "cursor(\"a\",500)",
-         "filter=and(eq(att2,\"theSame\"),lt(att1,5),gt(att1,42))&select=att1,att2,att3.subAtt4&option=limit(100,0),cursor(\"a\",500),"
-               + "sort(+att1,-att2)",
          "filter=and(eq(att2,\"theSame\"),lt(att1,5),gt(att1,42))&select=att1,att2,att3.subAtt4&option=sort(+att1,-att2),cursor(\"a\","
                + "500),limit(100,0)",
-         "filter=and(eq(att2,\"theSame\"),lt(att1,5),gt(att1,42))&select=att1,att2,att3.subAtt4&option=limit(100,0),cursor(500),sort"
-               + "(+att1,-att2)",
          "filter=and(eq(att2,\"theSame\"),lt(att1,5),gt(att1,42))&select=att1,att2,att3.subAtt4&option=sort(+att1,-att2),limit(100,0),"
                + "cursor(500)"
    } )
-   void queryWithRandomizedOrderAndCursorAndLimitShouldNotBeParsable( final String expression ) {
-
+   void queryWithRandomizedOrderThrowExtraneousInputExcpetion( final String expression ) {
       assertThatThrownBy( () -> RqlParser.from( expression ) ).isInstanceOf( ParseException.class )
-            .hasMessageContaining( "Cursor and Slice cannot be used together" );
+            .hasMessageContaining( "extraneous input" );
+   }
+
+   @ParameterizedTest
+   @ValueSource( strings = {
+         "filter=and(eq(att2,\"theSame\"),lt(att1,5),gt(att1,42))&select=att1,att2,att3.subAtt4&option=limit(100,0),cursor(\"a\",500),"
+               + "sort(+att1,-att2)",
+         "filter=and(eq(att2,\"theSame\"),lt(att1,5),gt(att1,42))&select=att1,att2,att3.subAtt4&option=cursor(0),limit(10,100),"
+               + "sort(+att1,-att2)",
+         "filter=and(eq(att2,\"theSame\"),lt(att1,5),gt(att1,42))&select=att1,att2,att3.subAtt4&option=cursor(\"a\",500),cursor(\"a\","
+               + "500),limit(10,100),"
+               + "sort(+att1,-att2)",
+         "filter=and(eq(att2,\"theSame\"),lt(att1,5),gt(att1,42))&select=att1,att2,att3.subAtt4&option=cursor(\"a\",500),limit(10,100),"
+               + "sort(+att1,-att2)",
+         "filter=and(eq(att2,\"theSame\"),lt(att1,5),gt(att1,42))&select=att1,att2,att3.subAtt4&option=limit(100,0),cursor(500),sort"
+               + "(+att1,-att2)",
+   } )
+   void queryWithRandomizedOrderAndCursorAndLimitThrowExceptionException( final String expression ) {
+      assertThatThrownBy( () -> RqlParser.from( expression ) ).isInstanceOf( ParseException.class )
+            .hasMessageContaining( "mismatched input" ).hasMessageContaining( "expecting 'sort'" );
    }
 
    @Test

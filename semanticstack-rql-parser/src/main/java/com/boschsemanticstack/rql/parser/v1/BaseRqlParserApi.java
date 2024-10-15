@@ -45,7 +45,7 @@ class BaseRqlParserApi {
       parser.removeErrorListeners(); // default error listener prints to System.out
       parser.addErrorListener( errorListener );
       result.setParser( parser );
- 
+
       try {
          result.setParseTree( startingRule.apply( parser ) );
       } catch ( final RecognitionException e ) {
@@ -57,7 +57,7 @@ class BaseRqlParserApi {
    private static class CollectingErrorListener extends BaseErrorListener {
       private final ParseResult result;
 
-      public CollectingErrorListener( final ParseResult result ) {
+      CollectingErrorListener( final ParseResult result ) {
          this.result = result;
       }
 
