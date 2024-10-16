@@ -1,8 +1,5 @@
 changelog:
   categories:
-    - title: ⭐ New Features
-      labels:
-        - "*"
     - title: ⚠️ Breaking Changes
       labels:
         - major-update
@@ -16,3 +13,6 @@ changelog:
     - title: 📔 Documentation
       labels:
         - documentation
+    - title: ⭐ New Features
+      labels:
+        - "*"
