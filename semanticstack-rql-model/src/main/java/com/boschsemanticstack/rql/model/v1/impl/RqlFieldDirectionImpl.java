@@ -21,12 +21,7 @@ public record RqlFieldDirectionImpl( String attribute, Direction direction ) imp
          throw new IllegalArgumentException( "Neither attribute nor direction may be null!" );
       }
    }
- 
-   /*
-    * (non-Javadoc)
-    *
-    * @see java.lang.Object#toString()
-    */
+
    @Override
    public String toString() {
       return attribute + ( direction == Direction.ASCENDING ? " ASC" : " DESC" );

@@ -26,12 +26,7 @@ public record RqlSelectImpl( List<String> attributes ) implements RqlSelect {
             ? Collections.emptyList()
             : List.copyOf( attributes );
    }
- 
-   /*
-    * (non-Javadoc)
-    *
-    * @see com.bosch.inl.core.common.rql.RqlSelect#contains(java.lang.String)
-    */
+
    @Override
    public boolean contains( final String attribute ) {
       return attributes.stream().anyMatch( attribute::startsWith );
@@ -41,12 +36,7 @@ public record RqlSelectImpl( List<String> attributes ) implements RqlSelect {
    public boolean hasAttributeStartingWith( final String attribute ) {
       return attributes.stream().anyMatch( a -> a.startsWith( attribute ) );
    }
-
-   /*
-    * (non-Javadoc)
-    *
-    * @see com.bosch.inl.core.common.rql.RqlSelect#isEmpty()
-    */
+   
    @Override
    public boolean isEmpty() {
       return attributes.isEmpty();

@@ -15,7 +15,7 @@ package com.boschsemanticstack.rql.model.v1;
 import java.util.Optional;
 
 /**
- * contains parameters for paging support if not the whole resultset is wanted.
+ * contains parameters for paging support if not the whole result set is wanted.
  *
  * @see RqlQueryModel
  */
@@ -24,6 +24,8 @@ public interface RqlOptions extends RqlModelNode {
    RqlOrder getOrder();
 
    Optional<RqlSlice> getSlice();
+
+   Optional<RqlCursor> getCursor();
 
    boolean isEmpty();
 

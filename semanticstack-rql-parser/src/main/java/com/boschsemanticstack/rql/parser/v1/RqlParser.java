@@ -134,7 +134,7 @@ public class RqlParser {
          final RqlQueryModel result = new RqlQueryModelImpl(
                originalModel.getSelect(),
                originalModel.getFilter().orElse( null ),
-               new RqlOptionsImpl( nextSlice, originalModel.getOptions().getOrder() )
+               new RqlOptionsImpl( nextSlice, originalModel.getOptions().getOrder(), originalModel.getOptions().getCursor().orElse( null ) )
          );
          computeNextSlice();
          return result;

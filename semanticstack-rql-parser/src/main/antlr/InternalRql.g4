@@ -46,7 +46,7 @@ filterList // entrypoint for filter if already partitioned
     ;
 
 optionList // entrypoint for options if already partitioned
-    : 'option' '=' option (',' option)* // uniqueness is checked in parse-tree visitor code
+    : 'option' '=' optionExpression
     ;
 // end toplevel expressions
 
@@ -85,19 +85,23 @@ literalList
     ;
 
 stringLiteralList
-    : StringLiteral (',' StringLiteral)*  //TODO: should we allow null here? Possible problem with oracle
+    : StringLiteral (',' StringLiteral)*
     ;
 
 floatLiteralList
-    : FloatLiteral (',' FloatLiteral)*  //TODO: should we allow null here? Possible problem with oracle
+    : FloatLiteral (',' FloatLiteral)*
     ;
 
 intLiteralList
-    : IntLiteral (',' IntLiteral)*  //TODO: should we allow null here? Possible problem with oracle
+    : IntLiteral (',' IntLiteral)*
     ;
 
-option
-    : (sortExpression | limitExpression)*
+optionExpression
+    : sortExpression (',' limitOrCursorExpression)? | limitOrCursorExpression (',' sortExpression)? | invalidExpression?
+    ;
+
+limitOrCursorExpression
+    : limitExpression | cursorExpression
     ;
 
 sortExpression
@@ -106,6 +110,22 @@ sortExpression
 
 limitExpression
     : 'limit' '(' IntLiteral ',' IntLiteral ')'
+    ;
+
+cursorExpression
+    : 'cursor' '(' (StringLiteral ',')? IntLiteral ')'
+    ;
+
+// Error rule to catch invalid combinations
+invalidExpression
+    : (limitExpression ',' cursorExpression)
+    | (cursorExpression  ',' limitExpression)
+    | (sortExpression ',' cursorExpression  ',' limitExpression)
+    | (sortExpression ','  limitExpression ',' cursorExpression)
+    | (limitExpression ',' cursorExpression ',' sortExpression)
+    | (cursorExpression ',' limitExpression ',' sortExpression)
+    | (cursorExpression ',' sortExpression ',' limitExpression)
+    | (limitExpression ',' sortExpression ',' cursorExpression)
     ;
 
 literal
@@ -201,3 +221,4 @@ fragment CharEscapeSeq : '\\' ('b' | 't' | 'n' | 'f' | 'r' | '"' | '\\');
 WS
    : [ \t\n\r] + -> skip
    ;
+

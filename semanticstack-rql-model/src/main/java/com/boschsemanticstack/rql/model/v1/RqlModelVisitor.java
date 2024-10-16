@@ -25,6 +25,8 @@ public abstract class RqlModelVisitor<T> {
 
    public abstract T visitSlice( RqlSlice model );
 
+   public abstract T visitCursor( RqlCursor model );
+
    public abstract T visitOrder( RqlOrder model );
 
    public abstract T visitLogicOperation( RqlFilter filter );

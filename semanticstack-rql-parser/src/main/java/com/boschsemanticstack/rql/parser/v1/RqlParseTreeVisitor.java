@@ -22,10 +22,12 @@ import java.time.OffsetDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.boschsemanticstack.rql.exceptions.ParseException;
 import com.boschsemanticstack.rql.exceptions.SourceLocation;
+import com.boschsemanticstack.rql.model.v1.RqlCursor;
 import com.boschsemanticstack.rql.model.v1.RqlFieldDirection;
 import com.boschsemanticstack.rql.model.v1.RqlFilter;
 import com.boschsemanticstack.rql.model.v1.RqlModelNode;
@@ -34,6 +36,7 @@ import com.boschsemanticstack.rql.model.v1.RqlOrder;
 import com.boschsemanticstack.rql.model.v1.RqlQueryModel;
 import com.boschsemanticstack.rql.model.v1.RqlSelect;
 import com.boschsemanticstack.rql.model.v1.RqlSlice;
+import com.boschsemanticstack.rql.model.v1.impl.RqlCursorImpl;
 import com.boschsemanticstack.rql.model.v1.impl.RqlFieldDirectionImpl;
 import com.boschsemanticstack.rql.model.v1.impl.RqlFilterImpl;
 import com.boschsemanticstack.rql.model.v1.impl.RqlOptionsImpl;
@@ -67,21 +70,19 @@ class RqlParseTreeVisitor extends InternalRqlBaseVisitor<Object> {
    private static class ModelCombiner {
       RqlSelect select;
       RqlFilter filter;
-      RqlSlice slice;
-      RqlOrder order;
+      RqlOptions options;
 
       private void add( final RqlModelNode node ) {
-         if ( node instanceof RqlSelect rqlSelect ) {
+         if ( node instanceof final RqlSelect rqlSelect ) {
             trySetSelect( rqlSelect );
             return;
          }
-         if ( node instanceof RqlFilter rqlFilter ) {
+         if ( node instanceof final RqlFilter rqlFilter ) {
             trySetFilter( rqlFilter );
             return;
          }
-         if ( node instanceof RqlOptions rqlOptions ) {
-            trySetSlice( rqlOptions );
-            trySetOrder( rqlOptions );
+         if ( node instanceof final RqlOptions rqlOptions ) {
+            trySetOptions( rqlOptions );
             return;
          }
          if ( node != null ) {
@@ -89,26 +90,12 @@ class RqlParseTreeVisitor extends InternalRqlBaseVisitor<Object> {
          }
       }
 
-      private void trySetOrder( final RqlOptions node ) {
-         if ( order == null ) {
-            order = node.getOrder().isEmpty()
-                  ? null
-                  : node.getOrder();
+      private void trySetOptions( final RqlOptions node ) {
+         if ( options == null ) {
+            options = node;
             return;
          }
-         if ( !node.getOrder().isEmpty() ) {
-            throw new ParseException( "No more than one order statement allowed" );
-         }
-      }
-
-      private void trySetSlice( final RqlOptions node ) {
-         if ( slice == null ) {
-            slice = node.getSlice().orElse( null );
-            return;
-         }
-         if ( node.getSlice().isPresent() ) {
-            throw new ParseException( "No more than one limit statement allowed" );
-         }
+         throw new ParseException( "No more than one options statement allowed" );
       }
 
       private void trySetSelect( final RqlSelect node ) {
@@ -128,7 +115,7 @@ class RqlParseTreeVisitor extends InternalRqlBaseVisitor<Object> {
       }
 
       public RqlQueryModel build() {
-         return new RqlQueryModelImpl( select, filter, new RqlOptionsImpl( slice, order ) );
+         return new RqlQueryModelImpl( select, filter, options );
       }
    }
 
@@ -163,48 +150,22 @@ class RqlParseTreeVisitor extends InternalRqlBaseVisitor<Object> {
 
    @Override
    public RqlOptions visitOptionList( final InternalRqlParser.OptionListContext ctx ) {
-      final List<Object> options = null == ctx || null == ctx.option()
-            ? Collections.emptyList()
-            : ctx.option().stream()
-            .map( this::visitOption )
-            .toList();
 
-      checkOnlyOneLimit( options );
-      checkOnlyOneOrder( options );
-
-      final RqlSlice slice = options.stream()
-            .filter( RqlSlice.class::isInstance )
-            .map( RqlSlice.class::cast )
-            .findAny()
-            .orElse( null );
-
-      final RqlOrder order = options.stream()
-            .filter( RqlOrder.class::isInstance )
-            .map( RqlOrder.class::cast )
-            .findAny()
-            .orElse( new RqlOrderImpl( null ) );
-
-      return new RqlOptionsImpl( slice, order );
-   }
-
-   private void checkOnlyOneLimit( final List<Object> options ) {
-      if ( options.stream()
-            .filter( RqlSlice.class::isInstance )
-            .limit( 2 )
-            .count()
-            > 1 ) {
-         throw new ParseException( "No more than one limit statement allowed" );
+      final InternalRqlParser.OptionExpressionContext optionExpression = ctx.optionExpression();
+      if ( optionExpression == null ) {
+         return RqlOptionsImpl.emptyOptions();
       }
-   }
 
-   private void checkOnlyOneOrder( final List<Object> options ) {
-      if ( options.stream()
-            .filter( RqlOrder.class::isInstance )
-            .limit( 2 )
-            .count()
-            > 1 ) {
-         throw new ParseException( "No more than one sort statement allowed" );
+      visitInvalidExpression( optionExpression.invalidExpression() );
+
+      final RqlOrder order = visitSortExpression( optionExpression.sortExpression() );
+      if ( optionExpression.limitOrCursorExpression() == null ) {
+         return new RqlOptionsImpl( null, order, null );
       }
+      final RqlSlice slice = visitLimitExpression( optionExpression.limitOrCursorExpression().limitExpression() );
+      final RqlCursor cursor = visitCursorExpression( optionExpression.limitOrCursorExpression().cursorExpression() );
+
+      return new RqlOptionsImpl( slice, order, cursor );
    }
 
    @Override
@@ -213,7 +174,15 @@ class RqlParseTreeVisitor extends InternalRqlBaseVisitor<Object> {
             ? new RqlOrderImpl( null )
             : new RqlOrderImpl( ctx.sortFieldIdentifier().stream()
             .map( this::visitSortFieldIdentifier )
-            .collect( Collectors.toList() ) );
+            .toList() );
+   }
+
+   @Override
+   public Object visitInvalidExpression( final InternalRqlParser.InvalidExpressionContext ctx ) {
+      if ( ctx == null ) {
+         return null;
+      }
+      throw new ParseException( "Cursor and Limit cannot be used together" );
    }
 
    @Override
@@ -226,7 +195,22 @@ class RqlParseTreeVisitor extends InternalRqlBaseVisitor<Object> {
 
    @Override
    public RqlSlice visitLimitExpression( final InternalRqlParser.LimitExpressionContext ctx ) {
+      if ( ctx == null ) {
+         return null;
+      }
       return new RqlSliceImpl( Long.parseLong( ctx.IntLiteral( 0 ).getText() ), Long.parseLong( ctx.IntLiteral( 1 ).getText() ) );
+   }
+
+   @Override
+   public RqlCursor visitCursorExpression( final InternalRqlParser.CursorExpressionContext ctx ) {
+      if ( ctx == null ) {
+         return null;
+      }
+      if ( ctx.StringLiteral() == null ) {
+         return new RqlCursorImpl( Long.parseLong( ctx.IntLiteral().getText() ) );
+      }
+      return new RqlCursorImpl( Optional.ofNullable( unescapeStringLiteral( ctx.StringLiteral() ) ),
+            Long.parseLong( ctx.IntLiteral().getText() ) );
    }
 
    @Override
@@ -238,7 +222,7 @@ class RqlParseTreeVisitor extends InternalRqlBaseVisitor<Object> {
    public List<RqlFilter> visitFilterList( final InternalRqlParser.FilterListContext ctx ) {
       return ctx.filterExpression().stream()
             .map( this::visitFilterExpression )
-            .collect( Collectors.toList() );
+            .toList();
    }
 
    @Override
@@ -359,7 +343,7 @@ class RqlParseTreeVisitor extends InternalRqlBaseVisitor<Object> {
 
    private OffsetDateTime parseOffsetDateTime( final InternalRqlParser.LinearilyOrderableLiteralContext ctx ) {
       try {
-         return OffsetDateTime.parse( ctx.getText().replace( ",", "." ) );// workaround to support ',' separated fractional seconds
+         return OffsetDateTime.parse( ctx.getText().replace( ",", "." ) );
       } catch ( final DateTimeParseException e ) {
          throw new ParseException( e.getMessage(),
                new SourceLocation( ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine() + 1 ), e );
@@ -427,6 +411,6 @@ class RqlParseTreeVisitor extends InternalRqlBaseVisitor<Object> {
    }
 
    private String unescapeFieldIdentifier( final TerminalNode fieldIdentifier ) {
-      return fieldIdentifier.getSymbol().getText(); //TODO: really unescape if we want to allow special characters in fieldnames
+      return fieldIdentifier.getSymbol().getText();
    }
 }

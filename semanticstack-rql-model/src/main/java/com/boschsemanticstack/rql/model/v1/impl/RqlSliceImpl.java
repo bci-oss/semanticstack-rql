@@ -13,42 +13,30 @@
 
 package com.boschsemanticstack.rql.model.v1.impl;
 
-import com.boschsemanticstack.rql.model.v1.RqlModelVisitor;
+import java.util.Objects;
+
 import com.boschsemanticstack.rql.model.v1.RqlSlice;
 
 public record RqlSliceImpl( long offset, long limit ) implements RqlSlice {
 
    @Override
-   public <T> T accept( final RqlModelVisitor<? extends T> visitor ) {
-      return visitor.visitSlice( this );
-   }
-
-   @Override
    public String toString() {
       return "Offset=" + offset + ", limit=" + limit;
    }
- 
+
    @Override
    public boolean equals( final Object o ) {
       if ( this == o ) {
          return true;
       }
-      if ( o == null || getClass() != o.getClass() ) {
+      if ( !( o instanceof final RqlSliceImpl rqlSlice ) ) {
          return false;
       }
-
-      final RqlSliceImpl slice = (RqlSliceImpl) o;
-
-      if ( offset() != slice.offset() ) {
-         return false;
-      }
-      return limit() == slice.limit();
+      return limit == rqlSlice.limit && offset == rqlSlice.offset;
    }
 
    @Override
    public int hashCode() {
-      int result = (int) ( offset() ^ ( offset() >>> 32 ) );
-      result = 31 * result + (int) ( limit() ^ ( limit() >>> 32 ) );
-      return result;
+      return Objects.hash( offset, limit );
    }
 }

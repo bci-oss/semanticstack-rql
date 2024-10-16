@@ -24,7 +24,10 @@ import com.boschsemanticstack.rql.model.v1.RqlQueryModel;
 import com.boschsemanticstack.rql.model.v1.impl.RqlFieldDirectionImpl;
 import com.boschsemanticstack.rql.model.v1.impl.RqlSliceImpl;
 import com.boschsemanticstack.rql.parser.v1.RqlParser;
+
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 class RqlRepresentationTest {
 
@@ -40,12 +43,22 @@ class RqlRepresentationTest {
    }
 
    @Test
-   void queryWithRandomizedOrderShouldBeParsable() {
+   void queryWithRandomizedDuplicateOptionShouldNotBeParsable() {
       final String expression = " option=sort(+att1,-att2)"
             + "&filter=and(eq(att2,\"theSame\"),lt(att1,5),gt(att1,42))"
             + "&select=att1,att2,att3.subAtt4"
             + "&option=limit(5,500)";
 
+      assertThatThrownBy( () -> RqlParser.from( expression ) ).isInstanceOf( ParseException.class )
+            .hasMessageContaining( "No more than one options statement allowed" );
+   }
+
+   @ParameterizedTest
+   @ValueSource( strings = {
+         "filter=and(eq(att2,\"theSame\"),lt(att1,5),gt(att1,42))&select=att1,att2,att3.subAtt4&option=sort(+att1,-att2),limit(5,500)",
+         "filter=and(eq(att2,\"theSame\"),lt(att1,5),gt(att1,42))&select=att1,att2,att3.subAtt4&option=limit(5,500),sort(+att1,-att2)"
+   } )
+   void queryWithRandomizedOrderShouldBeParsable( final String expression ) {
       final RqlQueryModel query = RqlParser.from( expression );
 
       assertThat( query.getOptions().getOrder().fieldDirections() )
@@ -61,11 +74,99 @@ class RqlRepresentationTest {
       assertThat( query.getFilter().get().getChildren() ).extracting( RqlFilter::getOperator,
                   RqlFilter::getAttribute, RqlFilter::getValue )
             .containsExactly(
+                  tuple( RqlFilter.Operator.EQ, "att2", "theSame" ), tuple( RqlFilter.Operator.LT, "att1", 5 ),
+                  tuple( RqlFilter.Operator.GT, "att1", 42 ) );
+   }
+
+   @ParameterizedTest
+   @ValueSource( strings = {
+         "filter=and(eq(att2,\"theSame\"),lt(att1,5),gt(att1,42))&select=att1,att2,att3.subAtt4&option=sort(+att1,-att2),cursor(500)",
+         "filter=and(eq(att2,\"theSame\"),lt(att1,5),gt(att1,42))&select=att1,att2,att3.subAtt4&option=cursor(500),sort(+att1,-att2)"
+   } )
+   void queryWithRandomizedOrderAndCursorShouldBeParsable( final String expression ) {
+      final RqlQueryModel query = RqlParser.from( expression );
+
+      assertThat( query.getOptions().getOrder().fieldDirections() )
+            .containsExactly(
+                  new RqlFieldDirectionImpl( "att1", RqlFieldDirection.Direction.ASCENDING ),
+                  new RqlFieldDirectionImpl( "att2", RqlFieldDirection.Direction.DESCENDING )
+            );
+      assertThat( query.getOptions().getCursor().get().limit() ).isEqualTo( 500 );
+      assertThat( query.getSelect().attributes() )
+            .containsExactly( "att1", "att2", "att3.subAtt4" );
+
+      assertThat( query.getFilter().get().getChildren() ).extracting( RqlFilter::getOperator,
+                  RqlFilter::getAttribute, RqlFilter::getValue )
+            .containsExactly(
                   tuple( RqlFilter.Operator.EQ, "att2", "theSame" ),
                   tuple( RqlFilter.Operator.LT, "att1", 5 ),
-                  tuple( RqlFilter.Operator.GT, "att1", 42 )
+                  tuple( RqlFilter.Operator.GT, "att1", 42 ) );
+   }
 
+   @ParameterizedTest
+   @ValueSource( strings = {
+         "filter=and(eq(att2,\"theSame\"),lt(att1,5),gt(att1,42))&select=att1,att2,att3.subAtt4&option=sort(+att1,-att2),cursor(\"a\",500)",
+         "filter=and(eq(att2,\"theSame\"),lt(att1,5),gt(att1,42))&select=att1,att2,att3.subAtt4&option=cursor(\"a\",500),sort(+att1,-att2)"
+   } )
+   void queryWithRandomizedOrderAndCursorStartShouldBeParsable( final String expression ) {
+      final RqlQueryModel query = RqlParser.from( expression );
+
+      assertThat( query.getOptions().getOrder().fieldDirections() )
+            .containsExactly(
+                  new RqlFieldDirectionImpl( "att1", RqlFieldDirection.Direction.ASCENDING ),
+                  new RqlFieldDirectionImpl( "att2", RqlFieldDirection.Direction.DESCENDING )
             );
+      assertThat( query.getOptions().getCursor().get().limit() ).isEqualTo( 500 );
+      assertThat( query.getOptions().getCursor().get().cursor() ).contains( "a" );
+      assertThat( query.getSelect().attributes() )
+            .containsExactly( "att1", "att2", "att3.subAtt4" );
+
+      assertThat( query.getFilter().get().getChildren() ).extracting( RqlFilter::getOperator,
+                  RqlFilter::getAttribute, RqlFilter::getValue )
+            .containsExactly(
+                  tuple( RqlFilter.Operator.EQ, "att2", "theSame" ),
+                  tuple( RqlFilter.Operator.LT, "att1", 5 ),
+                  tuple( RqlFilter.Operator.GT, "att1", 42 ) );
+   }
+
+   @ParameterizedTest
+   @ValueSource( strings = {
+         "filter=and(eq(att2,\"theSame\"),lt(att1,5),gt(att1,42))&select=att1,att2,att3.subAtt4&option=sort(+att1,-att2),cursor(\"a\","
+               + "500),limit(100,0)",
+         "filter=and(eq(att2,\"theSame\"),lt(att1,5),gt(att1,42))&select=att1,att2,att3.subAtt4&option=cursor(\"a\",500),sort(+att1,"
+               + "-att2),limit(100,0)",
+         "filter=and(eq(att2,\"theSame\"),lt(att1,5),gt(att1,42))&select=att1,att2,att3.subAtt4&option=sort(+att1,-att2),limit(100,0),"
+               + "cursor(\"a\",500)",
+         "filter=and(eq(att2,\"theSame\"),lt(att1,5),gt(att1,42))&select=att1,att2,att3.subAtt4&option=sort(+att1,-att2),cursor(\"a\","
+               + "500),limit(100,0)",
+         "filter=and(eq(att2,\"theSame\"),lt(att1,5),gt(att1,42))&select=att1,att2,att3.subAtt4&option=sort(+att1,-att2),limit(100,0),"
+               + "cursor(500)",
+         "filter=and(eq(att2,\"theSame\"),lt(att1,5),gt(att1,42))&select=att1,att2,att3.subAtt4&option=limit(100,0),cursor(\"a\",500),"
+               + "sort(+att1,-att2)",
+         "filter=and(eq(att2,\"theSame\"),lt(att1,5),gt(att1,42))&select=att1,att2,att3.subAtt4&option=cursor(0),limit(10,100),"
+               + "sort(+att1,-att2)",
+         "filter=and(eq(att2,\"theSame\"),lt(att1,5),gt(att1,42))&select=att1,att2,att3.subAtt4&option=cursor(\"a\",500),limit(10,100),"
+               + "sort(+att1,-att2)",
+         "filter=and(eq(att2,\"theSame\"),lt(att1,5),gt(att1,42))&select=att1,att2,att3.subAtt4&option=limit(100,0),cursor(500),sort"
+               + "(+att1,-att2)"
+   } )
+   void queryWithRandomizedOrderThrowInvalidExpressionExcpetion( final String expression ) {
+      assertThatThrownBy( () -> RqlParser.from( expression ) ).isInstanceOf( ParseException.class )
+            .hasMessageContaining( "Cursor and Limit cannot be used together" );
+   }
+
+   @ParameterizedTest
+   @ValueSource( strings = {
+         "filter=and(eq(att2,\"theSame\"),lt(att1,5),gt(att1,42))&select=att1,att2,att3.subAtt4&option=cursor(\"a\",500),cursor(\"a\",0)",
+         "filter=and(eq(att2,\"theSame\"),lt(att1,5),gt(att1,42))&select=att1,att2,att3.subAtt4&option=cursor(0),cursor(500),sort"
+               + "(+att1,-att2)",
+         "filter=and(eq(att2,\"theSame\"),lt(att1,5),gt(att1,42))&select=att1,att2,att3.subAtt4&option=limit(10,500),limit(10,10)",
+         "filter=and(eq(att2,\"theSame\"),lt(att1,5),gt(att1,42))&select=att1,att2,att3.subAtt4&option=limit(10,500),limit(10,10),sort"
+               + "(+att1,-att2)",
+   } )
+   void queryWithRandomizedOrderThrowExtraneousInputExcpetion( final String expression ) {
+      assertThatThrownBy( () -> RqlParser.from( expression ) ).isInstanceOf( ParseException.class )
+            .hasMessageContaining( "no viable alternative at input" );
    }
 
    @Test
