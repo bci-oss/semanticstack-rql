@@ -63,7 +63,7 @@
     <antlr4.version>4.13.2</antlr4.version>
     <assertj.version>3.26.3</assertj.version>
     <h2.version>2.3.232</h2.version>
-    <junit.version>5.11.2</junit.version>
+    <junit.version>5.11.3</junit.version>
     <mockito.version>5.14.2</mockito.version>
     <jackson.version>2.18.0</jackson.version>
     <querydsl.version>6.8</querydsl.version>
