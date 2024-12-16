@@ -74,6 +74,7 @@ class BaseRqlParserApi {
             result.getErrors().add( new ParseException( msg ) );
             return;
          }
+
          result.getErrors().add(
                new ParseException(
                      msg,

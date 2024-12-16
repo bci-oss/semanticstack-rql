@@ -22,9 +22,9 @@ public class ParseException extends RuntimeException {
    public ParseException( final String message ) {
       this( message, (SourceLocation) null );
    }
- 
+
    public ParseException( final String message, final SourceLocation sourceLocation ) {
-      super( message );
+      super( createErrorMessage( message, sourceLocation ) );
       this.sourceLocation = sourceLocation;
    }
 
@@ -33,12 +33,12 @@ public class ParseException extends RuntimeException {
    }
 
    public ParseException( final String message, final SourceLocation sourceLocation, final Throwable cause ) {
-      super( message, cause );
+      super( createErrorMessage( message, sourceLocation ), cause );
       this.sourceLocation = sourceLocation;
    }
 
    public ParseException( final String message, final Optional<SourceLocation> sourceLocation, final Throwable cause ) {
-      super( message, cause );
+      super( createErrorMessage( message, sourceLocation.orElse( null ) ), cause );
       this.sourceLocation = sourceLocation.orElse( null );
    }
 
@@ -47,6 +47,13 @@ public class ParseException extends RuntimeException {
     */
    public Optional<SourceLocation> getSourceLocation() {
       return Optional.ofNullable( sourceLocation );
+   }
+
+   private static String createErrorMessage( final String message, final SourceLocation sourceLocation ) {
+      if ( sourceLocation == null ) {
+         return message;
+      }
+      return message + " @" + sourceLocation;
    }
 
    @Override
