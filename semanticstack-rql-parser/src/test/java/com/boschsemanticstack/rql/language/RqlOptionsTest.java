@@ -170,7 +170,7 @@ class RqlOptionsTest {
    void shouldNotThrowNoViableAlternativeOptionSyntax( final String expression ) {
       final Throwable throwable = catchThrowable( () -> RqlParser.from( expression ) );
       assertThat( throwable ).isInstanceOf( ParseException.class )
-            .hasMessageContaining( "no viable alternative at input" );
+            .hasMessageContaining( "missing Sign at 'id'" );
    }
 
    @ParameterizedTest
