@@ -120,8 +120,6 @@ cursorExpression
 invalidExpression
     : (limitExpression ',' cursorExpression)
     | (cursorExpression  ',' limitExpression)
-    | (sortExpression ',' cursorExpression  ',' limitExpression)
-    | (sortExpression ','  limitExpression ',' cursorExpression)
     | (limitExpression ',' cursorExpression ',' sortExpression)
     | (cursorExpression ',' limitExpression ',' sortExpression)
     | (cursorExpression ',' sortExpression ',' limitExpression)

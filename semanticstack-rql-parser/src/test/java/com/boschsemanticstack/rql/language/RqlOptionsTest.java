@@ -165,6 +165,16 @@ class RqlOptionsTest {
 
    @ParameterizedTest
    @ValueSource( strings = {
+         "option=sort(id)",
+   } )
+   void shouldNotThrowNoViableAlternativeOptionSyntax( final String expression ) {
+      final Throwable throwable = catchThrowable( () -> RqlParser.from( expression ) );
+      assertThat( throwable ).isInstanceOf( ParseException.class )
+            .hasMessageContaining( "no viable alternative at input" );
+   }
+
+   @ParameterizedTest
+   @ValueSource( strings = {
          "option=sort(+id),limit(10,10)",
          "option=limit(100, 10),sort(+id)",
          "option=sort(+id),cursor(100)",

@@ -152,7 +152,7 @@ class RqlRepresentationTest {
    } )
    void queryWithRandomizedOrderThrowInvalidExpressionExcpetion( final String expression ) {
       assertThatThrownBy( () -> RqlParser.from( expression ) ).isInstanceOf( ParseException.class )
-            .hasMessageContaining( "Cursor and Limit cannot be used together" );
+            .hasMessageContaining( "extraneous input ',' expecting {<EOF>, '&'}" );
    }
 
    @ParameterizedTest
