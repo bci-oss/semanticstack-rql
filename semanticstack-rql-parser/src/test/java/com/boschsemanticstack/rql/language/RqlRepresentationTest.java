@@ -15,6 +15,7 @@ package com.boschsemanticstack.rql.language;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.assertj.core.api.Assertions.tuple;
 
 import com.boschsemanticstack.rql.exceptions.ParseException;
@@ -131,6 +132,8 @@ class RqlRepresentationTest {
 
    @ParameterizedTest
    @ValueSource( strings = {
+         "filter=and(eq(att2,\"theSame\"),lt(att1,5),gt(att1,42))&select=att1,att2,att3.subAtt4&option=cursor(\"a\",500),sort(+att1,"
+               + "-att2),limit(100,0)",
          "filter=and(eq(att2,\"theSame\"),lt(att1,5),gt(att1,42))&select=att1,att2,att3.subAtt4&option=sort(+att1,-att2),cursor(\"a\","
                + "500),limit(100,0)",
          "filter=and(eq(att2,\"theSame\"),lt(att1,5),gt(att1,42))&select=att1,att2,att3.subAtt4&option=sort(+att1,-att2),limit(100,0),"
@@ -140,27 +143,12 @@ class RqlRepresentationTest {
          "filter=and(eq(att2,\"theSame\"),lt(att1,5),gt(att1,42))&select=att1,att2,att3.subAtt4&option=sort(+att1,-att2),limit(100,0),"
                + "cursor(500)"
    } )
-   void queryWithRandomizedOrderThrowInvalidExpressionExcpetion( final String expression ) {
-      assertThatThrownBy( () -> RqlParser.from( expression ) ).isInstanceOf( ParseException.class )
-            .hasMessageContaining( "extraneous input ',' expecting {<EOF>, '&'}" );
-   }
-
-   @ParameterizedTest
-   @ValueSource( strings = {
-         "filter=and(eq(att2,\"theSame\"),lt(att1,5),gt(att1,42))&select=att1,att2,att3.subAtt4&option=cursor(\"a\",500),sort(+att1,"
-               + "-att2),limit(100,0)",
-         "filter=and(eq(att2,\"theSame\"),lt(att1,5),gt(att1,42))&select=att1,att2,att3.subAtt4&option=cursor(0),limit(10,100),"
-               + "sort(+att1,-att2)",
-         "filter=and(eq(att2,\"theSame\"),lt(att1,5),gt(att1,42))&select=att1,att2,att3.subAtt4&option=cursor(\"a\",500),limit(10,100),"
-               + "sort(+att1,-att2)",
-         "filter=and(eq(att2,\"theSame\"),lt(att1,5),gt(att1,42))&select=att1,att2,att3.subAtt4&option=limit(100,0),cursor(500),sort"
-               + "(+att1,-att2)",
-         "filter=and(eq(att2,\"theSame\"),lt(att1,5),gt(att1,42))&select=att1,att2,att3.subAtt4&option=limit(100,0),cursor(\"a\",500),"
-               + "sort(+att1,-att2)"
-   } )
-   void queryWithRandomizedOrderThrowCursorInvalidExpression( final String expression ) {
-      assertThatThrownBy( () -> RqlParser.from( expression ) ).isInstanceOf( ParseException.class )
-            .hasMessageContaining( "Cursor and Limit cannot be used together" );
+   void shouldThrowExtraneousInputOptionSyntax( final String expression ) {
+      final Throwable throwable = catchThrowable( () -> RqlParser.from( expression ) );
+      assertThat( throwable ).isInstanceOf( ParseException.class )
+            .hasMessageContaining( "extraneous input ',' expecting {<EOF>, '&'}" )
+            .hasMessageContaining( "@[line:1" )
+            .hasMessageContaining( "column" );
    }
 
    @ParameterizedTest
@@ -170,11 +158,22 @@ class RqlRepresentationTest {
                + "(+att1,-att2)",
          "filter=and(eq(att2,\"theSame\"),lt(att1,5),gt(att1,42))&select=att1,att2,att3.subAtt4&option=limit(10,500),limit(10,10)",
          "filter=and(eq(att2,\"theSame\"),lt(att1,5),gt(att1,42))&select=att1,att2,att3.subAtt4&option=limit(10,500),limit(10,10),sort"
-               + "(+att1,-att2)"
+               + "(+att1,-att2)",
+         "filter=and(eq(att2,\"theSame\"),lt(att1,5),gt(att1,42))&select=att1,att2,att3.subAtt4&option=cursor(0),limit(10,100),"
+               + "sort(+att1,-att2)",
+         "filter=and(eq(att2,\"theSame\"),lt(att1,5),gt(att1,42))&select=att1,att2,att3.subAtt4&option=cursor(\"a\",500),limit(10,100),"
+               + "sort(+att1,-att2)",
+         "filter=and(eq(att2,\"theSame\"),lt(att1,5),gt(att1,42))&select=att1,att2,att3.subAtt4&option=limit(100,0),cursor(500),sort"
+               + "(+att1,-att2)",
+         "filter=and(eq(att2,\"theSame\"),lt(att1,5),gt(att1,42))&select=att1,att2,att3.subAtt4&option=limit(100,0),cursor(\"a\",500),"
+               + "sort(+att1,-att2)"
    } )
-   void queryWithRandomizedOrderThrowExtraneousInputExcpetion( final String expression ) {
-      assertThatThrownBy( () -> RqlParser.from( expression ) ).isInstanceOf( ParseException.class )
-            .hasMessageContaining( "no viable alternative at input" );
+   void shouldThrowMismatchInputWrongOptionSyntax( final String expression ) {
+      final Throwable throwable = catchThrowable( () -> RqlParser.from( expression ) );
+      assertThat( throwable ).isInstanceOf( ParseException.class )
+            .hasMessageContaining( "mismatched input" )
+            .hasMessageContaining( "@[line:1" )
+            .hasMessageContaining( "column" );
    }
 
    @Test

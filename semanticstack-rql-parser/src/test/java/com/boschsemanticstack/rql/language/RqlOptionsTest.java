@@ -119,9 +119,19 @@ class RqlOptionsTest {
 
    @ParameterizedTest
    @ValueSource( strings = {
-         "option=,cursor(\"abc\",10)",
-         "option=,limit(100,10)",
-         "option=,sort(+id)",
+         "option=sort(+id)sort(+id)",
+         "option=limit(100,10)limit(100,10)",
+         "option=sort(+id)limit(100)",
+         "option=limit(100,10)sort(+id)",
+         "option=sort(+id)cursor(100)",
+         "option=cursor(100)sort(+id)",
+         "option=cursor(100),limit(10,100)sort(+id)",
+         "option=cursor(\"abc\",10),cursor(\"abc\",10)",
+         "option=cursor(\"abc\",10),cursor(10)",
+         "option=sort(+id),sort(+id)",
+         "option=limit(100)sort(+id)",
+         "option=limit(100,10),limit(100,10)",
+         "option=limit(100,10),cursor(100,10)",
          "option=cursor(\"abc\",10)cursor(10)",
          "option=sort(+id)sort(+id)",
          "option=limit(100,10)limit(100,10)",
@@ -129,38 +139,30 @@ class RqlOptionsTest {
          "option=limit(100,10)sort(+id)",
          "option=sort(+id)cursor(100)",
          "option=cursor(100)sort(+id)",
-         "option=cursor(100),limit(10,100)sort(+id)"
+         "option=cursor(100),limit(10,100)sort(+id)",
+         "option=cursor(100),limit(10,100)",
+         "option=cursor(100),limit(10,100),sort(+id)",
    } )
    void shouldThrowMismatchInputWrongOptionSyntax( final String expression ) {
       final Throwable throwable = catchThrowable( () -> RqlParser.from( expression ) );
       assertThat( throwable ).isInstanceOf( ParseException.class )
-            .hasMessageContaining( "mismatched input" );
+            .hasMessageContaining( "mismatched input" )
+            .hasMessageContaining( "@[line:1" )
+            .hasMessageContaining( "column" );
    }
 
    @ParameterizedTest
    @ValueSource( strings = {
-         "option=cursor(100),limit(10,100)",
-         "option=cursor(100),limit(10,100),sort(+id)",
+         "option=,cursor(\"abc\",10)",
+         "option=,limit(100,10)",
+         "option=,sort(+id)"
    } )
-   void shouldThrowInvalidExpressionSyntax( final String expression ) {
+   void shouldThrowExtraneousInputOptionSyntax( final String expression ) {
       final Throwable throwable = catchThrowable( () -> RqlParser.from( expression ) );
       assertThat( throwable ).isInstanceOf( ParseException.class )
-            .hasMessageContaining( "Cursor and Limit cannot be used together" );
-   }
-
-   @ParameterizedTest
-   @ValueSource( strings = {
-         "option=cursor(\"abc\",10),cursor(\"abc\",10)",
-         "option=cursor(\"abc\",10),cursor(10)",
-         "option=sort(+id),sort(+id)",
-         "option=limit(100)sort(+id)",
-         "option=limit(100,10),limit(100,10)",
-         "option=limit(100,10),cursor(100,10)",
-   } )
-   void shouldThrowNoViableAlternativeOptionSyntax( final String expression ) {
-      final Throwable throwable = catchThrowable( () -> RqlParser.from( expression ) );
-      assertThat( throwable ).isInstanceOf( ParseException.class )
-            .hasMessageContaining( "no viable alternative at input" );
+            .hasMessageContaining( "extraneous input ',' expecting {'sort', 'limit', 'cursor'}" )
+            .hasMessageContaining( "@[line:1" )
+            .hasMessageContaining( "column" );
    }
 
    @ParameterizedTest

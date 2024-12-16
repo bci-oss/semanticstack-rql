@@ -97,8 +97,9 @@ intLiteralList
     ;
 
 optionExpression
-    : sortExpression (',' limitOrCursorExpression)? | limitOrCursorExpression (',' sortExpression)? | invalidExpression?
+    : sortExpression (',' limitOrCursorExpression)? | limitOrCursorExpression (',' sortExpression)?
     ;
+
 
 limitOrCursorExpression
     : limitExpression | cursorExpression
@@ -114,16 +115,6 @@ limitExpression
 
 cursorExpression
     : 'cursor' '(' (StringLiteral ',')? IntLiteral ')'
-    ;
-
-// Error rule to catch invalid combinations
-invalidExpression
-    : (limitExpression ',' cursorExpression)
-    | (cursorExpression  ',' limitExpression)
-    | (limitExpression ',' cursorExpression ',' sortExpression)
-    | (cursorExpression ',' limitExpression ',' sortExpression)
-    | (cursorExpression ',' sortExpression ',' limitExpression)
-    | (limitExpression ',' sortExpression ',' cursorExpression)
     ;
 
 literal
