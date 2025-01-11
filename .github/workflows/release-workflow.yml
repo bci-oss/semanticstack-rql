@@ -76,7 +76,7 @@ jobs:
           git commit -m "Release version ${release_version}"
 
       - name: Commit version changes and push to upstream repository
-        uses: stefanzweifel/git-auto-commit-action@8621497c8c39c72f3e2a999a26b4ca1b5058a842 # v5
+        uses: stefanzweifel/git-auto-commit-action@e348103e9026cc0eee72ae06630dbe30c8bf7a79 # v5
         with:
           branch: ${{ env.release_branch_name }}
           commit_user_name: github-actions
