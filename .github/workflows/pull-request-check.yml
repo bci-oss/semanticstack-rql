@@ -11,7 +11,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Check code style
-        uses: dbelyaev/action-checkstyle@3e88cc416c4e627f24a99507bc5db5dbeccf572d # v1.16.10
+        uses: dbelyaev/action-checkstyle@974d1473b14ff34c8c2f410a7dbce2d0cd0e3ea9 # v1.19.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           reporter: github-pr-review
