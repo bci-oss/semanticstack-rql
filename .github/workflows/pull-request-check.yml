@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
 
       - name: Check code style
         uses: dbelyaev/action-checkstyle@974d1473b14ff34c8c2f410a7dbce2d0cd0e3ea9 # v1.19.0
@@ -20,7 +20,7 @@ jobs:
           fail_on_error: true
 
       - name: Setup JDK 17
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@c5195efecf7bdfc987ee8bae7a71cb8b11521c00 # v4
         with:
           distribution: 'temurin'
           java-version: '17'
