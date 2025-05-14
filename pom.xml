@@ -90,6 +90,11 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <java-target-version>21</java-target-version>
     <java-source-version>21</java-source-version>
+
+    <sonar.coverage.jacoco.xmlReportPaths>
+      ${project.basedir}/../semanticstack-rql-test-report/target/site/jacoco-aggregate/jacoco.xml,
+      ${project.basedir}/../../semanticstack-rql-test-report/target/site/jacoco-aggregate/jacoco.xml
+    </sonar.coverage.jacoco.xmlReportPaths>
   </properties>
 
   <dependencyManagement>
