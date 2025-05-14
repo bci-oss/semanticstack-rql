@@ -13,6 +13,7 @@
 
 package com.boschsemanticstack.rql.parser.v1;
 
+import static com.boschsemanticstack.rql.assertj.RqlQueryModelAssert.assertThat;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -34,9 +35,9 @@ class RqlParserTest {
             .sort()
             .build();
 
-      assertThat( model.isEmpty() )
+      assertThat( model )
             .describedAs( "A model only containing empty parts should regard itself as empty" )
-            .isTrue();
+            .isEmpty();
    }
 
    @Test
@@ -55,11 +56,12 @@ class RqlParserTest {
             .limit( 0, 500 )
             .build();
 
-      final String representation = RqlParser.toString( model );
-
-      assertThat( representation ).isEqualTo(
-            "select=att1,att2,att3/subAtt4&filter=and(eq(att2,\"theSame\"),or(lt(att1,5238907523475022349),not(gt(att1,"
-                  + "12345678901234567890123456789012345678901234567890))))&option=limit(0,500),sort(+att1,-att2)" );
+      assertThat( model )
+            .queryString()
+            .isEqualTo( """
+                  select=att1,att2,att3/subAtt4\
+                  &filter=and(eq(att2,"theSame"),or(lt(att1,5238907523475022349),not(gt(att1,12345678901234567890123456789012345678901234567890))))\
+                  &option=limit(0,500),sort(+att1,-att2)""" );
    }
 
    @Test
@@ -77,19 +79,21 @@ class RqlParserTest {
             .sort( RqlBuilder.asc( "att1" ), RqlBuilder.desc( "att2" ) )
             .cursor( "a", 500 );
 
-      final String representation = RqlParser.toString( builder.build() );
-
-      assertThat( representation ).isEqualTo(
-            "select=att1,att2,att3/subAtt4&filter=and(eq(att2,\"theSame\"),or(lt(att1,5238907523475022349),not(gt(att1,"
-                  + "12345678901234567890123456789012345678901234567890))))&option=cursor(\"a\",500),sort(+att1,-att2)" );
+      assertThat( builder.build() )
+            .queryString()
+            .isEqualTo( """
+                  select=att1,att2,att3/subAtt4\
+                  &filter=and(eq(att2,"theSame"),or(lt(att1,5238907523475022349),not(gt(att1,12345678901234567890123456789012345678901234567890))))\
+                  &option=cursor("a",500),sort(+att1,-att2)""" );
 
       builder = builder.cursor( 100 );
 
-      final String representation2 = RqlParser.toString( builder.build() );
-
-      assertThat( representation2 ).isEqualTo(
-            "select=att1,att2,att3/subAtt4&filter=and(eq(att2,\"theSame\"),or(lt(att1,5238907523475022349),not(gt(att1,"
-                  + "12345678901234567890123456789012345678901234567890))))&option=cursor(100),sort(+att1,-att2)" );
+      assertThat( builder.build() )
+            .queryString()
+            .isEqualTo( """
+                  select=att1,att2,att3/subAtt4\
+                  &filter=and(eq(att2,"theSame"),or(lt(att1,5238907523475022349),not(gt(att1,12345678901234567890123456789012345678901234567890))))\
+                  &option=cursor(100),sort(+att1,-att2)""" );
    }
 
    @Test
@@ -97,14 +101,16 @@ class RqlParserTest {
       RqlBuilder builder = RqlParser.builder()
             .cursor( "a", 500 )
             .limit( 0, 100 );
-      assertThatThrownBy( builder::build ).isInstanceOf( IllegalArgumentException.class )
+      assertThatThrownBy( builder::build )
+            .isInstanceOf( IllegalArgumentException.class )
             .hasMessageContaining( "Cursor and Slice cannot be used together" );
 
       builder = RqlParser.builder()
             .cursor( 100 )
             .limit( 0, 100 );
 
-      assertThatThrownBy( builder::build ).isInstanceOf( IllegalArgumentException.class )
+      assertThatThrownBy( builder::build )
+            .isInstanceOf( IllegalArgumentException.class )
             .hasMessageContaining( "Cursor and Slice cannot be used together" );
    }
 
@@ -119,7 +125,8 @@ class RqlParserTest {
             )
             .build();
 
-      assertThat( RqlParser.toString( model ) )
+      assertThat( model )
+            .queryString()
             .isEqualTo( "filter=in(attribute,\"foo\",\"bar\",\"fooBar\")" );
    }
 
@@ -133,7 +140,8 @@ class RqlParserTest {
             )
             .build();
 
-      assertThat( RqlParser.toString( model ) )
+      assertThat( model )
+            .queryString()
             .isEqualTo( "filter=in(attribute,\"foo\",\"bar\",\"fooBar\")" );
    }
 
@@ -150,7 +158,8 @@ class RqlParserTest {
             RqlBuilder.eq( "discriminator", "COUPLING" )
       );
 
-      assertThat( RqlParser.toString( modelWithRestriction ) )
+      assertThat( modelWithRestriction )
+            .queryString()
             .isEqualTo( "filter=and(eq(deviceId,\"5b49d292-7572-48be-b205-e19d9fecf679\"),eq(discriminator,\"COUPLING\"))" );
    }
 
@@ -167,8 +176,12 @@ class RqlParserTest {
             RqlBuilder.in( "att1", "A", "B", "C" )
       );
 
-      assertThat( RqlParser.toString( modelWithRestriction ) )
-            .isEqualTo( "select=att1&filter=and(eq(discriminator,\"A\"),ne(att3,42),in(att1,\"A\",\"B\",\"C\"))" );
+      assertThat( modelWithRestriction )
+            .queryString()
+            .isEqualTo( """
+                  select=att1\
+                  &filter=and(eq(discriminator,"A"),ne(att3,42),in(att1,"A","B","C"))"""
+            );
    }
 
    @Test
@@ -189,10 +202,13 @@ class RqlParserTest {
             RqlBuilder.or( RqlBuilder.ne( "att3", 42 ) ) // <2>
       );
 
-      assertThat( RqlParser.toString( modelWithRestriction ) )
-            .isEqualTo(
-                  "select=att1,att2,att3/subAtt4&filter=and(eq(att2,\"theSame\"),lt(att1,23),eq(att2,\"fizzBuzz\"),or(ne(att3,42)))"
-                        + "&option=limit(0,500),sort(+att1,-att2)" );
+      assertThat( modelWithRestriction )
+            .queryString()
+            .isEqualTo( """
+                  select=att1,att2,att3/subAtt4\
+                  &filter=and(eq(att2,"theSame"),lt(att1,23),eq(att2,"fizzBuzz"),or(ne(att3,42)))\
+                  &option=limit(0,500),sort(+att1,-att2)"""
+            );
    }
 
    @Test
@@ -201,7 +217,9 @@ class RqlParserTest {
             .limit( 12, 97 )
             .build();
 
-      assertThat( RqlParser.toString( modelWith12to97Limit ) ).isEqualTo( "option=limit(12,97)" );
+      assertThat( modelWith12to97Limit )
+            .queryString()
+            .isEqualTo( "option=limit(12,97)" );
 
       assertThat( RqlParser.getPagedQueryStream( modelWith12to97Limit, 50 )
             .map( RqlParser::toString )
@@ -217,7 +235,9 @@ class RqlParserTest {
             .select( "foo" )
             .build();
 
-      assertThat( RqlParser.toString( unboundedQuery ) ).isEqualTo( "select=foo" );
+      assertThat( unboundedQuery )
+            .queryString()
+            .isEqualTo( "select=foo" );
 
       assertThat( RqlParser.getPagedQueryStream( unboundedQuery, 50 )
             .map( RqlParser::toString )

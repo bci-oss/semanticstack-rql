@@ -196,6 +196,28 @@ This can be expressed elegantly using the following construct:
 <4> The deferral is needed so another request is only made after we get to this element.
 Otherwise, a `.take(15)` further up the stream would not take effect until all elements had been fetched.
 
+==== Pre-processing RQL filters
+
+You can pre-process the parsed RQL filters to automatically simplify or transform them using a list of pre-defined pre-processors.
+This can be very useful for eliminating common mistakes in user input, for example transforming `not(ne(att1,"value"))` into `eq(att1,"value")`, or simplify expressions like `and(ne(attr1,"val1"),ne(attr1,"val2"))` to `not(in(attr1,"val1","val2"))`; or `or(eq(attr1,"val1"),eq(attr1,"val2"))` to `in(attr1,"val1","val2")`.
+
+[source,java,linenums,options="nowrap"]
+----
+      final RqlQueryModel preProcessedModel = RqlParser.preProcessFilter(
+            model,
+            List.of(  //<1> <2> <3>
+               new NotNeToEqRqlFilterPreProcessor(),
+               new AndNeToNotInRqlFilterPreProcessor(),
+               new OrEqToInRqlFilterPreProcessor()
+            )
+      );
+----
+
+<1> Each pre-processor must implement the `RqlFilterPreProcessor` interface.
+<2> You can create your own pre-processors by implementing this interface and adding them to the list.
+<3> The pre-processors are applied in the order they are defined in the list. This means that the first
+pre-processor will be applied first, then the second will be applied on the result of the first transformation and so on.
+
 [[rql-query-dsl]]
 == RQL to QueryDSL
 

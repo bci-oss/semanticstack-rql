@@ -21,7 +21,6 @@ import java.util.Queue;
 
 import com.boschsemanticstack.rql.exceptions.NoSuchFieldQueryException;
 import com.boschsemanticstack.rql.model.v1.RqlFilter;
-
 import com.querydsl.core.types.Path;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.CollectionPathBase;
