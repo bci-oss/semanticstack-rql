@@ -88,8 +88,8 @@
     <testreports.surefire>surefire-report</testreports.surefire>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <java-target-version>17</java-target-version>
-    <java-source-version>17</java-source-version>
+    <java-target-version>21</java-target-version>
+    <java-source-version>21</java-source-version>
 
     <sonar.coverage.jacoco.xmlReportPaths>
       ${project.basedir}/../semanticstack-rql-test-report/target/site/jacoco-aggregate/jacoco.xml,
