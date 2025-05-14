@@ -23,6 +23,7 @@ import java.util.Optional;
 import com.boschsemanticstack.rql.exceptions.NoSuchFieldQueryException;
 import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.dsl.SimpleExpression;
+
 import jakarta.validation.constraints.NotNull;
 
 /**

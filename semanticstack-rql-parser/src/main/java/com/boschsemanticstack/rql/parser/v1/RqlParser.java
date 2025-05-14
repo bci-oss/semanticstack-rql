@@ -20,6 +20,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.stream.Stream;
@@ -27,6 +28,7 @@ import java.util.stream.StreamSupport;
 
 import com.boschsemanticstack.rql.model.v1.RqlBuilder;
 import com.boschsemanticstack.rql.model.v1.RqlFilter;
+import com.boschsemanticstack.rql.model.v1.RqlFilterPreProcessor;
 import com.boschsemanticstack.rql.model.v1.RqlQueryModel;
 import com.boschsemanticstack.rql.model.v1.RqlSlice;
 import com.boschsemanticstack.rql.model.v1.impl.RqlFilterImpl;
@@ -34,8 +36,17 @@ import com.boschsemanticstack.rql.model.v1.impl.RqlOptionsImpl;
 import com.boschsemanticstack.rql.model.v1.impl.RqlQueryModelImpl;
 import com.boschsemanticstack.rql.model.v1.impl.RqlSliceImpl;
 import com.boschsemanticstack.rql.model.v1.impl.RqlToStringWriter;
+import com.boschsemanticstack.rql.model.v1.impl.preprocessor.AndNeToNotInRqlFilterPreProcessor;
+import com.boschsemanticstack.rql.model.v1.impl.preprocessor.NotNeToEqRqlFilterPreProcessor;
+import com.boschsemanticstack.rql.model.v1.impl.preprocessor.OrEqToInRqlFilterPreProcessor;
 
 public class RqlParser {
+
+   public static final List<RqlFilterPreProcessor> DEFAULT_FILTER_PREPROCESSORS = List.of(
+         new NotNeToEqRqlFilterPreProcessor(),
+         new AndNeToNotInRqlFilterPreProcessor(),
+         new OrEqToInRqlFilterPreProcessor()
+   );
 
    private RqlParser() {
       // utility class
@@ -43,6 +54,23 @@ public class RqlParser {
 
    public static RqlQueryModel from( final String rqlQuery ) {
       return new RqlParserApi().parseFullQuery( rqlQuery );
+   }
+
+   public static RqlQueryModel preProcessFilter( final RqlQueryModel model ) {
+      return preProcessFilter( model, DEFAULT_FILTER_PREPROCESSORS );
+   }
+
+   public static RqlQueryModel preProcessFilter(
+         final RqlQueryModel model,
+         final List<RqlFilterPreProcessor> filterPreProcessors ) {
+      if ( model == null ) {
+         throw new IllegalArgumentException( "Model must not be null for pre-processing." );
+      }
+      Optional<RqlFilter> result = model.getFilter();
+      for ( RqlFilterPreProcessor preProcessor : filterPreProcessors ) {
+         result = result.map( preProcessor::visit );
+      }
+      return new RqlQueryModelImpl( model.getSelect(), result.orElse( null ), model.getOptions() );
    }
 
    public static RqlBuilder builder() {

@@ -14,5 +14,6 @@ The following people have contributed to this repository:
 * Dominic Schabel
 * Nikolai Wiens
 * Bodgan Toma
+* Istvan Zoltan Nagy
 
 Please add yourself to this list, if you contribute to the content.

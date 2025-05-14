@@ -13,7 +13,7 @@
 
 package com.boschsemanticstack.rql.language;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static com.boschsemanticstack.rql.assertj.RqlQueryModelAssert.assertThat;
 
 import java.math.BigDecimal;
 import java.util.stream.Stream;
@@ -26,7 +26,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-  
+
 class RqlFloatingPointTest {
 
    @ParameterizedTest
@@ -34,10 +34,12 @@ class RqlFloatingPointTest {
    void shouldParseSimpleFloatingPointSyntaxIntoBigDecimal( final String expression ) {
       final RqlQueryModel model = RqlParser.from( expression );
 
-      assertThat( model.getFilter().get().getOperator() ).isEqualTo( RqlFilter.Operator.EQ );
-      assertThat( model.getFilter().get().getAttribute() ).isEqualTo( "id" );
-      assertThat( model.getFilter().get().getValue() ).isEqualTo( new BigDecimal( "12345.5432109876" ) );
-      assertThat( model.getFilter().get().getChildren() ).isEmpty();
+      assertThat( model )
+            .filter()
+            .hasOperator( RqlFilter.Operator.EQ )
+            .hasAttribute( "id" )
+            .valueIsEqualTo( new BigDecimal( "12345.5432109876" ) )
+            .hasNoChildren();
    }
 
    private static Stream<Arguments> expressions() {
@@ -56,9 +58,11 @@ class RqlFloatingPointTest {
 
       final RqlQueryModel model = RqlParser.from( expression );
 
-      assertThat( model.getFilter().get().getOperator() ).isEqualTo( RqlFilter.Operator.EQ );
-      assertThat( model.getFilter().get().getAttribute() ).isEqualTo( "id" );
-      assertThat( model.getFilter().get().getValue() ).isEqualTo( new BigDecimal( "0.0" ) );
-      assertThat( model.getFilter().get().getChildren() ).isEmpty();
+      assertThat( model )
+            .filter()
+            .hasOperator( RqlFilter.Operator.EQ )
+            .hasAttribute( "id" )
+            .valueIsEqualTo( new BigDecimal( "0.0" ) )
+            .hasNoChildren();
    }
 }

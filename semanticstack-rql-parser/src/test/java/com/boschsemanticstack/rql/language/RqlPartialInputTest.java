@@ -13,8 +13,8 @@
 
 package com.boschsemanticstack.rql.language;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.catchThrowable;
+import static com.boschsemanticstack.rql.assertj.RqlQueryModelAssert.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.boschsemanticstack.rql.exceptions.ParseException;
 import com.boschsemanticstack.rql.model.v1.RqlQueryModel;
@@ -29,9 +29,8 @@ class RqlPartialInputTest {
    void nullInputShouldThrowParseException() {
       final String expression = null;
 
-      final Throwable throwable = catchThrowable( () -> RqlParser.from( expression ) );
-
-      assertThat( throwable ).isInstanceOf( ParseException.class )
+      assertThatThrownBy( () -> RqlParser.from( expression ) )
+            .isInstanceOf( ParseException.class )
             .hasMessageContaining( "Input was null" );
    }
 
@@ -41,9 +40,9 @@ class RqlPartialInputTest {
 
       final RqlQueryModel model = RqlParser.from( expression );
 
-      assertThat( model.isEmpty() )
+      assertThat( model )
             .describedAs( "Parsing empty string should lead to an empty model." )
-            .isTrue();
+            .isEmpty();
    }
 
    @Test
@@ -52,13 +51,13 @@ class RqlPartialInputTest {
 
       final RqlQueryModel model = RqlParser.from( expression );
 
-      assertThat( model.getFilter() )
+      assertThat( model )
             .describedAs( "Parsing select only should lead to an empty filter." )
-            .isEmpty();
-      assertThat( model.getOptions().isEmpty() )
+            .hasNoFilter()
             .describedAs( "Parsing select only string should lead to empty options." )
-            .isTrue();
-      assertThat( model.getSelect().attributes() ).containsExactly( "id", "name" );
+            .hasNoOptions()
+            .select()
+            .attributesContainExactly( "id", "name" );
    }
 
    @Test
@@ -67,10 +66,10 @@ class RqlPartialInputTest {
 
       final RqlQueryModel model = RqlParser.from( expression );
 
-      assertThat( model.getSelect().isEmpty() ).isTrue();
-      assertThat( model.getFilter() ).isEmpty();
-
-      assertThat( model.getOptions().isEmpty() ).isFalse();
-      assertThat( model.getOptions().getCursor() ).contains( new RqlCursorImpl( 500 ) );
+      assertThat( model )
+            .hasNoFilter()
+            .hasNoSelect()
+            .options()
+            .containsCursor( new RqlCursorImpl( 500 ) );
    }
 }

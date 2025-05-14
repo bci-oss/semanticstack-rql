@@ -13,9 +13,8 @@
 
 package com.boschsemanticstack.rql.language;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static com.boschsemanticstack.rql.assertj.RqlQueryModelAssert.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.assertj.core.api.Assertions.catchThrowable;
 
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
@@ -33,20 +32,18 @@ class RqlTimeTest {
    void shouldNotParseIso8601ZuluWithSecondsMissing() {
       final String expression = "filter=eq(created,2007-12-03T10:15Z)";
 
-      final Throwable thrown = catchThrowable( () -> RqlParser.from( expression ) );
-
-      assertThat( thrown ).as( "This is actually valid ISO 8601 but not supported yet" )
+      assertThatThrownBy( () -> RqlParser.from( expression ) )
+            .as( "This is actually valid ISO 8601 but not supported yet" )
             .isInstanceOf( ParseException.class )
             .hasMessageContaining( "mismatched input" );
    }
- 
+
    @Test
    void shouldNotParseIso8601ZuluWithMinutesAndSecondsMissing() {
       final String expression = "filter=eq(created,2007-12-03T10:15+4:27)";
 
-      final Throwable thrown = catchThrowable( () -> RqlParser.from( expression ) );
-
-      assertThat( thrown ).as( "This is actually valid ISO 8601 but not supported yet" )
+      assertThatThrownBy( () -> RqlParser.from( expression ) )
+            .as( "This is actually valid ISO 8601 but not supported yet" )
             .isInstanceOf( ParseException.class )
             .hasMessageContaining( "mismatched input" );
    }
@@ -57,11 +54,14 @@ class RqlTimeTest {
 
       final RqlQueryModel model = RqlParser.from( expression );
 
-      assertThat( model.getFilter().get().getOperator() ).isEqualTo( RqlFilter.Operator.EQ );
-      assertThat( model.getFilter().get().getAttribute() ).isEqualTo( "created" );
-      assertThat( model.getFilter().get().getValue() ).isEqualTo(
-            OffsetDateTime.of( 2007, 12, 3, 10, 15, 30, 123 * 1000 * 100, ZoneOffset.UTC ) );
-      assertThat( model.getFilter().get().getChildren() ).isEmpty();
+      assertThat( model )
+            .filter()
+            .hasOperator( RqlFilter.Operator.EQ )
+            .hasAttribute( "created" )
+            .valueIsEqualTo( OffsetDateTime.of(
+                  2007, 12, 3,
+                  10, 15, 30, 123 * 1000 * 100, ZoneOffset.UTC ) )
+            .hasNoChildren();
    }
 
    @Test
@@ -70,11 +70,14 @@ class RqlTimeTest {
 
       final RqlQueryModel model = RqlParser.from( expression );
 
-      assertThat( model.getFilter().get().getOperator() ).isEqualTo( RqlFilter.Operator.EQ );
-      assertThat( model.getFilter().get().getAttribute() ).isEqualTo( "created" );
-      assertThat( model.getFilter().get().getValue() ).isEqualTo(
-            OffsetDateTime.of( 2007, 12, 3, 10, 15, 30, 123 * 1000 * 100, ZoneOffset.UTC ) );
-      assertThat( model.getFilter().get().getChildren() ).isEmpty();
+      assertThat( model )
+            .filter()
+            .hasOperator( RqlFilter.Operator.EQ )
+            .hasAttribute( "created" )
+            .valueIsEqualTo( OffsetDateTime.of(
+                  2007, 12, 3,
+                  10, 15, 30, 123 * 1000 * 100, ZoneOffset.UTC ) )
+            .hasNoChildren();
    }
 
    @Test
@@ -83,10 +86,14 @@ class RqlTimeTest {
 
       final RqlQueryModel model = RqlParser.from( expression );
 
-      assertThat( model.getFilter().get().getOperator() ).isEqualTo( RqlFilter.Operator.EQ );
-      assertThat( model.getFilter().get().getAttribute() ).isEqualTo( "created" );
-      assertThat( model.getFilter().get().getValue() ).isEqualTo( OffsetDateTime.of( 2007, 12, 3, 10, 15, 30, 0, ZoneOffset.UTC ) );
-      assertThat( model.getFilter().get().getChildren() ).isEmpty();
+      assertThat( model )
+            .filter()
+            .hasOperator( RqlFilter.Operator.EQ )
+            .hasAttribute( "created" )
+            .valueIsEqualTo( OffsetDateTime.of(
+                  2007, 12, 3,
+                  10, 15, 30, 0, ZoneOffset.UTC ) )
+            .hasNoChildren();
    }
 
    @Test
@@ -95,10 +102,14 @@ class RqlTimeTest {
 
       final RqlQueryModel model = RqlParser.from( expression );
 
-      assertThat( model.getFilter().get().getOperator() ).isEqualTo( RqlFilter.Operator.EQ );
-      assertThat( model.getFilter().get().getAttribute() ).isEqualTo( "created" );
-      assertThat( model.getFilter().get().getValue() ).isEqualTo( OffsetDateTime.of( 2007, 12, 3, 10, 15, 30, 0, ZoneOffset.UTC ) );
-      assertThat( model.getFilter().get().getChildren() ).isEmpty();
+      assertThat( model )
+            .filter()
+            .hasOperator( RqlFilter.Operator.EQ )
+            .hasAttribute( "created" )
+            .valueIsEqualTo( OffsetDateTime.of(
+                  2007, 12, 3,
+                  10, 15, 30, 0, ZoneOffset.UTC ) )
+            .hasNoChildren();
    }
 
    @Test
@@ -107,11 +118,14 @@ class RqlTimeTest {
 
       final RqlQueryModel model = RqlParser.from( expression );
 
-      assertThat( model.getFilter().get().getOperator() ).isEqualTo( RqlFilter.Operator.EQ );
-      assertThat( model.getFilter().get().getAttribute() ).isEqualTo( "created" );
-      assertThat( model.getFilter().get().getValue() ).isEqualTo(
-            OffsetDateTime.of( 2007, 12, 3, 10, 15, 30, 0, ZoneOffset.ofHoursMinutes( 4, 37 ) ) );
-      assertThat( model.getFilter().get().getChildren() ).isEmpty();
+      assertThat( model )
+            .filter()
+            .hasOperator( RqlFilter.Operator.EQ )
+            .hasAttribute( "created" )
+            .valueIsEqualTo( OffsetDateTime.of(
+                  2007, 12, 3,
+                  10, 15, 30, 0, ZoneOffset.ofHoursMinutes( 4, 37 ) ) )
+            .hasNoChildren();
    }
 
    @Test

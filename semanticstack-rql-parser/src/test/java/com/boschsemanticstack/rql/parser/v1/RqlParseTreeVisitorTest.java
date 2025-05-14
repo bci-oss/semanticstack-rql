@@ -13,8 +13,8 @@
 
 package com.boschsemanticstack.rql.parser.v1;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.catchThrowable;
+import static com.boschsemanticstack.rql.assertj.RqlQueryModelAssert.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.boschsemanticstack.rql.exceptions.ParseException;
 import com.boschsemanticstack.rql.model.v1.RqlFilter;
@@ -30,15 +30,16 @@ class RqlParseTreeVisitorTest {
 
       final RqlQueryModel model = RqlParser.from( expression );
 
-      assertThat( model.getSelect().attributes() ).containsExactly( "id", "name" );
+      assertThat( model )
+            .select()
+            .attributesContainExactly( "id", "name" );
    }
 
    @Test
    void shouldParseNullLiteral() {
       final String attribute = "parentId";
-      final String value = null;
 
-      final String expression = "filter=eq(" + attribute + "," + value + ")";
+      final String expression = "filter=eq(" + attribute + ", null)";
 
       checkParseResult( expression, null );
    }
@@ -49,13 +50,14 @@ class RqlParseTreeVisitorTest {
 
       final RqlQueryModel model = RqlParser.from( expression );
 
-      assertThat( model.getFilter().get().getFilterType() ).isEqualTo( RqlFilter.FilterType.NOT );
-      assertThat( model.getFilter().get().getChildren() ).hasSize( 1 );
-
-      final RqlFilter inFilter = model.getFilter().get().getChildren().get( 0 );
-      assertThat( inFilter.getFilterType() ).isEqualTo( RqlFilter.FilterType.VALUE );
-      assertThat( inFilter.getOperator() ).isEqualTo( RqlFilter.Operator.IN );
-      assertThat( inFilter.getValues() ).containsExactly( "a", "b" );
+      assertThat( model )
+            .filter()
+            .hasFilterType( RqlFilter.FilterType.NOT )
+            .hasChildCount( 1 )
+            .getFirstChild()
+            .hasFilterType( RqlFilter.FilterType.VALUE )
+            .hasOperator( RqlFilter.Operator.IN )
+            .valuesContainExactly( "a", "b" );
    }
 
    @Test
@@ -64,13 +66,11 @@ class RqlParseTreeVisitorTest {
 
       final RqlQueryModel model = RqlParser.from( expression );
 
-      assertThat( model.getFilter().get().getFilterType() ).isEqualTo( RqlFilter.FilterType.VALUE );
-
-      assertThat( model.getFilter().get().getOperator() ).isEqualTo( RqlFilter.Operator.EQ );
-      assertThat( model.getFilter().get().getValues() ).isNotNull();
-      assertThat( model.getFilter().get().getValues() ).describedAs( model.getFilter().toString() )
-            .hasSize( 1 )
-            .containsNull();
+      assertThat( model )
+            .filter()
+            .hasFilterType( RqlFilter.FilterType.VALUE )
+            .hasOperator( RqlFilter.Operator.EQ )
+            .valueIsEqualTo( null );
    }
 
    @Test
@@ -79,13 +79,11 @@ class RqlParseTreeVisitorTest {
 
       final RqlQueryModel model = RqlParser.from( expression );
 
-      assertThat( model.getFilter().get().getFilterType() ).isEqualTo( RqlFilter.FilterType.VALUE );
-
-      assertThat( model.getFilter().get().getOperator() ).isEqualTo( RqlFilter.Operator.NE );
-      assertThat( model.getFilter().get().getValues() ).isNotNull();
-      assertThat( model.getFilter().get().getValues() ).describedAs( model.getFilter().toString() )
-            .hasSize( 1 )
-            .containsNull();
+      assertThat( model )
+            .filter()
+            .hasFilterType( RqlFilter.FilterType.VALUE )
+            .hasOperator( RqlFilter.Operator.NE )
+            .valueIsEqualTo( null );
    }
 
    @Test
@@ -161,9 +159,12 @@ class RqlParseTreeVisitorTest {
    private void checkParseResult( final String expression, final String expected ) {
       final RqlQueryModel model = RqlParser.from( expression );
 
-      assertThat( model.getFilter().get().getValue() )
+      assertThat( model )
+            .filter()
+            .hasFilterType( RqlFilter.FilterType.VALUE )
+            .hasOperator( RqlFilter.Operator.EQ )
             .describedAs( "Input '%s' should be parsed as '%s'", expression, expected )
-            .isEqualTo( expected );
+            .valueIsEqualTo( expected );
    }
 
    @Test
@@ -172,8 +173,9 @@ class RqlParseTreeVisitorTest {
 
       final RqlQueryModel model = RqlParser.from( expression );
 
-      assertThat( model.getFilter().get().getValues() )
-            .containsExactlyInAnyOrder( 4.6, 7.8, 9.0 );
+      assertThat( model )
+            .filter()
+            .valuesContainExactly( 4.6, 7.8, 9.0 );
    }
 
    @Test
@@ -182,8 +184,9 @@ class RqlParseTreeVisitorTest {
 
       final RqlQueryModel model = RqlParser.from( expression );
 
-      assertThat( model.getFilter().get().getValues() )
-            .containsExactlyInAnyOrder( 4, 6, 7, 8, 9, 0 );
+      assertThat( model )
+            .filter()
+            .valuesContainExactly( 4, 6, 7, 8, 9, 0 );
    }
 
    @Test
@@ -192,16 +195,16 @@ class RqlParseTreeVisitorTest {
 
       final RqlQueryModel model = RqlParser.from( expression );
 
-      assertThat( model.getFilter().get().getValues() )
-            .containsExactlyInAnyOrder( "A", "B", "C" );
+      assertThat( model )
+            .filter()
+            .valuesContainExactly( "A", "B", "C" );
    }
 
    @Test
    void shouldFailParsingInFilterWithNullAnywhere() {
       final String expression = "filter=in(id,4.6,null,9.0)";
 
-      final Throwable throwable = catchThrowable( () -> RqlParser.from( expression ) );
-      assertThat( throwable )
+      assertThatThrownBy( () -> RqlParser.from( expression ) )
             .isInstanceOf( ParseException.class )
             .hasMessageContaining( "mismatched input 'null' expecting FloatLiteral" );
    }
@@ -210,8 +213,7 @@ class RqlParseTreeVisitorTest {
    void shouldFailParsingInFilterWithMixedStringAndNumber() {
       final String expression = "filter=in(id,4.6,\"foo\",9.0)";
 
-      final Throwable throwable = catchThrowable( () -> RqlParser.from( expression ) );
-      assertThat( throwable )
+      assertThatThrownBy( () -> RqlParser.from( expression ) )
             .isInstanceOf( ParseException.class )
             .hasMessageContaining( "mismatched input '\"foo\"' expecting FloatLiteral" );
    }
