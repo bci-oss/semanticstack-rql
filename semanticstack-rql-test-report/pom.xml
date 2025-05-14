@@ -26,6 +26,25 @@
 
    <packaging>pom</packaging>
 
+   <dependencies>
+      <dependency>
+         <groupId>com.boschsemanticstack</groupId>
+         <artifactId>semanticstack-rql-parser</artifactId>
+      </dependency>
+      <dependency>
+         <groupId>com.boschsemanticstack</groupId>
+         <artifactId>semanticstack-rql-model</artifactId>
+      </dependency>
+      <dependency>
+         <groupId>com.boschsemanticstack</groupId>
+         <artifactId>semanticstack-rql-core</artifactId>
+      </dependency>
+      <dependency>
+         <groupId>com.boschsemanticstack</groupId>
+         <artifactId>semanticstack-rql-2-querydsl</artifactId>
+      </dependency>
+
+   </dependencies>
 
    <build>
       <plugins>
@@ -35,7 +54,7 @@
             <executions>
                <execution>
                   <id>aggregate-reports</id>
-                  <phase>prepare-package</phase>
+                  <phase>verify</phase>
                   <goals>
                      <goal>report-aggregate</goal>
                   </goals>
