@@ -28,6 +28,7 @@
     <module>semanticstack-rql-parser</module>
     <module>semanticstack-rql-model</module>
     <module>semanticstack-rql-2-querydsl</module>
+    <module>semanticstack-rql-test-report</module>
     <module>examples/semanticstack-rql-examples-querydsljpa</module>
   </modules>
 
@@ -80,6 +81,8 @@
     <maven-javadoc-plugin.version>3.11.2</maven-javadoc-plugin.version>
     <maven-source-plugin.version>3.3.1</maven-source-plugin.version>
     <maven-surefire-plugin.version>3.5.3</maven-surefire-plugin.version>
+    <maven-surefire-report-plugin.version>3.5.2</maven-surefire-report-plugin.version>
+    <org.jacoco.version>0.8.12</org.jacoco.version>
 
     <!-- General settings -->
     <testreports.surefire>surefire-report</testreports.surefire>
@@ -191,6 +194,16 @@
     <pluginManagement>
       <plugins>
         <plugin>
+          <groupId>org.jacoco</groupId>
+          <artifactId>org.jacoco.build</artifactId>
+          <version>${org.jacoco.version}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-report-plugin</artifactId>
+          <version>${maven-surefire-report-plugin.version}</version>
+        </plugin>
+        <plugin>
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>build-helper-maven-plugin</artifactId>
           <version>${build-helper-maven-plugin.version}</version>
@@ -240,13 +253,32 @@
     </pluginManagement>
 
     <plugins>
+
+      <!-- jacoco plugin required for unit test coverage on SonarQube. -->
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <executions>
+          <!-- In here the JaCoCo Agent is prepared before starting your Tests -->
+          <execution>
+            <id>default-prepare-agent</id>
+            <goals>
+              <goal>prepare-agent</goal>
+            </goals>
+            <configuration>
+              <destFile>${project.build.directory}/jacoco.exec</destFile>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
       <!-- Configure maven surefire plugin (execution of unit tests) -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
           <skip>false</skip>
-          <reportsDirectory>${project.build.directory}/surefire-reports/</reportsDirectory>
+          <reportsDirectory>${project.build.directory}/${testreports.surefire}</reportsDirectory>
           <includes>
             <include>**/*Tests.java</include>
             <include>**/*Test.java</include>

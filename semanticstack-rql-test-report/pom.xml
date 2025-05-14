@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2024 Robert Bosch Manufacturing Solutions GmbH
+  ~
+  ~ See the AUTHORS file(s) distributed with this work for additional
+  ~ information regarding authorship.
+  ~
+  ~ This Source Code Form is subject to the terms of the Mozilla Public
+  ~ License, v. 2.0. If a copy of the MPL was not distributed with this
+  ~ file, You can obtain one at https://mozilla.org/MPL/2.0/.
+  ~
+  ~ SPDX-License-Identifier: MPL-2.0
+  -->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+   <modelVersion>4.0.0</modelVersion>
+   <parent>
+      <groupId>com.boschsemanticstack</groupId>
+      <artifactId>semanticstack-rql-parent</artifactId>
+      <version>DEV-SNAPSHOT</version>
+      <relativePath>../pom.xml</relativePath>
+   </parent>
+   <artifactId>semanticstack-rql-test-report</artifactId>
+   <name>Bosch Semantic Stack Test Report</name>
+
+   <packaging>pom</packaging>
+
+   <dependencies>
+      <dependency>
+         <groupId>com.boschsemanticstack</groupId>
+         <artifactId>semanticstack-rql-parser</artifactId>
+      </dependency>
+      <dependency>
+         <groupId>com.boschsemanticstack</groupId>
+         <artifactId>semanticstack-rql-model</artifactId>
+      </dependency>
+      <dependency>
+         <groupId>com.boschsemanticstack</groupId>
+         <artifactId>semanticstack-rql-core</artifactId>
+      </dependency>
+      <dependency>
+         <groupId>com.boschsemanticstack</groupId>
+         <artifactId>semanticstack-rql-2-querydsl</artifactId>
+      </dependency>
+
+   </dependencies>
+
+   <build>
+      <plugins>
+         <plugin>
+            <groupId>org.jacoco</groupId>
+            <artifactId>jacoco-maven-plugin</artifactId>
+            <executions>
+               <execution>
+                  <id>aggregate-reports</id>
+                  <phase>verify</phase>
+                  <goals>
+                     <goal>report-aggregate</goal>
+                  </goals>
+               </execution>
+            </executions>
+         </plugin>
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-antrun-plugin</artifactId>
+            <executions>
+               <execution>
+                  <id>copy-surefire-report</id>
+                  <phase>prepare-package</phase>
+                  <configuration>
+                     <target>
+                        <copy todir="${project.build.directory}/${testreports.surefire}" flatten="true">
+                           <fileset dir="${basedir}/..">
+                              <include name="**/target/${testreports.surefire}/*.xml"/>
+                           </fileset>
+                        </copy>
+                     </target>
+                  </configuration>
+                  <goals>
+                     <goal>run</goal>
+                  </goals>
+               </execution>
+            </executions>
+         </plugin>
+
+         <!-- Configure generation of surefire reports -->
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-report-plugin</artifactId>
+            <configuration>
+               <outputDirectory>${project.build.directory}/${testreports.surefire}</outputDirectory>
+               <showSuccess>true</showSuccess>
+               <aggregate>false</aggregate>
+               <linkXRef>false</linkXRef>
+               <skipSurefireReport>${skip.maven.surefire.report.plugin}</skipSurefireReport>
+            </configuration>
+            <executions>
+               <execution>
+                  <id>generate-aggregate-surefire-report</id>
+                  <phase>verify</phase>
+                  <configuration>
+                     <outputName>${testreports.surefire}</outputName>
+                     <reportsDirectories>
+                        <reportsDirectory>
+                           ${project.build.directory}/${testreports.surefire}
+                        </reportsDirectory>
+                     </reportsDirectories>
+                  </configuration>
+                  <goals>
+                     <goal>report-only</goal>
+                  </goals>
+               </execution>
+            </executions>
+         </plugin>
+
+      </plugins>
+   </build>
+</project>
