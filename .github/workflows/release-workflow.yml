@@ -85,7 +85,7 @@ jobs:
           file_pattern: 'documentation/antora.yml pom.xml */pom.xml */*/pom.xml'
 
       - name: Build and Deploy to Maven Central
-        run: mvn -B clean deploy -Psign
+        run: mvn -B clean deploy org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Psign
         env:
           MAVEN_GPG_PASSPHRASE: ${{ secrets.PGP_KEY_PASSWORD }}
           MAVEN_CENTRAL_PASSWORD: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
