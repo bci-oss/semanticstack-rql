@@ -82,7 +82,8 @@
     <maven-source-plugin.version>3.3.1</maven-source-plugin.version>
     <maven-surefire-plugin.version>3.5.3</maven-surefire-plugin.version>
     <maven-surefire-report-plugin.version>3.5.2</maven-surefire-report-plugin.version>
-    <org.jacoco.version>0.8.12</org.jacoco.version>
+    <org-jacoco.version>0.8.12</org-jacoco.version>
+    <org-sonarsource-scanner.version>5.1.0.4751</org-sonarsource-scanner.version>
 
     <!-- General settings -->
     <testreports.surefire>surefire-report</testreports.surefire>
@@ -202,9 +203,14 @@
     <pluginManagement>
       <plugins>
         <plugin>
+          <groupId>org.sonarsource.scanner.maven</groupId>
+          <artifactId>sonar-maven-plugin</artifactId>
+          <version>${org-sonarsource-scanner.version}</version>
+        </plugin>
+        <plugin>
           <groupId>org.jacoco</groupId>
           <artifactId>org.jacoco.build</artifactId>
-          <version>${org.jacoco.version}</version>
+          <version>${org-jacoco.version}</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
