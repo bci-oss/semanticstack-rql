@@ -40,7 +40,7 @@ jobs:
           reporter: github-pr-review
           checkstyle_config: google_checks.xml
           level: warning
-          fail_on_error: false
+          fail_level: warning
 
       # Required to have Maven settings.xml set up correctly
       - name: Setup JDK 21
@@ -60,6 +60,14 @@ jobs:
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com  
+
+      - name: Cache Maven packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
 
       - name: Set versions
         run: |
