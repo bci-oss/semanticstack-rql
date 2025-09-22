@@ -75,7 +75,7 @@
     <build-helper-maven-plugin.version>3.6.0</build-helper-maven-plugin.version>
     <antlr4-maven-plugin.version>${antlr4.version}</antlr4-maven-plugin.version>
     <central-publishing-maven-plugin.version>0.7.0</central-publishing-maven-plugin.version>
-    <maven-compiler-plugin.version>3.14.0</maven-compiler-plugin.version>
+    <maven-compiler-plugin.version>3.14.1</maven-compiler-plugin.version>
     <maven-gpg-plugin.version>3.2.7</maven-gpg-plugin.version>
     <maven-clean-plugin.version>3.4.1</maven-clean-plugin.version>
     <maven-javadoc-plugin.version>3.11.2</maven-javadoc-plugin.version>
