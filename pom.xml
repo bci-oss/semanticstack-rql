@@ -81,7 +81,7 @@
     <maven-javadoc-plugin.version>3.11.2</maven-javadoc-plugin.version>
     <maven-source-plugin.version>3.3.1</maven-source-plugin.version>
     <maven-surefire-plugin.version>3.5.3</maven-surefire-plugin.version>
-    <maven-surefire-report-plugin.version>3.5.2</maven-surefire-report-plugin.version>
+    <maven-surefire-report-plugin.version>3.5.4</maven-surefire-report-plugin.version>
     <org-jacoco.version>0.8.13</org-jacoco.version>
     <org-sonarsource-scanner.version>5.1.0.4751</org-sonarsource-scanner.version>
 
