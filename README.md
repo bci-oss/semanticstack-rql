@@ -49,7 +49,7 @@ Are you having trouble with Semantic Stack RQL? We want to help!
 ## Build and contribute
 
 The top level elements of the SDK structure are all carried out as Maven multimodule projects.
-Building the project requires a Java 25-compatible JDK.
+Building the project requires a Java 25-compatible JDK, and consuming the published artifacts at runtime requires a Java 25 or newer JVM. This raises the minimum supported Java runtime version and is a breaking change compared to prior releases that targeted earlier Java versions.
 
 To build the project, run the following command:
 
