@@ -62,7 +62,7 @@
   <properties>
     <!-- Dependency Versions -->
     <antlr4.version>4.13.2</antlr4.version>
-    <assertj.version>3.27.3</assertj.version>
+    <assertj.version>3.27.7</assertj.version>
     <h2.version>2.4.240</h2.version>
     <junit.version>6.0.3</junit.version>
     <mockito.version>5.17.0</mockito.version>
