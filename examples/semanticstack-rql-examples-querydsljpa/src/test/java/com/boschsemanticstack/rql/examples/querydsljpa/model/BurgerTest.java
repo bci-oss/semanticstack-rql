@@ -70,7 +70,7 @@ class BurgerTest {
       final Burger burger = new Burger( 1L, "TestBurger", Dressing.MUSTARD );
       assertThat( burger ).isNotEqualTo( null );
    }
-   
+
    @Test
    void shouldNotBeEqualWhenDifferentId() {
       final Burger burger1 = new Burger( 1L, "TestBurger", Dressing.MUSTARD );

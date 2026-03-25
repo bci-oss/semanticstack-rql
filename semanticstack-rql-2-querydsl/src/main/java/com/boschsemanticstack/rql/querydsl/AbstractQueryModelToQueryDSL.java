@@ -131,7 +131,7 @@ public abstract class AbstractQueryModelToQueryDSL<R> extends AbstractPathPredic
       for ( final String attribute : attributes ) {
          try {
             expression = existsSortAttribute( expression, attribute );
-         } catch ( final IllegalAccessException e ) {
+         } catch ( final IllegalAccessException _ ) {
             // cannot happen
          }
       }
@@ -202,7 +202,7 @@ public abstract class AbstractQueryModelToQueryDSL<R> extends AbstractPathPredic
       try {
          final Field entityField = root.getType().getDeclaredField( path );
          return Optional.ofNullable( entityField.getAnnotation( annotation ) );
-      } catch ( final NoSuchFieldException e ) {
+      } catch ( final NoSuchFieldException _ ) {
          return Optional.empty();
       }
    }
@@ -248,7 +248,7 @@ public abstract class AbstractQueryModelToQueryDSL<R> extends AbstractPathPredic
          return methodPredicate;
       } catch ( final NoSuchFieldQueryException exception ) {
          throw exception;
-      } catch ( final Exception exception ) {
+      } catch ( final Exception _ ) {
          throw e;
       }
    }

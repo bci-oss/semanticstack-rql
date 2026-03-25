@@ -117,13 +117,15 @@ public class QueryModelToQueryDSL extends AbstractQueryModelToQueryDSL<Predicate
    }
 
    private Predicate digest( final List<RqlFilter> children ) {
+      if ( children.isEmpty() ) {
+         return new BooleanBuilder().getValue();
+      }
       if ( children.size() == 1 ) {
          return digest( children.get( 0 ) );
-      } else {
-         final BooleanBuilder booleanBuilder = new BooleanBuilder();
-         children.forEach( operand -> booleanBuilder.and( digest( operand ) ) );
-         return booleanBuilder.getValue();
       }
+      final BooleanBuilder booleanBuilder = new BooleanBuilder();
+      children.forEach( operand -> booleanBuilder.and( digest( operand ) ) );
+      return booleanBuilder.getValue();
    }
 
    public QueryModelToQueryDSL applyTo( final RqlQueryModel query ) {

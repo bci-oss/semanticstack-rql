@@ -25,7 +25,7 @@ public class QueryHandlingExample {
 
    private final RestClient someRestClient = null;
 
-   private RestResponse getSomeResourceWithRqlUsingQueryParameters( final RqlQueryModel query ) {
+   public RestResponse getSomeResourceWithRqlUsingQueryParameters( final RqlQueryModel query ) {
 
       final Map<String, String> queryParameters = RqlParser.toQueryParameters( query );
 
@@ -36,7 +36,7 @@ public class QueryHandlingExample {
             .execute();
    }
 
-   private void someRestEndpoint(
+   public void someRestEndpoint(
          final String selectParam, // <2>
          final String filterParam, // <2>
          final String optionParam ) { //<2>
@@ -52,28 +52,34 @@ public class QueryHandlingExample {
 
       final RqlQueryModel from = RqlParser.from( queryString );
 
-      // do something with query model
+      doSomethingWithModel( from );
    }
 
-   private void someRestEndpoint( final String theWholeQuery ) {//<1>
+   private static void doSomethingWithModel( RqlQueryModel from ) {
+      // do something with query model
+      if( from.getChildren().isEmpty()){
+         return;
+      }
+      System.out.println( from );
+   }
+
+   public void someRestEndpoint( final String theWholeQuery ) {//<1>
 
       // this highly depends on your rest backend therefore no api call to do this is provided
       final RqlQueryModel from = RqlParser.from( Optional.ofNullable( theWholeQuery ).orElse( "" ) );
 
-      // do something with query model
+      doSomethingWithModel( from );
    }
 
-   private interface RestClient {
+   public interface RestClient {
       RestClient post( String address );
-
-      RestClient withBody( String body );
 
       RestResponse execute();
 
       RestClient addQueryParam( String select, String select1 );
    }
 
-   private interface RestResponse {
+   public interface RestResponse {
 
    }
 }
