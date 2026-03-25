@@ -80,7 +80,7 @@
     <maven-surefire-report-plugin.version>3.5.5</maven-surefire-report-plugin.version>
     <org-jacoco.version>0.8.14</org-jacoco.version>
     <org-sonarsource-scanner.version>5.5.0.6356</org-sonarsource-scanner.version>
-    <spotless-maven-plugin.version>2.44.0</spotless-maven-plugin.version>
+    <spotless-maven-plugin.version>3.4.0</spotless-maven-plugin.version>
 
 
     <!-- General settings -->
