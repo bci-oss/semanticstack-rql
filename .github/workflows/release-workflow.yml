@@ -92,8 +92,8 @@ jobs:
           MAVEN_CENTRAL_PASSWORD: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
           MAVEN_CENTRAL_USERNAME: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
 
-      # Full release: Github
-      - name: "Create Github release (full)"
+      # Full release: GitHub
+      - name: "Create GitHub release (full)"
         run: |
           gh release create "v${{ github.event.inputs.release_version }}" \
             --target "${{ env.release_branch_name }}" \
