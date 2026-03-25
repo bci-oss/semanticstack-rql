@@ -275,7 +275,7 @@
         <artifactId>maven-checkstyle-plugin</artifactId>
         <version>${maven-checkstyle-plugin.version}</version>
         <configuration>
-            <configLocation>${maven.multiModuleProjectDirectory}/.development/rql-checkstyle.xml</configLocation>
+            <configLocation>${maven.multiModuleProjectDirectory}/rql-checkstyle.xml</configLocation>
             <consoleOutput>true</consoleOutput>
             <failsOnError>true</failsOnError>
             <failOnViolation>true</failOnViolation>
