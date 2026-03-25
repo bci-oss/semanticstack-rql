@@ -245,7 +245,7 @@
                   <include>**/*.java</include>
                   <include>**/*.md</include>
                   <include>**/*.adoc</include>
-                  <include>**/*.ttl</include>
+                  <include>**/*.xml</include>
                 </includes>
                 <trimTrailingWhitespace/>
                 <endWithNewline/>
