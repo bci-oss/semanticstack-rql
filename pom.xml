@@ -248,12 +248,6 @@
                 <lineEndings>UNIX</lineEndings>
               </format>
             </formats>
-            <!-- Java-specific formats -->
-            <java>
-              <includes>
-                <include>src/**/*.java</include>
-              </includes>
-            </java>
           </configuration>
         </plugin>
         <plugin>
