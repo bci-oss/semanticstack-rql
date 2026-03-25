@@ -242,10 +242,10 @@
               <!-- General formats -->
               <format>
                 <includes>
-                  <include>*.java</include>
-                  <include>*.md</include>
-                  <include>*.adoc</include>
-                  <include>*.ttl</include>
+                  <include>**/*.java</include>
+                  <include>**/*.md</include>
+                  <include>**/*.adoc</include>
+                  <include>**/*.ttl</include>
                 </includes>
                 <trimTrailingWhitespace/>
                 <endWithNewline/>
@@ -253,12 +253,6 @@
                 <lineEndings>UNIX</lineEndings>
               </format>
             </formats>
-            <!-- Java-specific formats -->
-            <java>
-              <includes>
-                <include>src/**/*.java</include>
-              </includes>
-            </java>
           </configuration>
         </plugin>
         <plugin>
