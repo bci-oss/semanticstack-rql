@@ -6,9 +6,6 @@ on:
         description: 'Version number of the release'
         required: true
 
-permissions:
-  contents: write
-  actions: write
 
 jobs:
   check-preconditions:
@@ -32,6 +29,9 @@ jobs:
   release:
     name: Release
     needs: [ check-preconditions ]
+    permissions:
+      contents: write
+      actions: write
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
