@@ -132,6 +132,11 @@
         <artifactId>semanticstack-rql-2-querydsl</artifactId>
         <version>${project.version}</version>
       </dependency>
+      <dependency>
+        <groupId>com.boschsemanticstack</groupId>
+        <artifactId>semanticstack-rql-examples-querydsljpa</artifactId>
+        <version>${project.version}</version>
+      </dependency>
 
       <!-- Third party artifacts -->
       <dependency>
