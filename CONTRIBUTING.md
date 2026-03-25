@@ -19,10 +19,10 @@ We follow the [Git branching guidance](https://docs.microsoft.com/en-us/azure/de
 
 More specifically the repository has the following branches:
 
- name of branch                    | description                                                      
+ name of branch                    | description
 -----------------------------------|------------------------------------------------------------------
- `main`                            | Contains the latest state of the repository                      
- `v{version_number}-RC{rc_number}` | A "release candidate": A version that freezes major features and 
+ `main`                            | Contains the latest state of the repository
+ `v{version_number}-RC{rc_number}` | A "release candidate": A version that freezes major features and
 
 can be considered a pre-release of the next full release.
 `v{version_number}` | A full release of the respective version.
@@ -40,10 +40,10 @@ We use the `Issues` feature of GitHub for tracking all types of work in the repo
 
 We distinguish between the following types of issues;
 
- Issue Types  | Description                                                                             
+ Issue Types  | Description
 --------------|-----------------------------------------------------------------------------------------
- `Bug Report` | This `Issue` is dedicated to reporting a problem.                                       
- `Task`       | This `Issue` is used for describing and proposing a new work item (e.g., a new feature) 
+ `Bug Report` | This `Issue` is dedicated to reporting a problem.
+ `Task`       | This `Issue` is used for describing and proposing a new work item (e.g., a new feature)
 
 If there are issues that link to the same topic, the creator of the issue shall mention those other tasks in the
 description. To group tasks that can belong together, one could further create an issue mentioning and describing
@@ -99,8 +99,8 @@ following template:
 
 ```
 /*
- * Copyright (c) {YEAR} {NAME OF COMPANY X} 
- * Copyright (c) {YEAR} {NAME OF COMPANY Y} 
+ * Copyright (c) {YEAR} {NAME OF COMPANY X}
+ * Copyright (c) {YEAR} {NAME OF COMPANY Y}
  *
  * See the AUTHORS file(s) distributed with this work for additional
  * information regarding authorship.
@@ -156,7 +156,7 @@ which are licensed under [CC-BY-4.0](https://creativecommons.org/licenses/by/4.0
 states:
 
 ````
-Changes to the contract of an API are considered a breaking change. Changes that impact the backwards compatibility 
+Changes to the contract of an API are considered a breaking change. Changes that impact the backwards compatibility
 of an API are a breaking change.
 `````
 
@@ -175,4 +175,3 @@ v1.0.0-RC1, v1.0.0
 * [For a Repo](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request-from-a-fork)
 * [Issue Creation](https://help.github.com/en/github/managing-your-work-on-github/creating-an-issue)
 * [PR Creation](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request)
-
