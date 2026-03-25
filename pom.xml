@@ -89,8 +89,8 @@
     <testreports.surefire>surefire-report</testreports.surefire>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <java-target-version>21</java-target-version>
-    <java-source-version>21</java-source-version>
+    <java-target-version>25</java-target-version>
+    <java-source-version>25</java-source-version>
 
     <!-- Sonar settings -->
     <sonar.coverage.jacoco.xmlReportPaths>
