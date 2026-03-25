@@ -146,4 +146,3 @@ class BurgerTest {
       assertThat( burger.getDressing() ).isNull();
    }
 }
-

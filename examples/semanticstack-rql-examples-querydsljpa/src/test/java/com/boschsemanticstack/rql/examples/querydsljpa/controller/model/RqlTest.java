@@ -93,4 +93,3 @@ class RqlTest {
       assertThat( rql.toString() ).isEqualTo( "option=limit(0,10)" );
    }
 }
-
