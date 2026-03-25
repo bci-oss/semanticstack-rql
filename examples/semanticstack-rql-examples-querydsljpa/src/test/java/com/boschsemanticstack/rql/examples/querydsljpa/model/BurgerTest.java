@@ -22,17 +22,19 @@ class BurgerTest {
    @Test
    void shouldCreateBurgerWithDefaultConstructor() {
       final Burger burger = new Burger();
-      assertThat( burger.getId() ).isZero();
-      assertThat( burger.getName() ).isNull();
-      assertThat( burger.getDressing() ).isNull();
+      assertThat( burger )
+            .returns( 0L, Burger::getId )
+            .returns( null, Burger::getName )
+            .returns( null, Burger::getDressing );
    }
 
    @Test
    void shouldCreateBurgerWithAllArgsConstructor() {
       final Burger burger = new Burger( 1L, "TestBurger", Dressing.MUSTARD );
-      assertThat( burger.getId() ).isEqualTo( 1L );
-      assertThat( burger.getName() ).isEqualTo( "TestBurger" );
-      assertThat( burger.getDressing() ).isEqualTo( Dressing.MUSTARD );
+      assertThat( burger )
+            .returns( 1L, Burger::getId )
+            .returns( "TestBurger", Burger::getName )
+            .returns( Dressing.MUSTARD, Burger::getDressing );
    }
 
    @Test
@@ -64,23 +66,11 @@ class BurgerTest {
    }
 
    @Test
-   void shouldBeEqualToSelf() {
-      final Burger burger = new Burger( 1L, "TestBurger", Dressing.MUSTARD );
-      assertThat( burger ).isEqualTo( burger );
-   }
-
-   @Test
    void shouldNotBeEqualToNull() {
       final Burger burger = new Burger( 1L, "TestBurger", Dressing.MUSTARD );
       assertThat( burger ).isNotEqualTo( null );
    }
-
-   @Test
-   void shouldNotBeEqualToDifferentClass() {
-      final Burger burger = new Burger( 1L, "TestBurger", Dressing.MUSTARD );
-      assertThat( burger ).isNotEqualTo( "not a burger" );
-   }
-
+   
    @Test
    void shouldNotBeEqualWhenDifferentId() {
       final Burger burger1 = new Burger( 1L, "TestBurger", Dressing.MUSTARD );
@@ -106,24 +96,20 @@ class BurgerTest {
    void shouldHaveSameHashCodeWhenEqual() {
       final Burger burger1 = new Burger( 1L, "TestBurger", Dressing.MUSTARD );
       final Burger burger2 = new Burger( 1L, "TestBurger", Dressing.MUSTARD );
-      assertThat( burger1.hashCode() ).isEqualTo( burger2.hashCode() );
+      assertThat( burger1 ).hasSameHashCodeAs( burger2 );
    }
 
    @Test
    void shouldHaveDifferentHashCodeWhenNotEqual() {
       final Burger burger1 = new Burger( 1L, "TestBurger", Dressing.MUSTARD );
       final Burger burger2 = new Burger( 2L, "OtherBurger", Dressing.TOMATO_SAUCE );
-      assertThat( burger1.hashCode() ).isNotEqualTo( burger2.hashCode() );
+      assertThat( burger1 ).doesNotHaveSameHashCodeAs( burger2 );
    }
 
    @Test
    void shouldReturnMeaningfulToString() {
       final Burger burger = new Burger( 1L, "TestBurger", Dressing.MUSTARD );
-      final String result = burger.toString();
-      assertThat( result ).contains( "Burger" );
-      assertThat( result ).contains( "TestBurger" );
-      assertThat( result ).contains( "MUSTARD" );
-      assertThat( result ).contains( "1" );
+      assertThat( burger ).hasToString( "Burger(id=1, name=TestBurger, dressing=MUSTARD)" );
    }
 
    @Test

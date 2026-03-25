@@ -58,7 +58,7 @@ class RqlTest {
    @Test
    void shouldCreateWithOptionOnly() {
       final Rql rql = Rql.withOption( "sort(+name),limit(0,2)" );
-      assertThat( rql.toString() ).isEqualTo( "option=sort(+name),limit(0,2)" );
+      assertThat( rql ).hasToString( "option=sort(+name),limit(0,2)" );
    }
 
    @Test
@@ -78,18 +78,18 @@ class RqlTest {
    @Test
    void shouldFormatToStringWithFilter() {
       final Rql rql = new Rql( "eq(name,\"Test\")", "limit(0,10)" );
-      assertThat( rql.toString() ).isEqualTo( "filter=eq(name,\"Test\")&option=limit(0,10)" );
+      assertThat( rql ).hasToString( "filter=eq(name,\"Test\")&option=limit(0,10)" );
    }
 
    @Test
    void shouldFormatToStringWithoutFilter() {
       final Rql rql = new Rql( null, "limit(0,10)" );
-      assertThat( rql.toString() ).isEqualTo( "option=limit(0,10)" );
+      assertThat( rql ).hasToString( "option=limit(0,10)" );
    }
 
    @Test
    void shouldFormatToStringWithEmptyFilter() {
       final Rql rql = new Rql( "", "limit(0,10)" );
-      assertThat( rql.toString() ).isEqualTo( "option=limit(0,10)" );
+      assertThat( rql ).hasToString( "option=limit(0,10)" );
    }
 }
