@@ -31,7 +31,6 @@ jobs:
     needs: [ check-preconditions ]
     permissions:
       contents: write
-      actions: write
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
