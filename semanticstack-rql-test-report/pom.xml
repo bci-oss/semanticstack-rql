@@ -43,6 +43,10 @@
          <groupId>com.boschsemanticstack</groupId>
          <artifactId>semanticstack-rql-2-querydsl</artifactId>
       </dependency>
+      <dependency>
+         <groupId>com.boschsemanticstack</groupId>
+         <artifactId>semanticstack-rql-examples-querydsljpa</artifactId>
+      </dependency>
 
    </dependencies>
 
