@@ -98,7 +98,6 @@ jobs:
           gh release create "v${{ github.event.inputs.release_version }}" \
             --target "${{ env.release_branch_name }}" \
             --title "v${{ github.event.inputs.release_version }}" \
-            --notes "Release version ${{ github.event.inputs.release_version }}." \
             --generate-notes
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN  }}
