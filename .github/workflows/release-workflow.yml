@@ -80,7 +80,7 @@ jobs:
           git add .
           git commit -m "Release version ${release_version}"
 
-      - name: Commit version changes and push to upstream repository
+      - name: Push release branch to upstream repository
         run: |
           git push origin HEAD:refs/heads/${{ env.release_branch_name }}
 
