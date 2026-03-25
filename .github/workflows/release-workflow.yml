@@ -5,6 +5,10 @@ on:
       release_version:
         description: 'Version number of the release'
         required: true
+
+permissions:
+  contents: write
+
 jobs:
   check-preconditions:
     name: Check preconditions
@@ -83,6 +87,8 @@ jobs:
       - name: Push release branch to upstream repository
         run: |
           git push origin HEAD:refs/heads/${{ env.release_branch_name }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and Deploy to Maven Central
         run: mvn -B clean deploy org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Psign
@@ -100,12 +106,4 @@ jobs:
             --title "v${{ github.event.inputs.release_version }}" \
             --generate-notes
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN  }}
-          
-      # Currently cannot use because the CLA locks closed PRs and the action cannot comment PRs
-      #- name: "Notify issues of release their fix is contained in"
-      #  uses: apexskier/github-release-commenter@3bd413ad5e1d603bfe2282f9f06f2bdcec079327 # v1.3.6
-      #  with:
-      #    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #    comment-template: |
-      #      Release {release_link} addresses this.
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
