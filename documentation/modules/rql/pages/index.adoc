@@ -4,7 +4,7 @@ Generally, a Resource Query Language (RQL) serves as a query language tailored f
 
 The *Bosch Semantic Stack RQL* open-source project comes with its own RQL grammar and the corresponding Java tooling. The RQL parser, for example, aims to support REST API owners with handling incoming queries that use the Bosch Semantic Stack RQL.
 
-A query that utilizes Bosch Semantic Stack RQL can have up to three main parts: 
+A query that utilizes Bosch Semantic Stack RQL can have up to three main parts:
 
 * `select`
 * `filter`

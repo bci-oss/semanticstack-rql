@@ -38,7 +38,7 @@ import jakarta.validation.constraints.NotNull;
 @SuppressWarnings( { "java:S3740" } )
 // java:S3740 parameterized types - they are not known for the expressions handled here so they cannot be given explicitly
 public abstract class AbstractPathPredicateResolver<T extends Expression<?>, P> implements PathPredicateResolver<T, P> {
- 
+
    private final Class<T> handledPathType = getRawClassOfFirstTypeParameter();
 
    /**

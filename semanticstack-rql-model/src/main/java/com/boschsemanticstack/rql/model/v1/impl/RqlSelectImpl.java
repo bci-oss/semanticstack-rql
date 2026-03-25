@@ -36,7 +36,7 @@ public record RqlSelectImpl( List<String> attributes ) implements RqlSelect {
    public boolean hasAttributeStartingWith( final String attribute ) {
       return attributes.stream().anyMatch( a -> a.startsWith( attribute ) );
    }
-   
+
    @Override
    public boolean isEmpty() {
       return attributes.isEmpty();

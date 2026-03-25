@@ -39,7 +39,7 @@ import com.querydsl.core.types.dsl.SimpleExpression;
 @SuppressWarnings( { "java:S3740" } )
 // java:S3740 parameterized types - thy are not known for the expressions handled here so they cannot be given explicitly
 public class QueryModelToQueryDSL extends AbstractQueryModelToQueryDSL<Predicate> {
- 
+
    /**
     * Transform {@link RqlQueryModel} into predicates, paging and sorting information
     * for a given Querydsl query type.

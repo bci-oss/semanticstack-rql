@@ -31,7 +31,7 @@ public @interface WildcardCount {
     * @return {@link String}s which are counted for the validation.
     */
    char[] wildcards() default { '*', '%' };
- 
+
    /**
     * @return the number of allowed wildcards.
     */

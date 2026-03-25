@@ -29,7 +29,7 @@ public class WildcardEntity {
    private String regex1;
    @RqlPattern( regex = ".+[^\\*]\\*$" )
    private String regex2;
- 
+
    private String id;
    private String type;
 

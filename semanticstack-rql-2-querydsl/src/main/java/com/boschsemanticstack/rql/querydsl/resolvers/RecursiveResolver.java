@@ -42,7 +42,7 @@ public class RecursiveResolver<T extends Expression<?>> extends AbstractPathPred
    private final AbstractPathPredicateResolver parentResolver;
 
    private final MethodHandle delegatingResolve;
- 
+
    /**
     * Instantiates a {@link RecursiveResolver} that will delegate the actual resolution back to the {@link
     * PathPredicateResolver#resolve(SimpleExpression, Field, Queue, RqlFilter)} method of the given parent resolver.

@@ -1,7 +1,7 @@
 = Syntax Guide
 :source-language: rql
 :page-partial:
-//Keep :page-partial: attribute so that users of Antora versions lower than 2.2 will also be able to include the page without running into ordering problems. More details: https://docs.antora.org/antora/latest/page/page-partial/  
+//Keep :page-partial: attribute so that users of Antora versions lower than 2.2 will also be able to include the page without running into ordering problems. More details: https://docs.antora.org/antora/latest/page/page-partial/
 
 
 Learn how to compose queries that are based on and conform to Bosch Semantic Stack RQL.

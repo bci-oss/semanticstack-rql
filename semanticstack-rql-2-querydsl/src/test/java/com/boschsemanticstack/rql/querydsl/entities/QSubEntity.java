@@ -37,7 +37,7 @@ public class QSubEntity extends EntityPathBase<SubEntity> {
 
    public final MapPath<String, String, StringPath> metadata = createMap( "metadata", String.class, String.class,
          StringPath.class );
- 
+
    public QSubEntity3 entity;
 
    public final ListPath<String, StringPath> stringList = createList( "stringList", String.class, StringPath.class,
