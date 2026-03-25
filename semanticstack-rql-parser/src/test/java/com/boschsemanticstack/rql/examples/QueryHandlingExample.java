@@ -21,13 +21,11 @@ import java.util.stream.Stream;
 import com.boschsemanticstack.rql.model.v1.RqlQueryModel;
 import com.boschsemanticstack.rql.parser.v1.RqlParser;
 
-import io.reactivex.Observable;
-
 public class QueryHandlingExample {
 
    private final RestClient someRestClient = null;
 
-   private Observable<RestResponse> getSomeResourceWithRqlUsingQueryParameters( final RqlQueryModel query ) {
+   private RestResponse getSomeResourceWithRqlUsingQueryParameters( final RqlQueryModel query ) {
 
       final Map<String, String> queryParameters = RqlParser.toQueryParameters( query );
 
@@ -35,9 +33,9 @@ public class QueryHandlingExample {
             .addQueryParam( "select", queryParameters.get( "select" ) ) // <1>
             .addQueryParam( "filter", queryParameters.get( "filter" ) ) // <1>
             .addQueryParam( "option", queryParameters.get( "option" ) ) // <1>
-            .toObservableResponse();
+            .execute();
    }
- 
+
    private void someRestEndpoint(
          final String selectParam, // <2>
          final String filterParam, // <2>
@@ -70,7 +68,7 @@ public class QueryHandlingExample {
 
       RestClient withBody( String body );
 
-      Observable<RestResponse> toObservableResponse();
+      RestResponse execute();
 
       RestClient addQueryParam( String select, String select1 );
    }

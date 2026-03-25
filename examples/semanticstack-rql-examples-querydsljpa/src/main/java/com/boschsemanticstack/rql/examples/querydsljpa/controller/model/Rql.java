@@ -19,29 +19,28 @@ import java.nio.charset.StandardCharsets;
 
 import org.springframework.util.StringUtils;
 
-import lombok.AllArgsConstructor;
-import lombok.SneakyThrows;
-
-@AllArgsConstructor
 public class Rql {
-   private String filter;
-   private String option;
+   private final String filter;
+   private final String option;
+
+   public Rql( final String filter, final String option ) {
+      this.filter = filter;
+      this.option = option;
+   }
 
    @Override
    public String toString() {
       return StringUtils.hasLength( filter ) ? "filter=" + filter + "&option=" + option : "option=" + option;
    }
 
-   @SneakyThrows
    public Rql encode() {
-      return new Rql( //
+      return new Rql(
             filter != null ? URLEncoder.encode( filter, StandardCharsets.UTF_8 ) : null,
             option != null ? URLEncoder.encode( option, StandardCharsets.UTF_8 ) : null );
    }
 
-   @SneakyThrows
    public Rql decode() {
-      return new Rql( //
+      return new Rql(
             filter != null ? URLDecoder.decode( filter, StandardCharsets.UTF_8 ) : null,
             option != null ? URLDecoder.decode( option, StandardCharsets.UTF_8 ) : null );
    }

@@ -24,12 +24,9 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import lombok.Data;
-
 /**
  * Just a lazy, simple page-implementation for demonstration purposes.
  */
-@Data
 @JsonInclude( Include.NON_NULL )
 public class PageResource<T> {
    @JsonProperty
@@ -51,6 +48,30 @@ public class PageResource<T> {
       count = page.getSize();
       this.page = page.getNumber();
       pageSize = page.getPageable().getPageSize();
+   }
+
+   public long getTotalCount() {
+      return totalCount;
+   }
+
+   public int getCount() {
+      return count;
+   }
+
+   public int getPage() {
+      return page;
+   }
+
+   public int getPageSize() {
+      return pageSize;
+   }
+
+   public List<T> getElements() {
+      return elements;
+   }
+
+   public List<Link> getLinks() {
+      return links;
    }
 
    public static <T> PageResource<T> of( final Page<T> page ) {

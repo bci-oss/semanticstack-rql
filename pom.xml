@@ -62,18 +62,12 @@
   <properties>
     <!-- Dependency Versions -->
     <antlr4.version>4.13.2</antlr4.version>
-    <assertj.version>3.27.7</assertj.version>
-    <h2.version>2.4.240</h2.version>
-    <junit.version>6.0.3</junit.version>
-    <mockito.version>5.23.0</mockito.version>
-    <jackson.version>2.21.2</jackson.version>
     <querydsl.version>7.1</querydsl.version>
-    <jakarta.version>3.1.1</jakarta.version>
-    <rxjava.version>2.2.21</rxjava.version>
+    <spring-boot.version>3.5.12</spring-boot.version>
 
     <!-- Plugin Versions -->
-    <build-helper-maven-plugin.version>3.6.1</build-helper-maven-plugin.version>
     <antlr4-maven-plugin.version>${antlr4.version}</antlr4-maven-plugin.version>
+    <build-helper-maven-plugin.version>3.6.1</build-helper-maven-plugin.version>
     <central-publishing-maven-plugin.version>0.10.0</central-publishing-maven-plugin.version>
     <checkstyle.version>10.26.1</checkstyle.version>
     <maven-compiler-plugin.version>3.15.0</maven-compiler-plugin.version>
@@ -110,16 +104,9 @@
     <dependencies>
       <!-- POM section -->
       <dependency>
-        <groupId>com.fasterxml.jackson</groupId>
-        <artifactId>jackson-bom</artifactId>
-        <version>${jackson.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.junit</groupId>
-        <artifactId>junit-bom</artifactId>
-        <version>${junit.version}</version>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-dependencies</artifactId>
+        <version>${spring-boot.version}</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -148,16 +135,6 @@
 
       <!-- Third party artifacts -->
       <dependency>
-        <groupId>jakarta.validation</groupId>
-        <artifactId>jakarta.validation-api</artifactId>
-        <version>${jakarta.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>io.reactivex.rxjava2</groupId>
-        <artifactId>rxjava</artifactId>
-        <version>${rxjava.version}</version>
-      </dependency>
-      <dependency>
         <groupId>io.github.openfeign.querydsl</groupId>
         <artifactId>querydsl-core</artifactId>
         <version>${querydsl.version}</version>
@@ -182,24 +159,9 @@
 
       <!-- Artifacts for testing -->
       <dependency>
-        <groupId>com.h2database</groupId>
-        <artifactId>h2</artifactId>
-        <version>${h2.version}</version>
-      </dependency>
-      <dependency>
         <groupId>org.antlr</groupId>
         <artifactId>antlr4</artifactId>
         <version>${antlr4.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.assertj</groupId>
-        <artifactId>assertj-core</artifactId>
-        <version>${assertj.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.mockito</groupId>
-        <artifactId>mockito-core</artifactId>
-        <version>${mockito.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
