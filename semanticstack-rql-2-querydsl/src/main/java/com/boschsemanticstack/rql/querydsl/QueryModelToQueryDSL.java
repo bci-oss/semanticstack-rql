@@ -121,7 +121,7 @@ public class QueryModelToQueryDSL extends AbstractQueryModelToQueryDSL<Predicate
          return new BooleanBuilder().getValue();
       }
       if ( children.size() == 1 ) {
-         return digest( children.get( 0 ) );
+         return digest( children.getFirst() );
       }
       final BooleanBuilder booleanBuilder = new BooleanBuilder();
       children.forEach( operand -> booleanBuilder.and( digest( operand ) ) );

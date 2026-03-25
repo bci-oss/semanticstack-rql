@@ -24,35 +24,35 @@ class RqlTest {
       final Rql original = new Rql( "like(name,\"*Rql\")", "limit(0,20)" );
       final Rql encoded = original.encode();
       final Rql decoded = encoded.decode();
-      assertThat( decoded.toString() ).isEqualTo( original.toString() );
+      assertThat( decoded ).hasToString( original.toString() );
    }
 
    @Test
    void shouldDecodeWithNullFilter() {
       final Rql encoded = new Rql( null, "limit%280%2C20%29" );
       final Rql decoded = encoded.decode();
-      assertThat( decoded.toString() ).isEqualTo( "option=limit(0,20)" );
+      assertThat( decoded ).hasToString( "option=limit(0,20)" );
    }
 
    @Test
    void shouldDecodeWithNullOption() {
       final Rql encoded = new Rql( "like%28name%2C%22*Rql%22%29", null );
       final Rql decoded = encoded.decode();
-      assertThat( decoded.toString() ).contains( "like(name,\"*Rql\")" );
+      assertThat( decoded ).hasToString( "filter=like(name,\"*Rql\")&option=null" );
    }
 
    @Test
    void shouldEncodeAndDecodeRoundTrip() {
       final Rql original = new Rql( "eq(dressing,\"MUSTARD\")", "sort(+name),limit(0,10)" );
       final Rql roundTripped = original.encode().decode();
-      assertThat( roundTripped.toString() ).isEqualTo( original.toString() );
+      assertThat( roundTripped ).hasToString( original.toString() );
    }
 
    @Test
    void shouldDecodeAlreadyDecodedValues() {
       final Rql rql = new Rql( "like(name,\"*Burger\")", "limit(0,5)" );
       final Rql decoded = rql.decode();
-      assertThat( decoded.toString() ).isEqualTo( rql.toString() );
+      assertThat( decoded ).hasToString( rql.toString() );
    }
 
    @Test

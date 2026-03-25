@@ -84,7 +84,6 @@ public abstract class AbstractQueryModelToQueryDSL<R> extends AbstractPathPredic
     * @param rootResource the QueryDSL metamodel instance to apply the query to
     */
    protected AbstractQueryModelToQueryDSL( final EntityPathBase rootResource ) {
-      super();
       this.rootResource = rootResource;
    }
 
