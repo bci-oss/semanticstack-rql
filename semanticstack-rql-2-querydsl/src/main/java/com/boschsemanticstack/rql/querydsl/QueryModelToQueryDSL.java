@@ -39,7 +39,7 @@ import com.querydsl.core.types.dsl.SimpleExpression;
 @SuppressWarnings( { "java:S3740" } )
 // java:S3740 parameterized types - thy are not known for the expressions handled here so they cannot be given explicitly
 public class QueryModelToQueryDSL extends AbstractQueryModelToQueryDSL<Predicate> {
- 
+
    /**
     * Transform {@link RqlQueryModel} into predicates, paging and sorting information
     * for a given Querydsl query type.
@@ -117,13 +117,15 @@ public class QueryModelToQueryDSL extends AbstractQueryModelToQueryDSL<Predicate
    }
 
    private Predicate digest( final List<RqlFilter> children ) {
-      if ( children.size() == 1 ) {
-         return digest( children.get( 0 ) );
-      } else {
-         final BooleanBuilder booleanBuilder = new BooleanBuilder();
-         children.forEach( operand -> booleanBuilder.and( digest( operand ) ) );
-         return booleanBuilder.getValue();
+      if ( children.isEmpty() ) {
+         return new BooleanBuilder().getValue();
       }
+      if ( children.size() == 1 ) {
+         return digest( children.getFirst() );
+      }
+      final BooleanBuilder booleanBuilder = new BooleanBuilder();
+      children.forEach( operand -> booleanBuilder.and( digest( operand ) ) );
+      return booleanBuilder.getValue();
    }
 
    public QueryModelToQueryDSL applyTo( final RqlQueryModel query ) {

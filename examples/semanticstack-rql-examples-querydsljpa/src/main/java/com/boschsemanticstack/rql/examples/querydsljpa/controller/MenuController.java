@@ -34,7 +34,6 @@ import com.boschsemanticstack.rql.model.v1.RqlQueryModel;
 import com.boschsemanticstack.rql.parser.v1.RqlParser;
 import com.boschsemanticstack.rql.querydsl.QueryModelToQueryDSL;
 
-import lombok.SneakyThrows;
 
 @RestController
 @RequestMapping( value = "/api/v1/menu", produces = "application/hal+json" )
@@ -47,7 +46,6 @@ public class MenuController {
    }
 
    @GetMapping
-   @SneakyThrows
    public ResponseEntity<PageResource<Burger>> getMenu( @RequestParam( value = "filter", required = false ) final String filter,
          @RequestParam( value = "option", defaultValue = "sort(+name),limit(0,2)" ) final String option ) {
       final Rql rql = new Rql( filter, option );

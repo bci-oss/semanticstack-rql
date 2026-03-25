@@ -25,24 +25,6 @@
    <artifactId>semanticstack-rql-examples-querydsljpa</artifactId>
    <name>Bosch Semantic Stack RQL Examples::QueryDslWithJpa</name>
 
-   <properties>
-      <spring-boot.version>3.3.4</spring-boot.version>
-      <!-- In case that you do not use the RQL-parent pom you need to provide the querydsl-version -->
-      <!-- <querydsl.version>[4.1.4,)</querydsl.version> -->
-   </properties>
-
-   <dependencyManagement>
-      <dependencies>
-         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-dependencies</artifactId>
-            <version>${spring-boot.version}</version>
-            <type>pom</type>
-            <scope>import</scope>
-         </dependency>
-      </dependencies>
-   </dependencyManagement>
-
    <dependencies>
       <dependency>
          <groupId>com.boschsemanticstack</groupId>
@@ -73,11 +55,7 @@
       <dependency>
          <groupId>io.github.openfeign.querydsl</groupId>
          <artifactId>querydsl-apt</artifactId>
-         <version>${querydsl.version}</version>
-      </dependency>
-      <dependency>
-         <groupId>org.projectlombok</groupId>
-         <artifactId>lombok</artifactId>
+         <scope>provided</scope>
       </dependency>
       <!-- Test dependencies -->
       <dependency>
@@ -90,21 +68,22 @@
    <build>
       <plugins>
          <plugin>
-            <groupId>com.mysema.maven</groupId>
-            <artifactId>apt-maven-plugin</artifactId>
-            <executions>
-               <execution>
-                  <id>querydsl-generate-model</id>
-                  <phase>generate-sources</phase>
-                  <goals>
-                     <goal>process</goal>
-                  </goals>
-                  <configuration>
-                     <outputDirectory>target/generated-sources/java</outputDirectory>
-                     <processor>com.querydsl.apt.jpa.JPAAnnotationProcessor</processor>
-                  </configuration>
-               </execution>
-            </executions>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <configuration>
+               <annotationProcessorPaths>
+                  <path>
+                     <groupId>io.github.openfeign.querydsl</groupId>
+                     <artifactId>querydsl-apt</artifactId>
+                     <version>${querydsl.version}</version>
+                     <classifier>jakarta</classifier>
+                  </path>
+                  <path>
+                     <groupId>jakarta.persistence</groupId>
+                     <artifactId>jakarta.persistence-api</artifactId>
+                  </path>
+               </annotationProcessorPaths>
+            </configuration>
          </plugin>
          <plugin>
             <groupId>org.codehaus.mojo</groupId>

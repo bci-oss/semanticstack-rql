@@ -36,7 +36,7 @@ import com.querydsl.core.types.dsl.SimpleExpression;
 // java:S3740 parameterized types - thy are not known for the expressions handled here so they cannot be given explicitely
 public class CollectionPathResolver extends RecursiveResolver<CollectionPathBase<?, ?, ?>> {
    private final SimpleValueResolver simpleValueResolver;
- 
+
    public CollectionPathResolver( final AbstractPathPredicateResolver parentResolver,
          final SimpleValueResolver simpleValueResolver ) {
       super( parentResolver );

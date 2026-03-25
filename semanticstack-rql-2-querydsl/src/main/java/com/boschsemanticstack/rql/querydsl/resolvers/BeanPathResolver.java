@@ -32,7 +32,7 @@ public class BeanPathResolver extends RecursiveResolver<BeanPath<?>> {
    public BeanPathResolver( final AbstractPathPredicateResolver parentResolver ) {
       super( parentResolver );
    }
- 
+
    @Override
    public Predicate resolve( final SimpleExpression root, final Field field, final Queue<String> pathElements, final RqlFilter filter )
          throws ReflectiveOperationException {

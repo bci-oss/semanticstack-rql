@@ -38,7 +38,7 @@ import jakarta.validation.constraints.NotNull;
 @SuppressWarnings( { "java:S3740" } )
 // java:S3740 parameterized types - they are not known for the expressions handled here so they cannot be given explicitly
 public abstract class AbstractPathPredicateResolver<T extends Expression<?>, P> implements PathPredicateResolver<T, P> {
- 
+
    private final Class<T> handledPathType = getRawClassOfFirstTypeParameter();
 
    /**
@@ -46,10 +46,14 @@ public abstract class AbstractPathPredicateResolver<T extends Expression<?>, P> 
     */
    @SuppressWarnings( "unchecked" )
    private Class<T> getRawClassOfFirstTypeParameter() {
-      final ParameterizedType superclass = (ParameterizedType) getClass().getGenericSuperclass(); // we KNOW it's parameterized ;)
-      final Type typeOfFirstArgument = superclass.getActualTypeArguments()[0];
-      return typeOfFirstArgument instanceof ParameterizedType
-            ? (Class<T>) ((ParameterizedType) typeOfFirstArgument).getRawType()
+      final ParameterizedType superclass = (ParameterizedType) getClass().getGenericSuperclass(); // we KNOW it's parameterized
+      final Type[] typeArguments = superclass.getActualTypeArguments();
+      if ( typeArguments.length == 0 ) {
+         throw new IllegalStateException( "No type arguments found for " + getClass().getName() );
+      }
+      final Type typeOfFirstArgument = typeArguments[0];
+      return typeOfFirstArgument instanceof ParameterizedType parameterizedType
+            ? (Class<T>) parameterizedType.getRawType()
             : (Class<T>) typeOfFirstArgument;
    }
 
@@ -76,7 +80,7 @@ public abstract class AbstractPathPredicateResolver<T extends Expression<?>, P> 
       final Class<? extends SimpleExpression> typeOfElementAtPath = path.getClass();
       try {
          return Optional.of( typeOfElementAtPath.getMethod( methodName ) );
-      } catch ( final NoSuchMethodException e ) {
+      } catch ( final NoSuchMethodException _ ) {
          return Optional.empty();
       }
    }
@@ -85,7 +89,7 @@ public abstract class AbstractPathPredicateResolver<T extends Expression<?>, P> 
       final Class<? extends SimpleExpression> typeOfElementAtPath = path.getClass();
       try {
          return Optional.of( typeOfElementAtPath.getMethod( methodName, parameterTypes ) );
-      } catch ( final NoSuchMethodException e ) {
+      } catch ( final NoSuchMethodException _ ) {
          return Optional.empty();
       }
    }

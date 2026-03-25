@@ -17,7 +17,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Queue;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import com.boschsemanticstack.rql.exceptions.IllegalValueTypeQueryException;
@@ -42,7 +41,7 @@ import com.querydsl.core.types.dsl.StringExpression;
 public class SimpleValueResolver extends AbstractPathPredicateResolver<SimpleExpression<?>, Predicate> {
 
    private final TypeConverters typeConverters;
- 
+
    public SimpleValueResolver( final TypeConverters typeConverters ) {
       super();
       this.typeConverters = typeConverters;
@@ -78,26 +77,25 @@ public class SimpleValueResolver extends AbstractPathPredicateResolver<SimpleExp
       final List<Object> typeConvertedValues = values.stream()
             .map( value -> typeConverters
                   .convertTo( property.getType(), value ) )
-            .collect( Collectors.toList() );
+            .toList();
 
       if ( RqlFilter.Operator.IN == filter.getOperator() ) {
          return ExpressionUtils.inAny( property,
                IntStream.iterate( 0, i -> i < typeConvertedValues.size(), i -> i + 1000 ).boxed()
                      .map( i -> typeConvertedValues.subList( i, Math.min( i + 1000, typeConvertedValues.size() ) ) )
-                     .collect( Collectors.toList() ) );
-      } else {
-         throw new IllegalValueTypeQueryException(
-               "Operator " + filter.getOperator() + " not supported for multiple values for property " + property );
+                     .toList() );
       }
+      throw new IllegalValueTypeQueryException(
+               "Operator " + filter.getOperator() + " not supported for multiple values for property " + property );
+
    }
 
    private Predicate getSingleValuePredicate( final RqlFilter filter, final SimpleExpression property ) {
       final Object value = filter.getValue();
       if ( null == value ) {
          return getNullPredicate( filter.getOperator(), property );
-      } else {
-         return getValuePredicate( filter.getOperator(), property, value );
       }
+      return getValuePredicate( filter.getOperator(), property, value );
    }
 
    private Predicate getNullPredicate( final RqlFilter.Operator operator, final SimpleExpression property ) {

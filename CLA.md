@@ -119,4 +119,3 @@ closest to the meaning of the original provision and that is enforceable. The te
 failure of essential purpose of this Agreement or any limited remedy to the maximum extent possible under law'.'
 
 8.5 You agree to notify Us of any facts or circumstances of which you become aware that would make this Agreement inaccurate in any respect'.'
-

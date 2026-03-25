@@ -14,7 +14,7 @@
 package com.boschsemanticstack.rql.model.v1;
 
 public class Rql {
- 
+
    protected Rql() {
 
    }

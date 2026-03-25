@@ -21,7 +21,7 @@ import com.boschsemanticstack.rql.exceptions.SourceLocation;
 import com.boschsemanticstack.rql.parser.v1.RqlParser;
 
 import org.junit.jupiter.api.Test;
- 
+
 class RqlInvalidInputTest {
 
    @Test

@@ -1,6 +1,6 @@
 = Developer Guide Resource Query Language (RQL)
 :page-partial:
-//Keep :page-partial: attribute so that users of Antora versions lower than 2.2 will also be able to include the page without running into ordering problems. More details: https://docs.antora.org/antora/latest/page/page-partial/  
+//Keep :page-partial: attribute so that users of Antora versions lower than 2.2 will also be able to include the page without running into ordering problems. More details: https://docs.antora.org/antora/latest/page/page-partial/
 
 [[rql-parser]]
 == RQL Parser
@@ -645,9 +645,3 @@ public class Bar{
 In this example we limit the 'Bar#name'.
 For 'Bar#name' the wildcard is just allowed at the beginning.
 The 'id' and 'name has not limits.
-
-
-
-
-
-

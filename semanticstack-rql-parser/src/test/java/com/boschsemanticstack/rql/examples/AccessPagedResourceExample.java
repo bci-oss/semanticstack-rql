@@ -13,6 +13,7 @@
 
 package com.boschsemanticstack.rql.examples;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -20,52 +21,38 @@ import com.boschsemanticstack.rql.model.v1.RqlQueryModel;
 import com.boschsemanticstack.rql.model.v1.impl.RqlToStringWriter;
 import com.boschsemanticstack.rql.parser.v1.RqlParser;
 
-import io.reactivex.Observable;
-
 public class AccessPagedResourceExample {
 
    private final RestClient someRestClient = null;
 
-   public Observable<String> getSomethingRemote( final RqlQueryModel query ) { // <1>
+   public List<String> getSomethingRemote( final RqlQueryModel query ) { // <1>
       final int pageSize = 170;  // entirely dependent on remote Service
       return getSomeResourceRecursive( RqlParser.getPagedQuery( query, pageSize ) );
    }
- 
-   private Observable<String> getSomeResourceRecursive( final Iterator<RqlQueryModel> pagedQuery ) {
 
-      if ( pagedQuery.hasNext() ) {
+   private List<String> getSomeResourceRecursive( final Iterator<RqlQueryModel> pagedQuery ) {
+      final List<String> allResults = new ArrayList<>();
+
+      while ( pagedQuery.hasNext() ) {
          final RqlQueryModel next = pagedQuery.next();
-         return someRestClient.post( "someAddress" )
+         final RestResponse response = someRestClient.post( "someAddress" )
                .withBody( new RqlToStringWriter().visitModel( next ) )
-               .toObservableResponse()
-               .flatMap( response -> doRecursionIfMoreMeasurementsAvailable(
-                     pagedQuery,
-                     next.getOptions().getSlice().get().limit(), //<2>
-                     response )
-               );
-      }
-      return Observable.empty();
-   }
+               .execute();
 
-   private Observable<String> doRecursionIfMoreMeasurementsAvailable(
-         final Iterator<RqlQueryModel> pagedQuery,
-         final long pageSize,
-         final RestResponse response ) {
+         if ( response.getResponseCode() != 200 ) {
+            throw new RuntimeException( "Remote service responded with " + response.getResponseCode() );
+         }
 
-      if ( response.getResponseCode() != 200 ) {
-         return Observable.error( new RuntimeException( "Remote service responded with " + response.getResponseCode() ) );
+         final List<String> results = response.getBodyAsList();
+         allResults.addAll( results );
+
+         final long pageLimit = next.getOptions().getSlice().get().limit(); //<2>
+         if ( results.size() < pageLimit ) { //<3>
+            break; // last page reached, no more data available
+         }
       }
 
-      final List<String> results = response.getBodyAsList();
-      Observable<String> observableResults = Observable.fromIterable( results );
-
-      if ( results.size() == pageSize && pagedQuery.hasNext() ) { //<3>
-         observableResults = observableResults.concatWith( Observable.defer(//<4>
-               () -> getSomeResourceRecursive( pagedQuery ) )
-         );
-      }
-
-      return observableResults;
+      return allResults;
    }
 
    private interface RestClient {
@@ -73,7 +60,7 @@ public class AccessPagedResourceExample {
 
       RestClient withBody( String body );
 
-      Observable<RestResponse> toObservableResponse();
+      RestResponse execute();
    }
 
    private interface RestResponse {

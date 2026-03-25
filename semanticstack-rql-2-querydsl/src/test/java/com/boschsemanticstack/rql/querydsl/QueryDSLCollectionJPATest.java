@@ -43,7 +43,7 @@ class QueryDSLCollectionJPATest {
       final String generatedQuery = asJpaQuery( predicate );
       assertThat( generatedQuery ).isEqualTo( expectedQuery );
    }
- 
+
    private QueryModelToQueryDSL getJpaQuery( final String queryParams ) {
       return QueryModelToQueryDSL.forJpa( QEntity.entity, RqlParser.from( queryParams ) );
    }

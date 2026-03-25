@@ -24,7 +24,7 @@ public abstract class IllegalQueryArgumentException extends IllegalArgumentExcep
    protected IllegalQueryArgumentException( final String message ) {
       super( message );
    }
- 
+
    protected IllegalQueryArgumentException( final String message, final Throwable cause ) {
       super( message, cause );
    }

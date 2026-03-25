@@ -62,28 +62,26 @@
   <properties>
     <!-- Dependency Versions -->
     <antlr4.version>4.13.2</antlr4.version>
-    <assertj.version>3.27.7</assertj.version>
-    <h2.version>2.4.240</h2.version>
-    <junit.version>6.0.3</junit.version>
-    <mockito.version>5.23.0</mockito.version>
-    <jackson.version>2.21.2</jackson.version>
     <querydsl.version>7.1</querydsl.version>
-    <jakarta.version>3.1.1</jakarta.version>
-    <rxjava.version>2.2.21</rxjava.version>
+    <spring-boot.version>3.5.12</spring-boot.version>
 
     <!-- Plugin Versions -->
-    <build-helper-maven-plugin.version>3.6.1</build-helper-maven-plugin.version>
     <antlr4-maven-plugin.version>${antlr4.version}</antlr4-maven-plugin.version>
+    <build-helper-maven-plugin.version>3.6.1</build-helper-maven-plugin.version>
     <central-publishing-maven-plugin.version>0.10.0</central-publishing-maven-plugin.version>
+    <checkstyle.version>10.26.1</checkstyle.version>
     <maven-compiler-plugin.version>3.15.0</maven-compiler-plugin.version>
     <maven-gpg-plugin.version>3.2.8</maven-gpg-plugin.version>
     <maven-clean-plugin.version>3.5.0</maven-clean-plugin.version>
+    <maven-checkstyle-plugin.version>3.6.0</maven-checkstyle-plugin.version>
     <maven-javadoc-plugin.version>3.12.0</maven-javadoc-plugin.version>
     <maven-source-plugin.version>3.4.0</maven-source-plugin.version>
     <maven-surefire-plugin.version>3.5.5</maven-surefire-plugin.version>
     <maven-surefire-report-plugin.version>3.5.5</maven-surefire-report-plugin.version>
     <org-jacoco.version>0.8.14</org-jacoco.version>
     <org-sonarsource-scanner.version>5.5.0.6356</org-sonarsource-scanner.version>
+    <spotless-maven-plugin.version>2.44.0</spotless-maven-plugin.version>
+
 
     <!-- General settings -->
     <testreports.surefire>surefire-report</testreports.surefire>
@@ -106,16 +104,9 @@
     <dependencies>
       <!-- POM section -->
       <dependency>
-        <groupId>com.fasterxml.jackson</groupId>
-        <artifactId>jackson-bom</artifactId>
-        <version>${jackson.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.junit</groupId>
-        <artifactId>junit-bom</artifactId>
-        <version>${junit.version}</version>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-dependencies</artifactId>
+        <version>${spring-boot.version}</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -141,18 +132,13 @@
         <artifactId>semanticstack-rql-2-querydsl</artifactId>
         <version>${project.version}</version>
       </dependency>
+      <dependency>
+        <groupId>com.boschsemanticstack</groupId>
+        <artifactId>semanticstack-rql-examples-querydsljpa</artifactId>
+        <version>${project.version}</version>
+      </dependency>
 
       <!-- Third party artifacts -->
-      <dependency>
-        <groupId>jakarta.validation</groupId>
-        <artifactId>jakarta.validation-api</artifactId>
-        <version>${jakarta.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>io.reactivex.rxjava2</groupId>
-        <artifactId>rxjava</artifactId>
-        <version>${rxjava.version}</version>
-      </dependency>
       <dependency>
         <groupId>io.github.openfeign.querydsl</groupId>
         <artifactId>querydsl-core</artifactId>
@@ -178,24 +164,9 @@
 
       <!-- Artifacts for testing -->
       <dependency>
-        <groupId>com.h2database</groupId>
-        <artifactId>h2</artifactId>
-        <version>${h2.version}</version>
-      </dependency>
-      <dependency>
         <groupId>org.antlr</groupId>
         <artifactId>antlr4</artifactId>
         <version>${antlr4.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.assertj</groupId>
-        <artifactId>assertj-core</artifactId>
-        <version>${assertj.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.mockito</groupId>
-        <artifactId>mockito-core</artifactId>
-        <version>${mockito.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -262,13 +233,59 @@
           <artifactId>maven-surefire-plugin</artifactId>
           <version>${maven-surefire-plugin.version}</version>
         </plugin>
-
-
+        <plugin>
+          <groupId>com.diffplug.spotless</groupId>
+          <artifactId>spotless-maven-plugin</artifactId>
+          <version>${spotless-maven-plugin.version}</version>
+          <configuration>
+            <formats>
+              <!-- General formats -->
+              <format>
+                <includes>
+                  <include>**/*.java</include>
+                  <include>**/*.md</include>
+                  <include>**/*.adoc</include>
+                  <include>**/*.xml</include>
+                </includes>
+                <trimTrailingWhitespace/>
+                <endWithNewline/>
+                <encoding>${project.build.sourceEncoding}</encoding>
+                <lineEndings>UNIX</lineEndings>
+              </format>
+            </formats>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-checkstyle-plugin</artifactId>
+          <version>${maven-checkstyle-plugin.version}</version>
+          <configuration>
+            <configLocation>${maven.multiModuleProjectDirectory}/rql-checkstyle.xml</configLocation>
+            <consoleOutput>true</consoleOutput>
+            <failsOnError>true</failsOnError>
+            <failOnViolation>true</failOnViolation>
+            <includeTestSourceDirectory>true</includeTestSourceDirectory>
+          </configuration>
+          <dependencies>
+            <dependency>
+              <groupId>com.puppycrawl.tools</groupId>
+              <artifactId>checkstyle</artifactId>
+              <version>${checkstyle.version}</version>
+            </dependency>
+          </dependencies>
+        </plugin>
       </plugins>
     </pluginManagement>
 
     <plugins>
-
+      <plugin>
+        <groupId>com.diffplug.spotless</groupId>
+        <artifactId>spotless-maven-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-checkstyle-plugin</artifactId>
+      </plugin>
       <!-- jacoco plugin required for unit test coverage on SonarQube. -->
       <plugin>
         <groupId>org.jacoco</groupId>

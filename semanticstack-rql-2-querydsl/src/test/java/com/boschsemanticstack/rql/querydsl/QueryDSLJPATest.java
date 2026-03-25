@@ -43,15 +43,16 @@ class QueryDSLJPATest {
       waySubQuery.where( innerPredicate );
       final Predicate predicate = QEntity.entity.in( waySubQuery );
       final String jpaQuery = asJpaQuery( predicate );
-      assertThat( jpaQuery ).isEqualTo( "\n"
-            + "where entity in (select entity\n"
-            + "from Entity entity\n"
-            + "  left join entity.subEntities as subEntity\n"
-            + "  left join entity.subEntities2\n"
-            + "  left join subEntity.metadata as subEntity_metadata_0 on key(subEntity_metadata_0) = ?1\n"
-            + "where subEntity.name = ?2 and subEntity_metadata_0 = ?3 and subEntity2.name = ?4)" );
+      assertThat( jpaQuery ).isEqualTo( """
+
+            where entity in (select entity
+            from Entity entity
+              left join entity.subEntities as subEntity
+              left join entity.subEntities2
+              left join subEntity.metadata as subEntity_metadata_0 on key(subEntity_metadata_0) = ?1
+            where subEntity.name = ?2 and subEntity_metadata_0 = ?3 and subEntity2.name = ?4)""" );
    }
- 
+
    private String asJpaQuery( final Predicate predicate ) {
       final JPQLSerializer serializer = new JPQLSerializer( JPQLTemplates.DEFAULT );
       final JPAQuery jpaQuery = (JPAQuery) new JPAQuery().where( predicate );
