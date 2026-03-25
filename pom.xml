@@ -237,10 +237,10 @@
               <!-- General formats -->
               <format>
                 <includes>
-                  <include>*.java</include>
-                  <include>*.md</include>
-                  <include>*.adoc</include>
-                  <include>*.ttl</include>
+                  <include>**/*.java</include>
+                  <include>**/*.md</include>
+                  <include>**/*.adoc</include>
+                  <include>**/*.ttl</include>
                 </includes>
                 <trimTrailingWhitespace/>
                 <endWithNewline/>
