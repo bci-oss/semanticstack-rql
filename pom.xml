@@ -62,7 +62,7 @@
   <properties>
     <!-- Dependency Versions -->
     <antlr4.version>4.13.2</antlr4.version>
-    <querydsl.version>7.1</querydsl.version>
+    <querydsl.version>7.2</querydsl.version>
     <spring-boot.version>4.0.6</spring-boot.version>
 
     <!-- Plugin Versions -->
