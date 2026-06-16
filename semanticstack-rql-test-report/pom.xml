@@ -88,36 +88,6 @@
             </executions>
          </plugin>
 
-         <!-- Configure generation of surefire reports -->
-         <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-surefire-report-plugin</artifactId>
-            <configuration>
-               <outputDirectory>${project.build.directory}/${testreports.surefire}</outputDirectory>
-               <showSuccess>true</showSuccess>
-               <aggregate>false</aggregate>
-               <linkXRef>false</linkXRef>
-               <skipSurefireReport>${skip.maven.surefire.report.plugin}</skipSurefireReport>
-            </configuration>
-            <executions>
-               <execution>
-                  <id>generate-aggregate-surefire-report</id>
-                  <phase>verify</phase>
-                  <configuration>
-                     <outputName>${testreports.surefire}</outputName>
-                     <reportsDirectories>
-                        <reportsDirectory>
-                           ${project.build.directory}/${testreports.surefire}
-                        </reportsDirectory>
-                     </reportsDirectories>
-                  </configuration>
-                  <goals>
-                     <goal>report-only</goal>
-                  </goals>
-               </execution>
-            </executions>
-         </plugin>
-
       </plugins>
    </build>
 </project>
