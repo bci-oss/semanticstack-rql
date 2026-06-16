@@ -17,6 +17,12 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
+  <parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>4.1.0</version>
+  </parent>
+
   <groupId>com.boschsemanticstack</groupId>
   <artifactId>semanticstack-rql-parent</artifactId>
   <version>DEV-SNAPSHOT</version>
@@ -62,22 +68,15 @@
   <properties>
     <!-- Dependency Versions -->
     <antlr4.version>4.13.2</antlr4.version>
-    <querydsl.version>7.4.0</querydsl.version>
-    <spring-boot.version>4.0.6</spring-boot.version>
+    <spring-boot.version>4.1.0</spring-boot.version>
+    <querydsl-openfeign.version>7.4.0</querydsl-openfeign.version>
 
     <!-- Plugin Versions -->
     <antlr4-maven-plugin.version>${antlr4.version}</antlr4-maven-plugin.version>
-    <build-helper-maven-plugin.version>3.6.1</build-helper-maven-plugin.version>
     <central-publishing-maven-plugin.version>0.10.0</central-publishing-maven-plugin.version>
     <checkstyle.version>13.5.0</checkstyle.version>
-    <maven-compiler-plugin.version>3.15.0</maven-compiler-plugin.version>
     <maven-gpg-plugin.version>3.2.8</maven-gpg-plugin.version>
-    <maven-clean-plugin.version>3.5.0</maven-clean-plugin.version>
     <maven-checkstyle-plugin.version>3.6.0</maven-checkstyle-plugin.version>
-    <maven-javadoc-plugin.version>3.12.0</maven-javadoc-plugin.version>
-    <maven-source-plugin.version>3.4.0</maven-source-plugin.version>
-    <maven-surefire-plugin.version>3.5.6</maven-surefire-plugin.version>
-    <maven-surefire-report-plugin.version>3.5.6</maven-surefire-report-plugin.version>
     <org-jacoco.version>0.8.14</org-jacoco.version>
     <org-sonarsource-scanner.version>5.7.0.6970</org-sonarsource-scanner.version>
     <spotless-maven-plugin.version>3.6.0</spotless-maven-plugin.version>
@@ -85,10 +84,7 @@
 
     <!-- General settings -->
     <testreports.surefire>surefire-report</testreports.surefire>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <java-target-version>25</java-target-version>
-    <java-source-version>25</java-source-version>
+    <java.version>25</java.version>
 
     <!-- Sonar settings -->
     <sonar.coverage.jacoco.xmlReportPaths>
@@ -102,15 +98,6 @@
 
   <dependencyManagement>
     <dependencies>
-      <!-- POM section -->
-      <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-dependencies</artifactId>
-        <version>${spring-boot.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-
       <!-- Project section -->
       <dependency>
         <groupId>com.boschsemanticstack</groupId>
@@ -142,17 +129,17 @@
       <dependency>
         <groupId>io.github.openfeign.querydsl</groupId>
         <artifactId>querydsl-core</artifactId>
-        <version>${querydsl.version}</version>
+        <version>${querydsl-openfeign.version}</version>
       </dependency>
       <dependency>
         <groupId>io.github.openfeign.querydsl</groupId>
         <artifactId>querydsl-jpa</artifactId>
-        <version>${querydsl.version}</version>
+        <version>${querydsl-openfeign.version}</version>
       </dependency>
       <dependency>
         <groupId>io.github.openfeign.querydsl</groupId>
         <artifactId>querydsl-apt</artifactId>
-        <version>${querydsl.version}</version>
+        <version>${querydsl-openfeign.version}</version>
       </dependency>
 
       <dependency>
@@ -185,16 +172,6 @@
           <version>${org-jacoco.version}</version>
         </plugin>
         <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-surefire-report-plugin</artifactId>
-          <version>${maven-surefire-report-plugin.version}</version>
-        </plugin>
-        <plugin>
-          <groupId>org.codehaus.mojo</groupId>
-          <artifactId>build-helper-maven-plugin</artifactId>
-          <version>${build-helper-maven-plugin.version}</version>
-        </plugin>
-        <plugin>
           <groupId>org.antlr</groupId>
           <artifactId>antlr4-maven-plugin</artifactId>
           <version>${antlr4-maven-plugin.version}</version>
@@ -202,36 +179,15 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
-          <version>${maven-compiler-plugin.version}</version>
           <configuration>
-            <source>${java-source-version}</source>
-            <target>${java-target-version}</target>
+            <source>${java.version}</source>
+            <target>${java.version}</target>
             <showWarnings>true</showWarnings>
             <showDeprecation>true</showDeprecation>
             <compilerArgs>
               <arg>-Xlint:all</arg>
             </compilerArgs>
           </configuration>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-javadoc-plugin</artifactId>
-          <version>${maven-javadoc-plugin.version}</version>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-source-plugin</artifactId>
-          <version>${maven-source-plugin.version}</version>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-clean-plugin</artifactId>
-          <version>${maven-clean-plugin.version}</version>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-surefire-plugin</artifactId>
-          <version>${maven-surefire-plugin.version}</version>
         </plugin>
         <plugin>
           <groupId>com.diffplug.spotless</groupId>
