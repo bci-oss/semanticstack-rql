@@ -63,7 +63,7 @@
     <!-- Dependency Versions -->
     <antlr4.version>4.13.2</antlr4.version>
     <querydsl.version>7.4.0</querydsl.version>
-    <spring-boot.version>4.0.6</spring-boot.version>
+    <spring-boot.version>4.1.0</spring-boot.version>
 
     <!-- Plugin Versions -->
     <antlr4-maven-plugin.version>${antlr4.version}</antlr4-maven-plugin.version>
