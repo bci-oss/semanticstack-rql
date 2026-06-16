@@ -77,7 +77,7 @@
     <checkstyle.version>13.5.0</checkstyle.version>
     <maven-gpg-plugin.version>3.2.8</maven-gpg-plugin.version>
     <maven-checkstyle-plugin.version>3.6.0</maven-checkstyle-plugin.version>
-    <org-jacoco.version>0.8.14</org-jacoco.version>
+    <org-jacoco.version>0.8.15</org-jacoco.version>
     <org-sonarsource-scanner.version>5.7.0.6970</org-sonarsource-scanner.version>
     <spotless-maven-plugin.version>3.6.0</spotless-maven-plugin.version>
 
