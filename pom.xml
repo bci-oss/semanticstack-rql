@@ -20,7 +20,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>4.1.0</version>
+    <version>4.0.7</version>
   </parent>
 
   <groupId>com.boschsemanticstack</groupId>
@@ -68,7 +68,7 @@
   <properties>
     <!-- Dependency Versions -->
     <antlr4.version>4.13.2</antlr4.version>
-    <spring-boot.version>4.1.0</spring-boot.version>
+    <spring-boot.version>4.0.7</spring-boot.version>
     <querydsl-openfeign.version>7.4.0</querydsl-openfeign.version>
 
     <!-- Plugin Versions -->
