@@ -25,7 +25,7 @@
 
   <groupId>com.boschsemanticstack</groupId>
   <artifactId>semanticstack-rql-parent</artifactId>
-  <version>DEV-SNAPSHOT</version>
+  <version>3.0.3</version>
   <packaging>pom</packaging>
   <name>Bosch Semantic Stack RQL Parent</name>
 
